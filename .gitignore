@@ -1,4 +1,4 @@
-/obj
-/bin
-/Newtonsoft.Json/obj
-/Newtonsoft.Json/bin
+MapEditor/obj
+MapEditor/bin
+MapEditor/Newtonsoft.Json/obj
+MapEditor/Newtonsoft.Json/bin
