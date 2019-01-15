@@ -931,5 +931,93 @@ namespace tyoEngineEditor
                 }
             }
         }
+
+        public class __AnimationUsedInfosJson
+        {
+            private int _index = 0;
+            public int Index
+            {
+                get { return _index; }
+                set { _index = value; }
+            }
+
+            private string _filePath = "";
+            public string FilePath
+            {
+                get { return _filePath; }
+                set { _filePath = value; }
+            }
+
+            private string _nodeName = "";
+            public string NodeName
+            {
+                get { return _nodeName; }
+                set { _nodeName = value; }
+            }
+
+            private string _direction = "";
+            public string Direction
+            {
+                get { return _direction; }
+                set { _direction = value; }
+            }
+        }
+
+        private List<__AnimationUsedInfosJson> _animationUsedInfosList = new List<__AnimationUsedInfosJson>();
+        public List<__AnimationUsedInfosJson> AnimationUsedInfosList
+        {
+            get { return _animationUsedInfosList; }
+        }
+
+        public class __AnimationOffsets
+        {
+            private int _index = 0;
+            public int Index
+            {
+                get { return _index; }
+                set { _index = value; }
+            }
+
+            private int _x = -1;
+            public int X
+            {
+                get { return _x; }
+                set { _x = value; }
+            }
+
+            private int _y = -1;
+            public int Y
+            {
+                get { return _y; }
+                set { _y = value; }
+            }
+
+            private int _offsetX = -1;
+            public int OffsetX
+            {
+                get { return _offsetX; }
+                set { _offsetX = value; }
+            }
+
+            private int _offsetY = -1;
+            public int OffsetY
+            {
+                get { return _offsetY; }
+                set { _offsetY = value; }
+            }
+
+            private int _layer = -1;
+            public int Layer
+            {
+                get { return _layer; }
+                set { _layer = value; }
+            }
+        }
+
+        private List<__AnimationOffsets> _animationOffsetList = new List<__AnimationOffsets>();
+        public List<__AnimationOffsets> AnimationOffsetList
+        {
+            get { return _animationOffsetList; }
+        }
     }
 }

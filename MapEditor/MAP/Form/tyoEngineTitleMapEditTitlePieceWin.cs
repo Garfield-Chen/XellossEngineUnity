@@ -19,12 +19,15 @@ namespace tyoEngineEditor
 
         tyoEngineTitleMapEditWindow _MapEditWin = null;
 
+        private const int MapTitlePanelSizeW = 800;
+        private const int MapTitlePanelSizeH = 800;
+
         public void InitData( tyoEngineTitleMapEditWindow _dlg )
         {
             _MapEditWin = _dlg;
 
-            mapTitlePanel.Size = new Size(800, 800);
-            this.Size = new Size(960, 960);
+            mapTitlePanel.Size = new Size(MapTitlePanelSizeW, MapTitlePanelSizeH);
+            this.Size = new Size(830, 890);
         }
 
         public void UpdateTick()
@@ -72,6 +75,7 @@ namespace tyoEngineEditor
 
         int _maxTitleW = 0;
         int _maxTitleH = 0;
+        float maxScale = 1.0f; 
 
         private void comboxTitleSelect_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -87,9 +91,24 @@ namespace tyoEngineEditor
                 _maxTitleW = _MapEditWin.GetMapTitleSelect().Width / _MapEditWin.GetMapInfos().Map_Title_Width;
                 _maxTitleH = _MapEditWin.GetMapTitleSelect().Height / _MapEditWin.GetMapInfos().Map_Title_Height;
 
-                //mapTitlePanel.Size = new Size(_MapEditWin.GetMapTitleSelect().Width , _MapEditWin.GetMapTitleSelect().Height);
-                //this.Size = new Size(_MapEditWin.GetMapTitleSelect().Width + 35, _MapEditWin.GetMapTitleSelect().Height + 90);
 
+                float _wScale = (float)MapTitlePanelSizeW / (float)_MapEditWin.GetMapTitleSelect().Width ;
+                float _hScale = (float)MapTitlePanelSizeH / (float)_MapEditWin.GetMapTitleSelect().Height;
+
+                if(_wScale < 1.0f || _hScale < 1.0f)
+                {
+                    if (_wScale < _hScale)
+                    {
+                        _TitleScale = _wScale;
+                    }
+                    else 
+                    {
+                        _TitleScale = _hScale;
+                    }
+
+                    maxScale = _TitleScale;
+                }
+               
                 for (int y = 0; y < _maxTitleH; ++y)
                 {
                     for (int x = 0; x < _maxTitleW; ++x)
@@ -133,8 +152,8 @@ namespace tyoEngineEditor
 
                 //e.Graphics.DrawImage(_MapEditWin.GetMapTitleSelect(), 0, 0);
 
-                int titlePanelPieceW = mapTitlePanel.Width / _MapEditWin.GetMapInfos().Map_Title_Width;
-                int titlePanelPieceH = mapTitlePanel.Height / _MapEditWin.GetMapInfos().Map_Title_Height;
+                //int titlePanelPieceW = mapTitlePanel.Width / _MapEditWin.GetMapInfos().Map_Title_Width;
+                //int titlePanelPieceH = mapTitlePanel.Height / _MapEditWin.GetMapInfos().Map_Title_Height;
 
                 int drawx = 0;
                 int drawy = 0;
@@ -143,10 +162,10 @@ namespace tyoEngineEditor
                 {
                     for (int y = 0; y < _maxTitleH; ++y)
                     {
-                        if (x > titlePanelPieceW || y > titlePanelPieceH)
-                        {
-                            continue;
-                        }
+//                         if (x > titlePanelPieceW || y > titlePanelPieceH)
+//                         {
+//                             continue;
+//                         }
 
                         if ((y * _maxTitleW + x) >= _MapEditWin.GetTitleImageList().Count)
                         {
@@ -455,19 +474,19 @@ namespace tyoEngineEditor
         {
             if (comboBoxTitleScale.SelectedIndex == 0)
             {
-                _TitleScale = 1.0f;
+                _TitleScale = maxScale;
             }
             else if (comboBoxTitleScale.SelectedIndex == 1)
             {
-                _TitleScale = 0.75f;
+                _TitleScale = maxScale * 0.75f;
             }
             else if (comboBoxTitleScale.SelectedIndex == 2)
             {
-                _TitleScale = 0.5f;
+                _TitleScale = maxScale * 0.5f;
             }
             else if (comboBoxTitleScale.SelectedIndex == 3)
             {
-                _TitleScale = 0.25f;
+                _TitleScale = maxScale * 0.25f;
             }
             
             //mapTitlePanel.Size = new Size((int)(_MapEditWin.GetMapTitleSelect().Width * _TitleScale), (int)(_MapEditWin.GetMapTitleSelect().Height * _TitleScale));

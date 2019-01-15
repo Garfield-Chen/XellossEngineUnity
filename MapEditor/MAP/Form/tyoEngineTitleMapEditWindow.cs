@@ -1336,12 +1336,12 @@ namespace tyoEngineEditor
         private void SaveEditorDataToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveDlg = new SaveFileDialog();
-            saveDlg.Filter = "tyo Engine Map Data|*.tmd";
+            saveDlg.Filter = "tyo Engine Map Data|*.json";
             saveDlg.ShowDialog();
 
             String _filePath = saveDlg.FileName;
 
-            if (Path.GetExtension(_filePath).ToLower() == ".tmd")
+            if (Path.GetExtension(_filePath).ToLower() == ".json")
             {
                 SaveMapDataToEditor(_filePath);
                 return;
@@ -1370,9 +1370,9 @@ namespace tyoEngineEditor
 
             String _pPath = _pDir + Path.GetFileName(_path);
 
-            FileStream fs = new FileStream(_pPath, FileMode.OpenOrCreate);
+            //FileStream fs = new FileStream(_pPath, FileMode.OpenOrCreate);
 
-            BinaryWriter binFile = new BinaryWriter(fs);
+            //BinaryWriter binFile = new BinaryWriter(fs);
 
             //Newtonsoft
             MapDataJsonFile _jsonFile = new MapDataJsonFile();
@@ -1385,22 +1385,22 @@ namespace tyoEngineEditor
             SaveTitleUseInfo(_jsonFile, _pPath);
             SaveMapAllData(_jsonFile);
 
-            SaveAnimationInfo(binFile);
-            SaveAnimationOffsets(binFile);
+            SaveUsedAnimationInfos(_jsonFile);
+            SaveAnimationOffsets(_jsonFile);
             //SaveAnimationArray(binFile);
             //SaveUseAnimationInfo(binFile);
             SaveAnimationPNG(_pPath);
             SaveAnimationXML(_pPath);
 
-            binFile.Close();
-            fs.Close();
+            //binFile.Close();
+            //fs.Close();
 
             string _jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(_jsonFile);
             //MapDataJsonFile _t2 = Newtonsoft.Json.JsonConvert.DeserializeObject<MapDataJsonFile>(_jsonString);
 
-            _pPath = _pDir + Path.GetFileName(_path.Replace(".tmd",".json"));
+            //_pPath = _pDir + Path.GetFileName(_path.Replace(".tmd",".json"));
 
-            fs = new FileStream(_pPath, FileMode.OpenOrCreate);
+            FileStream fs = new FileStream(_pPath, FileMode.OpenOrCreate);
             StreamWriter _writer = new StreamWriter(fs);
             _writer.Write(_jsonString);
             _writer.Close();
@@ -1422,33 +1422,20 @@ namespace tyoEngineEditor
             }
         }
 
-        private void SaveAnimationInfo(BinaryWriter _file)
+        private void SaveUsedAnimationInfos(MapDataJsonFile _file)
         {
-            _file.Write(_mapInfos._mapAnimationUseInfo.Count);
+            //_file.Write(_mapInfos._mapAnimationUseInfo.Count);
 
             foreach (KeyValuePair<int, MapUseAnimationInfo> item in _mapInfos._mapAnimationUseInfo)
             {
-                _file.Write(item.Key);
+                MapDataJsonFile.__AnimationUsedInfosJson _animationUsedInfos = new MapDataJsonFile.__AnimationUsedInfosJson();
 
-                //xml相对路径
-                byte[] bytesXMLPath = System.Text.Encoding.Default.GetBytes(item.Value.animationInfo.xmlPath);
+                _animationUsedInfos.Index = item.Key;
+                _animationUsedInfos.FilePath = item.Value.animationInfo.xmlPath;
+                _animationUsedInfos.NodeName = item.Value.animationInfo.name;
+                _animationUsedInfos.Direction = Animation.TransDirectionCN2EN(item.Value.animationInfo.direction);
 
-                _file.Write(bytesXMLPath.Length);
-                _file.Write(bytesXMLPath, 0, bytesXMLPath.Length);
-
-                //节点名称
-                byte[] bytesNames = System.Text.Encoding.Default.GetBytes(item.Value.animationInfo.name);
-
-                _file.Write(bytesNames.Length);
-                _file.Write(bytesNames, 0, bytesNames.Length);
-
-                //方向
-                string direction = Animation.TransDirectionCN2EN(item.Value.animationInfo.direction);
-                byte[] bytesDirection =
-                    System.Text.Encoding.Default.GetBytes(direction);
-
-                _file.Write(bytesDirection.Length);
-                _file.Write(bytesDirection, 0, bytesDirection.Length);
+                _file.AnimationUsedInfosList.Add(_animationUsedInfos);
             }
         }
 
@@ -2073,29 +2060,19 @@ namespace tyoEngineEditor
 
         #endregion
 
-        private void SaveAnimationOffsets(BinaryWriter binFile) 
+        private void SaveAnimationOffsets(MapDataJsonFile _file) 
         {
-            //有记录的偏移总数
-            binFile.Write(_mapInfos._mapAnimationOffsets.Count);
-
             foreach (AnimationOffset item in _mapInfos._mapAnimationOffsets.Values)
             {
-                binFile.Write(item._id);
+                MapDataJsonFile.__AnimationOffsets _offset = new MapDataJsonFile.__AnimationOffsets();
+                _offset.Index = item._id;
+                _offset.X = item._x;
+                _offset.Y = item._y;
+                _offset.Layer = item._layer;
+                _offset.OffsetX = item._offsetX;
+                _offset.OffsetY = item._offsetY;
 
-                //标志的X坐标
-                binFile.Write(item._x);
-
-                //标志的Y坐标
-                binFile.Write(item._y);
-
-                //标志的图层
-                binFile.Write(item._layer);
-
-                //偏移量X
-                binFile.Write(item._offsetX);
-
-                //偏移量Y
-                binFile.Write(item._offsetY);
+                _file.AnimationOffsetList.Add(_offset);
             }
         }
 

@@ -59,6 +59,7 @@
             this.listBoxAnimation = new System.Windows.Forms.ListBox();
             this.tabSystemMenuControl = new System.Windows.Forms.TabControl();
             this.TitleMapEditor = new System.Windows.Forms.TabPage();
+            this.btShowMap = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
@@ -79,7 +80,6 @@
             this.propertyGridMapEditor_MapInfos = new System.Windows.Forms.PropertyGrid();
             this.btMAP_RenewMap = new System.Windows.Forms.Button();
             this.btMAP_Edit = new System.Windows.Forms.Button();
-            this.btShowMap = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -106,7 +106,7 @@
             this.titleMapToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(784, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(784, 25);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -116,20 +116,20 @@
             this.newMapToolStripMenuItem,
             this.loadMapToolStripMenuItem});
             this.titleMapToolStripMenuItem.Name = "titleMapToolStripMenuItem";
-            this.titleMapToolStripMenuItem.Size = new System.Drawing.Size(69, 20);
+            this.titleMapToolStripMenuItem.Size = new System.Drawing.Size(75, 21);
             this.titleMapToolStripMenuItem.Text = "Title Map";
             // 
             // newMapToolStripMenuItem
             // 
             this.newMapToolStripMenuItem.Name = "newMapToolStripMenuItem";
-            this.newMapToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.newMapToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.newMapToolStripMenuItem.Text = "New Map";
             this.newMapToolStripMenuItem.Click += new System.EventHandler(this.newMapToolStripMenuItem_Click);
             // 
             // loadMapToolStripMenuItem
             // 
             this.loadMapToolStripMenuItem.Name = "loadMapToolStripMenuItem";
-            this.loadMapToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.loadMapToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.loadMapToolStripMenuItem.Text = "Load Map";
             this.loadMapToolStripMenuItem.Click += new System.EventHandler(this.loadMapToolStripMenuItem_Click);
             // 
@@ -151,7 +151,7 @@
             // dealingToolLabel
             // 
             this.dealingToolLabel.Name = "dealingToolLabel";
-            this.dealingToolLabel.Size = new System.Drawing.Size(46, 17);
+            this.dealingToolLabel.Size = new System.Drawing.Size(44, 17);
             this.dealingToolLabel.Text = "处理中";
             this.dealingToolLabel.Visible = false;
             // 
@@ -386,6 +386,17 @@
             this.TitleMapEditor.Text = "Title Map Editor <地图编辑器>";
             this.TitleMapEditor.UseVisualStyleBackColor = true;
             // 
+            // btShowMap
+            // 
+            this.btShowMap.Enabled = false;
+            this.btShowMap.Location = new System.Drawing.Point(274, 3);
+            this.btShowMap.Name = "btShowMap";
+            this.btShowMap.Size = new System.Drawing.Size(75, 23);
+            this.btShowMap.TabIndex = 4;
+            this.btShowMap.Text = "ShowMap";
+            this.btShowMap.UseVisualStyleBackColor = true;
+            this.btShowMap.Click += new System.EventHandler(this.btShowMap_Click);
+            // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage2);
@@ -593,17 +604,6 @@
             this.btMAP_Edit.Text = "编辑地图";
             this.btMAP_Edit.UseVisualStyleBackColor = true;
             this.btMAP_Edit.Click += new System.EventHandler(this.btMAP_Edit_Click);
-            // 
-            // btShowMap
-            // 
-            this.btShowMap.Enabled = false;
-            this.btShowMap.Location = new System.Drawing.Point(274, 3);
-            this.btShowMap.Name = "btShowMap";
-            this.btShowMap.Size = new System.Drawing.Size(75, 23);
-            this.btShowMap.TabIndex = 4;
-            this.btShowMap.Text = "ShowMap";
-            this.btShowMap.UseVisualStyleBackColor = true;
-            this.btShowMap.Click += new System.EventHandler(this.btShowMap_Click);
             // 
             // tyoEngineEditorMain
             // 

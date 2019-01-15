@@ -27,7 +27,7 @@ namespace tyoEngineEditor
         private Dictionary<string, AnimationInfo> animationInfos = null;
         private string animationVersion = string.Empty;
 
-        private bool hasAnimation = false;
+        //private bool hasAnimation = false;
 
         //打开地图的线程
         Thread threadLoadMap = null;
@@ -340,7 +340,7 @@ namespace tyoEngineEditor
             tabSystemMenuControl.SelectedIndex = 0;
 
             OpenFileDialog _dlg = new OpenFileDialog();
-            _dlg.Filter = "tyo Engine Map Data|*.tmd";
+            _dlg.Filter = "tyo Engine Map Data|*.json";
             _dlg.InitialDirectory = System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
             _dlg.ShowDialog();
 
@@ -411,7 +411,7 @@ namespace tyoEngineEditor
 
         private void LoadMapThread(object _filePath)
         {
-            if (Path.GetExtension(_filePath.ToString()).ToLower() == ".tmd")
+            if (Path.GetExtension(_filePath.ToString()).ToLower() == ".json")
             {
                 _nowMapInfos = new MapInfos();
                 ClearItemsHandle(null);
@@ -419,6 +419,7 @@ namespace tyoEngineEditor
                 LoadMap(_filePath.ToString());
                 return;
             }
+
             string s = _filePath.ToString();
             if (_filePath.ToString() == "")
             {
@@ -457,30 +458,52 @@ namespace tyoEngineEditor
             }
 
             FileStream fs = new FileStream(_filePath, FileMode.OpenOrCreate);
+            StreamReader fileReader = new StreamReader(fs);
 
-            BinaryReader binFile = new BinaryReader(fs);
+            MapDataJsonFile _jsonFile = new MapDataJsonFile();
+
+            string _jsonString = fileReader.ReadToEnd();
+
+            _jsonFile = Newtonsoft.Json.JsonConvert.DeserializeObject<MapDataJsonFile>(_jsonString);
+
+            //BinaryReader binFile = new BinaryReader(fs);
             _nowMapInfos.loadPath = _filePath;
-            LoadMapName(binFile);
-            LoadMapTitleInfos(binFile, _filePath);
-            LoadMapSize(binFile);
-            LoadLayerShowFlag(binFile);
-            LoadLayerInfos(binFile);
-            LoadTitleUseInfo(binFile, _filePath);
-            LoadMapAllData(binFile);
 
-            hasAnimation = binFile.PeekChar() > -1 ? true : false;
-            if (hasAnimation)
+
+            LoadMapName(_jsonFile);
+            LoadMapTitleInfos(_jsonFile, _filePath);
+            LoadMapSize(_jsonFile);
+            LoadLayerShowFlag(_jsonFile);
+            LoadLayerInfos(_jsonFile);
+            LoadTitleUseInfo(_jsonFile, _filePath);
+            LoadMapAllData(_jsonFile);
+
+            if ( _jsonFile.AnimationUsedInfosList.Count > 0)
             {
-                LoadAnimationInfo(binFile, _filePath);
-                LoadAnimationOffsets(binFile);
+                LoadAnimationUsedInfos(_jsonFile, _filePath);
+                LoadAnimationOffsets(_jsonFile);
 
-                //LoadUseAnimationInfo(binFile, _filePath);1749
                 LoadAnimationPNG(_filePath);
                 LoadAnimationXML(_filePath);
             }
+            else
+            {
+                countLoadMap += 4;
+            }
 
-            binFile.Close();
+//             hasAnimation = binFile.PeekChar() > -1 ? true : false;
+//             if (hasAnimation)
+//             {
+//                 LoadAnimationInfo(binFile, _filePath);
+//                 LoadAnimationOffsets(binFile);
+// 
+//                 //LoadUseAnimationInfo(binFile, _filePath);1749
+//                 LoadAnimationPNG(_filePath);
+//                 LoadAnimationXML(_filePath);
+//             }
 
+            //binFile.Close();
+            fileReader.Close();
             fs.Close();
 
             //propertyGridMapEditor_MapInfos.Refresh();
@@ -510,26 +533,49 @@ namespace tyoEngineEditor
             countLoadMap++;
         }
 
-        private void LoadAnimationOffsets(BinaryReader binFile) 
+        private void LoadAnimationUsedInfos(MapDataJsonFile _jsonFile, string path)
         {
-            int _count = binFile.ReadInt32();
-            int key = -4;
+            MapUseAnimationInfo mapUseAnimationInfo;
 
-            for (int i = 0; i < _count; i++) 
+            DirectoryInfo dir = Directory.GetParent(path);
+
+            for (int i = 0; i < _jsonFile.AnimationUsedInfosList.Count; ++i)
+            {
+                mapUseAnimationInfo = new MapUseAnimationInfo();
+                _nowMapInfos._mapAnimationUseInfo.Add(_jsonFile.AnimationUsedInfosList[i].Index, mapUseAnimationInfo);
+                mapUseAnimationInfo.animationInfo.xmlPath = _jsonFile.AnimationUsedInfosList[i].FilePath;
+                mapUseAnimationInfo.animationInfo.name = _jsonFile.AnimationUsedInfosList[i].NodeName;
+                mapUseAnimationInfo.animationInfo.direction = _jsonFile.AnimationUsedInfosList[i].Direction;
+
+                AnimationInfo animationInfo = Animation.GetSpeicalAnimation(dir.FullName + mapUseAnimationInfo.animationInfo.xmlPath,mapUseAnimationInfo.animationInfo.name, mapUseAnimationInfo.animationInfo.direction);
+
+                LoadUseAnimationInfo(dir, mapUseAnimationInfo, animationInfo.images);
+
+                mapUseAnimationInfo.w = animationInfo.images[0].originalW;
+                mapUseAnimationInfo.h = animationInfo.images[0].originalH;
+                mapUseAnimationInfo.bitmapsLength = animationInfo.images.Count;
+            }
+
+            countLoadMap++;
+        }
+
+        private void LoadAnimationOffsets(MapDataJsonFile _jsonFile) 
+        {
+            for (int i = 0; i < _jsonFile.AnimationOffsetList.Count; i++) 
             {
                 AnimationOffset animationOffset = new AnimationOffset();
 
-                animationOffset._id = binFile.ReadInt32();
+                animationOffset._id = _jsonFile.AnimationOffsetList[i].Index;
 
-                animationOffset._x = binFile.ReadInt32();
-                animationOffset._y = binFile.ReadInt32();
-                animationOffset._layer = binFile.ReadInt32();
-                animationOffset._offsetX = binFile.ReadInt32();
-                animationOffset._offsetY = binFile.ReadInt32();
+                animationOffset._x = _jsonFile.AnimationOffsetList[i].X;
+                animationOffset._y = _jsonFile.AnimationOffsetList[i].Y;
+                animationOffset._layer = _jsonFile.AnimationOffsetList[i].Layer;
+                animationOffset._offsetX = _jsonFile.AnimationOffsetList[i].OffsetX;
+                animationOffset._offsetY = _jsonFile.AnimationOffsetList[i].OffsetY;
 
-                key = animationOffset._id;
-                _nowMapInfos._mapAnimationOffsets.Add(key, animationOffset);
+                _nowMapInfos._mapAnimationOffsets.Add(animationOffset._id, animationOffset);
             }
+
             countLoadMap++;
         }
 
@@ -563,8 +609,7 @@ namespace tyoEngineEditor
             countLoadMap++;
         }
 
-        private void LoadUseAnimationInfo(DirectoryInfo d,
-            MapUseAnimationInfo mapUseAnimationInfo, List<AnimationImageInfo> animationImageInfos)
+        private void LoadUseAnimationInfo(DirectoryInfo d, MapUseAnimationInfo mapUseAnimationInfo, List<AnimationImageInfo> animationImageInfos)
         {
             for (int j = 0; j < animationImageInfos.Count; j++)
             {
@@ -763,7 +808,7 @@ namespace tyoEngineEditor
             countLoadMap++;
         }
 
-        private void LoadMapAllData(BinaryReader binFile)
+        private void LoadMapAllData(MapDataJsonFile _jsonFile)
         {
             _nowMapInfos._mapTitle = new int[_nowMapInfos._mapLayerInfosByIndex.Count, _nowMapInfos.Map_Size_Width, _nowMapInfos.Map_Size_Height];
             _nowMapInfos._mapExternFlag1 = new int[_nowMapInfos.Map_Size_Width, _nowMapInfos.Map_Size_Height];
@@ -776,15 +821,15 @@ namespace tyoEngineEditor
                 {
                     for (int y = 0; y < _nowMapInfos.Map_Size_Height; ++y)
                     {
-                        _nowMapInfos._mapTitle[i, x, y] = binFile.ReadInt32();
+                        _nowMapInfos._mapTitle[i, x, y] = _jsonFile.MapTitle[i, x, y];
 
                         if (i == 0)
                         {
-                            _nowMapInfos._mapExternFlag1[x, y] = binFile.ReadInt32();
-                            _nowMapInfos._mapBlockFlag[x, y] = binFile.ReadBoolean();
+                            _nowMapInfos._mapExternFlag1[x, y] = _jsonFile.MapTitle[i, x, y];
+                            _nowMapInfos._mapBlockFlag[x, y] = _jsonFile.MapBlockFlag[x, y];
                         }
 
-                        _nowMapInfos._mapAnimationTitle[i, x, y] = binFile.ReadInt32();//-1;
+                        _nowMapInfos._mapAnimationTitle[i, x, y] = _jsonFile.MapAnimationTitle[i, x, y];
                     }
                 }
             }
@@ -858,20 +903,20 @@ namespace tyoEngineEditor
 
         //bool _LoadOver = false;
 
-        private void LoadTitleUseInfo(BinaryReader binFile, String path)
+        private void LoadTitleUseInfo(MapDataJsonFile _jsonFile, String path)
         {
             //_LoadOver = false;
 
-            int _count = binFile.ReadInt32();
+            //int _count = binFile.ReadInt32();
 
             _CacheMapTitle.Clear();
             
-            for (int i = 0; i < _count; ++i)
+            for (int i = 0; i < _jsonFile.MapUsedTitleInfosList.Count; ++i)
             {
-                String _name = System.Text.Encoding.Default.GetString(binFile.ReadBytes(binFile.ReadInt32()));
-                int _id = binFile.ReadInt32();
-                int _comboxIndex = binFile.ReadInt32();
-                bool _flag = binFile.ReadBoolean();
+                String _name = _jsonFile.MapUsedTitleInfosList[i].Name;
+                int _id = _jsonFile.MapUsedTitleInfosList[i].TitleID;
+                int _comboxIndex = _jsonFile.MapUsedTitleInfosList[i].ComboxIndex;
+                bool _flag = _jsonFile.MapUsedTitleInfosList[i].UsedFlag;
 
                 MapUseTitleInfo _tmp = new MapUseTitleInfo();
 
@@ -881,10 +926,10 @@ namespace tyoEngineEditor
                 _tmp._flag = _flag;
 
                 _tmp._image = new tyoEngineTitleMapEditWindow.MapTitlePiece();
-                _tmp._image._x = binFile.ReadInt32();
-                _tmp._image._y = binFile.ReadInt32();
-                _tmp._image._w = binFile.ReadInt32();
-                _tmp._image._h = binFile.ReadInt32();
+                _tmp._image._x = _jsonFile.MapUsedTitleInfosList[i].TitleX;
+                _tmp._image._y = _jsonFile.MapUsedTitleInfosList[i].TitleY;
+                _tmp._image._w = _jsonFile.MapUsedTitleInfosList[i].TitleW;
+                _tmp._image._h = _jsonFile.MapUsedTitleInfosList[i].TitleH;
 
                 //optimize to read use title bmp..
 #warning optimize to read use title bmp.
@@ -951,17 +996,17 @@ namespace tyoEngineEditor
             countLoadMap++;
         }
 
-        private void LoadLayerInfos(BinaryReader binFile)
+        private void LoadLayerInfos(MapDataJsonFile _jsonFile)
         {
-            int _count = binFile.ReadInt32();
+            //int _count = binFile.ReadInt32();
 
-            for (int i = 0; i < _count; ++i)
+            for (int i = 0; i < _jsonFile.MapLayerInfosList.Count; ++i)
             {
-                int _index = binFile.ReadInt32();
+                int _index = _jsonFile.MapLayerInfosList[i].Index;
 
-                String _name = System.Text.Encoding.Default.GetString(binFile.ReadBytes(binFile.ReadInt32()));
+                String _name = _jsonFile.MapLayerInfosList[i].Name;
 
-                int _depth = binFile.ReadInt32();
+                int _depth = _jsonFile.MapLayerInfosList[i].Depth;
 
                 MapLayerInfos layer = new MapLayerInfos();
                 layer.Name = _name;
@@ -988,46 +1033,44 @@ namespace tyoEngineEditor
             }
         }
 
-        private void LoadLayerShowFlag(BinaryReader binFile)
+        private void LoadLayerShowFlag(MapDataJsonFile _jsonFile)
         {
-            int _count = binFile.ReadInt32();
+            _nowMapInfos._LayerShowFlag = new bool[_jsonFile.MapLayerShowFlagList.Count];
 
-            _nowMapInfos._LayerShowFlag = new bool[_count];
-
-            for (int i = 0; i < _count; ++i)
+            for (int i = 0; i < _jsonFile.MapLayerShowFlagList.Count; ++i)
             {
-                _nowMapInfos._LayerShowFlag[i] = binFile.ReadBoolean();
+                _nowMapInfos._LayerShowFlag[i] = _jsonFile.MapLayerShowFlagList[i];
             }
             countLoadMap++;
         }
 
-        private void LoadMapSize(BinaryReader binFile)
+        private void LoadMapSize(MapDataJsonFile _jsonFile)
         {
-            _nowMapInfos.Map_Size_Width = binFile.ReadInt32();
-            _nowMapInfos.Map_Size_Height = binFile.ReadInt32();
-            _nowMapInfos.Map_Title_Width = binFile.ReadInt32();
-            _nowMapInfos.Map_Title_Height = binFile.ReadInt32();
+            _nowMapInfos.Map_Size_Width = _jsonFile.MapSizeWidth;
+            _nowMapInfos.Map_Size_Height = _jsonFile.MapSizeHeight;
+            _nowMapInfos.Map_Title_Width = _jsonFile.MapTitleWidth;
+            _nowMapInfos.Map_Title_Height = _jsonFile.MapTitleHeight;
 
             countLoadMap++;
         }
 
-        private void LoadMapName(BinaryReader binFile)
+        private void LoadMapName(MapDataJsonFile _jsonFile)
         {
-            _nowMapInfos.Name = System.Text.Encoding.Default.GetString(binFile.ReadBytes(binFile.ReadInt32()));
+            _nowMapInfos.Name = _jsonFile.MapName;
             countLoadMap++;
         }
 
 
 
-        private void LoadMapTitleInfos(BinaryReader binFile, String path)
+        private void LoadMapTitleInfos(MapDataJsonFile _jsonFile, String path)
         {
-            int _count = binFile.ReadInt32();
+            //int _count = binFile.ReadInt32();
 
-            for (int i = 0; i < _count; ++i)
+            for (int i = 0; i < _jsonFile.MapTitleInfosList.Count; ++i)
             {
-                int _index = binFile.ReadInt32();
-                String _name = System.Text.Encoding.Default.GetString(binFile.ReadBytes(binFile.ReadInt32()));
-                String _filename = System.Text.Encoding.Default.GetString(binFile.ReadBytes(binFile.ReadInt32()));
+                int _index = _jsonFile.MapTitleInfosList[i].Index;
+                String _name = _jsonFile.MapTitleInfosList[i].Name;
+                String _filename = _jsonFile.MapTitleInfosList[i].Directory;
 
                 String _filepath = Path.GetDirectoryName(path);
                 _filepath = _filepath + "\\" + _filename;
