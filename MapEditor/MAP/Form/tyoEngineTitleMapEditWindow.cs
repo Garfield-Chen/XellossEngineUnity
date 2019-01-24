@@ -1339,7 +1339,7 @@ namespace tyoEngineEditor
             saveDlg.Filter = "tyo Engine Map Data|*.json";
             saveDlg.ShowDialog();
 
-            String _filePath = saveDlg.FileName;
+            string _filePath = saveDlg.FileName;
 
             if (Path.GetExtension(_filePath).ToLower() == ".json")
             {
@@ -1353,11 +1353,11 @@ namespace tyoEngineEditor
             }
         }
 
-        private void SaveMapDataToEditor(String _path)
+        private void SaveMapDataToEditor(string _path)
         {
-            String _pDir = Path.GetDirectoryName(_path);
-            _pDir += "\\";
-            _pDir += _mapInfos.Name;
+            string _pDir = Path.GetDirectoryName(_path);
+
+            _pDir += "\\" + _mapInfos.Name + (string.Format("_{0}-{1}-{2}_{3}-{4}-{5}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Second, DateTime.Now.Minute));
             _pDir += "\\";
 
             if (Directory.Exists(_pDir))
@@ -1368,7 +1368,7 @@ namespace tyoEngineEditor
 
             Directory.CreateDirectory(_pDir);
 
-            String _pPath = _pDir + Path.GetFileName(_path);
+            string _pPath = _pDir + Path.GetFileName(_path);
 
             //FileStream fs = new FileStream(_pPath, FileMode.OpenOrCreate);
 
@@ -1568,7 +1568,7 @@ namespace tyoEngineEditor
             }
         }
 
-        private void SaveTitleUseInfo(MapDataJsonFile _file, String _path)
+        private void SaveTitleUseInfo(MapDataJsonFile _file, string _path)
         {
             //_file.Write(_mapInfos._mapTitleUseInfo.Count);
 
@@ -1597,17 +1597,18 @@ namespace tyoEngineEditor
                 _usedInfo.TitleH = _mapInfos._mapTitleUseInfo[i]._image._h;
 
                 //使用的图块缓存
-                _ttmCount++;
+//                 _ttmCount++;
+// 
+//                 Image _tmp = _mapInfos._mapTitleUseInfo[i]._image._title;
+// 
+//                 string _fileName = Path.GetFileName(_path);
+//                 string _imgPath = Path.GetDirectoryName(_path);
+//                 Directory.CreateDirectory(_imgPath + "\\tmpfile\\");
+//                 _imgPath = _imgPath + "\\tmpfile\\" + _fileName + "_" + _ttmCount.ToString() + ".png";
+// 
+//                 _tmp.Save(_imgPath);
 
-                Image _tmp = _mapInfos._mapTitleUseInfo[i]._image._title;
-
-                String _imgPath = Path.GetDirectoryName(_path);
-                Directory.CreateDirectory(_imgPath + "\\tmpfile\\");
-                _imgPath = _imgPath + "\\tmpfile\\" + _ttmCount.ToString() + ".png";
-
-                _tmp.Save(_imgPath);
-
-                _imgPath = "tmpfile\\" + _ttmCount.ToString() + ".png";
+                //_imgPath = "tmpfile\\" + _ttmCount.ToString() + ".png";
                 // 
                 //                 byte[] bytesNames2 = System.Text.Encoding.Default.GetBytes(_imgPath);
                 // 
@@ -1658,7 +1659,7 @@ namespace tyoEngineEditor
         }
 
         //写地图 图块信息 并复制图块
-        private void SaveMapTitleInfos(MapDataJsonFile _file, String _path)
+        private void SaveMapTitleInfos(MapDataJsonFile _file, string _path)
         {
             //写总数
             //_file.Write(_mapInfos._mapTitleInfosByIndex.Count);
@@ -1845,14 +1846,13 @@ namespace tyoEngineEditor
         private void SaveMapDataToGame(String _path)
         {
             String _pDir = Path.GetDirectoryName(_path);
-            _pDir += "\\";
-            _pDir += _mapInfos.Name;
+
+            _pDir += "\\" + _mapInfos.Name + (string.Format("_{0}-{1}-{2}_{3}-{4}-{5}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Second, DateTime.Now.Minute));
             _pDir += "\\";
 
             if (Directory.Exists(_pDir))
             {
                 MessageBox.Show("你的地图名字已经存在，请备份你当前的地图或选择其他的文件夹存储！");
-
                 return;
             }
 
@@ -1860,21 +1860,56 @@ namespace tyoEngineEditor
 
             String _pPath = _pDir + Path.GetFileName(_path);
 
-            FileStream fs = new FileStream(_pPath, FileMode.OpenOrCreate);
+            //FileStream fs = new FileStream(_pPath, FileMode.OpenOrCreate);
 
+            //BinaryWriter binFile = new BinaryWriter(fs);
+
+            //Newtonsoft
+            MapDataJsonFile _jsonFile = new MapDataJsonFile();
+
+            SaveMapName(_jsonFile);
+            SaveMapTitleInfos(_jsonFile, _pPath);
+            SaveMapSize(_jsonFile);
+            SaveLayerShowFlag(_jsonFile);
+            SaveLayerInfos(_jsonFile);
+            SaveTitleUseInfo(_jsonFile, _pPath);
+            SaveMapAllData(_jsonFile);
+
+            SaveUsedAnimationInfos(_jsonFile);
+            SaveAnimationOffsets(_jsonFile);
+            //SaveAnimationArray(binFile);
+            //SaveUseAnimationInfo(binFile);
+            SaveAnimationPNG(_pPath);
+            SaveAnimationXML(_pPath);
+
+            //binFile.Close();
+            //fs.Close();
+
+            string _jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(_jsonFile);
+            //MapDataJsonFile _t2 = Newtonsoft.Json.JsonConvert.DeserializeObject<MapDataJsonFile>(_jsonString);
+
+            //_pPath = _pDir + Path.GetFileName(_path.Replace(".tmd",".json"));
+
+            FileStream fs = new FileStream(_pPath, FileMode.OpenOrCreate);
             BinaryWriter binFile = new BinaryWriter(fs);
 
-            //SaveMapName(binFile);
-            //SaveMapTitleInfos(binFile, _pPath);
-            //SaveMapSize(binFile);
-            //SaveTitleUseInfo(binFile, _pPath);
-            //SaveMapBlockData(binFile);
-            //SaveMapAllDataToGame(binFile);
-            //SaveAnimationInfo(binFile);
-            //SaveAnimationOffsets(binFile);
+            byte[] _bytelist = System.Text.Encoding.Default.GetBytes(_jsonString);
+            string _b64string = Convert.ToBase64String(_bytelist);
+            _b64string = _b64string.Replace('=', '$');
+            _b64string = _b64string.Replace('0', '#');
+            _b64string = _b64string.Replace('1', ')');
+            _b64string = _b64string.Replace('2', '(');
+            _b64string = _b64string.Replace('3', '@');
+            _b64string = _b64string.Replace('4', '%');
+            _b64string = _b64string.Replace('5', '&');
+            _b64string = _b64string.Replace('6', '{');
+            _b64string = _b64string.Replace('7', '}');
+            _b64string = _b64string.Replace('8', '[');
+            _b64string = _b64string.Replace('9', ']');
 
-            //SaveAnimationPNG(_pPath);
-            //SaveAnimationXML(_pPath);
+            byte[] _bytelistSave = System.Text.Encoding.Default.GetBytes(_b64string);
+            binFile.Write(_bytelistSave.Length);
+            binFile.Write(_bytelistSave);
 
             binFile.Close();
             fs.Close();
@@ -2079,13 +2114,13 @@ namespace tyoEngineEditor
         private void btOutputMapDataFile_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveDlg = new SaveFileDialog();
-            saveDlg.Filter = "tyo Engine Game Map Data|*.tmgd";
+            saveDlg.Filter = "tyo Engine Game Map Data|*.tyomap";
 
             saveDlg.ShowDialog();
 
             String _filePath = saveDlg.FileName;
 
-            if (Path.GetExtension(_filePath).ToLower() == ".tmgd")
+            if (Path.GetExtension(_filePath).ToLower() == ".tyomap")
             {
                 SaveMapDataToGame(_filePath);
                 return;

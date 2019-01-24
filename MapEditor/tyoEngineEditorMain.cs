@@ -903,7 +903,7 @@ namespace tyoEngineEditor
 
         //bool _LoadOver = false;
 
-        private void LoadTitleUseInfo(MapDataJsonFile _jsonFile, String path)
+        private void LoadTitleUseInfo(MapDataJsonFile _jsonFile, string path)
         {
             //_LoadOver = false;
 
@@ -913,7 +913,7 @@ namespace tyoEngineEditor
             
             for (int i = 0; i < _jsonFile.MapUsedTitleInfosList.Count; ++i)
             {
-                String _name = _jsonFile.MapUsedTitleInfosList[i].Name;
+                string _name = _jsonFile.MapUsedTitleInfosList[i].Name;
                 int _id = _jsonFile.MapUsedTitleInfosList[i].TitleID;
                 int _comboxIndex = _jsonFile.MapUsedTitleInfosList[i].ComboxIndex;
                 bool _flag = _jsonFile.MapUsedTitleInfosList[i].UsedFlag;
