@@ -7,9 +7,9 @@ using System.Drawing;
 
 namespace tyoEngineEditor
 {
-    public class MapTitleInfos
+    public class MapTileInfos
     {
-        public MapTitleInfos()
+        public MapTileInfos()
         {
 
         }
@@ -110,14 +110,14 @@ namespace tyoEngineEditor
         }
     }
 
-    public class MapUseTitleInfo //地图使用的块块信息
+    public class MapUseTileInfo //地图使用的块块信息
     {
-        public MapUseTitleInfo()
+        public MapUseTileInfo()
         {
 
         }
 
-        public tyoEngineTitleMapEditWindow.MapTitlePiece _image = null; //图块资源
+        public tyoEngineTileMapEditWindow.MapTilePiece _image = null; //图块资源
         public string _name = ""; //使用的图块名字
         public int _id = -1; //使用的图块id
         public int _comboIndex = 0; //在combox中的index
@@ -215,38 +215,38 @@ namespace tyoEngineEditor
         }
 
         [Description("地图图块宽度。"), Category("基本信息")]
-        public int Map_Title_Width
+        public int Map_Tile_Width
         {
             set
             {
-                _map_title_w = value;
+                _map_tile_w = value;
             }
 
             get
             {
-                return _map_title_w;
+                return _map_tile_w;
             }
         }
 
         [Description("地图图块高度。"), Category("基本信息")]
-        public int Map_Title_Height
+        public int Map_Tile_Height
         {
             set
             {
-                _map_title_h = value;
+                _map_tile_h = value;
             }
 
             get
             {
-                return _map_title_h;
+                return _map_tile_h;
             }
         }
 
         string _name = "新的地图"; //地图名字
         int _map_Width = 32; //窗口宽
         int _map_Height = 32; //高
-        int _map_title_w = 32; //地图图块宽
-        int _map_title_h = 32; //地图图块高
+        int _map_tile_w = 32; //地图图块宽
+        int _map_tile_h = 32; //地图图块高
 
         public string loadPath = string.Empty;//读取地图的路径，为空则是新建地图
 
@@ -256,9 +256,9 @@ namespace tyoEngineEditor
 
         public bool _IsClickAnimation = false;
 
-        public Dictionary<int, MapTitleInfos> _mapTitleInfosByIndex = new Dictionary<int, MapTitleInfos>();
+        public Dictionary<int, MapTileInfos> _mapTileInfosByIndex = new Dictionary<int, MapTileInfos>();
 
-        public List<MapUseTitleInfo> _mapTitleUseInfo = new List<MapUseTitleInfo>();
+        public List<MapUseTileInfo> _mapTileUseInfo = new List<MapUseTileInfo>();
 
         public Dictionary<int, MapUseAnimationInfo> _mapAnimationUseInfo = new Dictionary<int, MapUseAnimationInfo>();
 
@@ -268,9 +268,9 @@ namespace tyoEngineEditor
 
         public List<string> animationXML = new List<string>();
 
-        public int[,,] _mapTitle = null;
+        public int[,,] _mapTile = null;
 
-        public int[, ,] _mapAnimationTitle = null;
+        public int[, ,] _mapAnimationTile = null;
 
         public int[,] _mapExternFlag1 = null;
 
@@ -352,7 +352,7 @@ namespace tyoEngineEditor
 
                     if (_IsClickAnimation) 
                     {
-                        _mapAnimationTitle[
+                        _mapAnimationTile[
                             _ActionList[_actionIndex]._ActionNodeList[i]._Layer,
                             _ActionList[_actionIndex]._ActionNodeList[i]._X,
                             _ActionList[_actionIndex]._ActionNodeList[i]._Y
@@ -361,7 +361,7 @@ namespace tyoEngineEditor
                     }
                     else 
                     {
-                        _mapTitle[
+                        _mapTile[
                         _ActionList[_actionIndex]._ActionNodeList[i]._Layer,
                         _ActionList[_actionIndex]._ActionNodeList[i]._X,
                         _ActionList[_actionIndex]._ActionNodeList[i]._Y
@@ -380,36 +380,36 @@ namespace tyoEngineEditor
         /// <param name="name"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        public int AddMapUseTitleInfo(tyoEngineTitleMapEditWindow.MapTitlePiece piece, 
+        public int AddMapUseTileInfo(tyoEngineTileMapEditWindow.MapTilePiece piece, 
             int comboxIndex, String name, int id)
         {
-            for (int i = 0; i < _mapTitleUseInfo.Count; ++i)
+            for (int i = 0; i < _mapTileUseInfo.Count; ++i)
             {
-                if (_mapTitleUseInfo[i]._id == id && _mapTitleUseInfo[i]._name 
-                    == name && _mapTitleUseInfo[i]._comboIndex == comboxIndex)
+                if (_mapTileUseInfo[i]._id == id && _mapTileUseInfo[i]._name 
+                    == name && _mapTileUseInfo[i]._comboIndex == comboxIndex)
                 {
                     return i;
                 }
             }
 
-            MapUseTitleInfo tmpUseInfos = new MapUseTitleInfo();
+            MapUseTileInfo tmpUseInfos = new MapUseTileInfo();
 
             tmpUseInfos._image = piece;
             tmpUseInfos._comboIndex = comboxIndex;
             tmpUseInfos._name = name;
             tmpUseInfos._id = id;
 
-            _mapTitleUseInfo.Add(tmpUseInfos);
+            _mapTileUseInfo.Add(tmpUseInfos);
 
-            return _mapTitleUseInfo.Count - 1;
+            return _mapTileUseInfo.Count - 1;
         }
 
         public void ReInit()
         {
-            _mapTitleUseInfo.Clear();
+            _mapTileUseInfo.Clear();
 
-            _mapTitle = new int[_mapLayerInfosByIndex.Count,_map_Width, _map_Height];
-            _mapAnimationTitle = new int[_mapLayerInfosByIndex.Count, _map_Width, _map_Height];
+            _mapTile = new int[_mapLayerInfosByIndex.Count,_map_Width, _map_Height];
+            _mapAnimationTile = new int[_mapLayerInfosByIndex.Count, _map_Width, _map_Height];
             _mapExternFlag1 = new int[_map_Width, _map_Height];
             _mapBlockFlag = new bool[_map_Width, _map_Height];
 
@@ -419,8 +419,8 @@ namespace tyoEngineEditor
                 {
                     for (int y = 0; y < _map_Height; ++y)
                     {
-                        _mapTitle[i, x, y] = -1;
-                        _mapAnimationTitle[i, x, y] = -1;
+                        _mapTile[i, x, y] = -1;
+                        _mapAnimationTile[i, x, y] = -1;
 
                         if(i == 0)
                         {
@@ -496,7 +496,7 @@ namespace tyoEngineEditor
             _ActionIndex = _lastActionIndex;
         }
 
-        public void SetMapTilte(int layer,int x, int y,int index)
+        public void SetMapTile(int layer,int x, int y,int index)
         {
             if (x >= Map_Size_Width || y >= Map_Size_Height)
             {
@@ -508,12 +508,12 @@ namespace tyoEngineEditor
                 return;
             }
 
-            _ActionList[_ActionIndex - 1].AddAction(_mapTitle[layer, x, y], false, layer, x, y);
+            _ActionList[_ActionIndex - 1].AddAction(_mapTile[layer, x, y], false, layer, x, y);
 
-            _mapTitle[layer, x, y] = index;
+            _mapTile[layer, x, y] = index;
         }
 
-        public void SetMapAnimationTilte(int layer, int x, int y, int index)
+        public void SetMapAnimationTile(int layer, int x, int y, int index)
         {
             if (x >= Map_Size_Width || y >= Map_Size_Height)
             {
@@ -525,27 +525,27 @@ namespace tyoEngineEditor
                 return;
             }
 
-            if (_mapAnimationTitle == null) 
+            if (_mapAnimationTile == null) 
             {
-                _mapAnimationTitle = new int[_mapLayerInfosByIndex.Count, _map_Width, _map_Height];
+                _mapAnimationTile = new int[_mapLayerInfosByIndex.Count, _map_Width, _map_Height];
                 for (int i = 0; i < _mapLayerInfosByIndex.Count; ++i)
                 {
                     for (int m = 0; m < _map_Width; ++m)
                     {
                         for (int n = 0; n < _map_Height; ++n)
                         {
-                            _mapAnimationTitle[i, m, n] = -1;
+                            _mapAnimationTile[i, m, n] = -1;
                         }
                     }
                 }
             }
 
-            _ActionList[_ActionIndex - 1].AddAction(_mapAnimationTitle[layer, x, y], false, layer, x, y);
+            _ActionList[_ActionIndex - 1].AddAction(_mapAnimationTile[layer, x, y], false, layer, x, y);
 
-            _mapAnimationTitle[layer, x, y] = index;
+            _mapAnimationTile[layer, x, y] = index;
         }
 
-        public int GetMapTitlePieceIndex(int layer, int x, int y)
+        public int GetMapTilePieceIndex(int layer, int x, int y)
         {
             if (x >= Map_Size_Width || y >= Map_Size_Height)
             {
@@ -557,10 +557,10 @@ namespace tyoEngineEditor
                 return -2;
             }
 
-            return _mapTitle[layer, x, y];
+            return _mapTile[layer, x, y];
         }
 
-        public void SetMapTilteBlock(int x, int y, bool isblock)
+        public void SetMapTileBlock(int x, int y, bool isblock)
         {
             if (x >= Map_Size_Width || y >= Map_Size_Height)
             {
@@ -766,21 +766,21 @@ namespace tyoEngineEditor
             set { _mapSizeHeight = value; }
         }
 
-        private int _mapTitleWidth = 0;
-        public int MapTitleWidth
+        private int _mapTileWidth = 0;
+        public int MapTileWidth
         {
-            get { return _mapTitleWidth; }
-            set { _mapTitleWidth = value; }
+            get { return _mapTileWidth; }
+            set { _mapTileWidth = value; }
         }
 
-        private int _mapTitleHeight = 0;
-        public int MapTitleHeight
+        private int _mapTileHeight = 0;
+        public int MapTileHeight
         {
-            get { return _mapTitleHeight; }
-            set { _mapTitleHeight = value; }
+            get { return _mapTileHeight; }
+            set { _mapTileHeight = value; }
         }
 
-        public class __MapTitleInfosJson
+        public class __MapTileInfosJson
         {
             private string _name = "";
             public string Name
@@ -803,10 +803,10 @@ namespace tyoEngineEditor
                 set { _index = value; }
             }
         }
-        private List<__MapTitleInfosJson> _mapTitleInfosList = new List<__MapTitleInfosJson>();
-        public List<__MapTitleInfosJson> MapTitleInfosList
+        private List<__MapTileInfosJson> _mapTileInfosList = new List<__MapTileInfosJson>();
+        public List<__MapTileInfosJson> MapTileInfosList
         {
-            get { return _mapTitleInfosList; }
+            get { return _mapTileInfosList; }
         }
 
         public class __MapLayerInfosJson
@@ -844,7 +844,7 @@ namespace tyoEngineEditor
             get { return _mapLayerShowFlagList; }
         }
 
-        public class __MapUsedTitleInfosJson
+        public class __MapUsedTileInfosJson
         {
             private string _name = "";
             public string Name
@@ -853,11 +853,11 @@ namespace tyoEngineEditor
                 set { _name = value; }
             }
 
-            private int _titleId = -1;
-            public int TitleID
+            private int _tileId = -1;
+            public int TileID
             {
-                get { return _titleId; }
-                set { _titleId = value; }
+                get { return _tileId; }
+                set { _tileId = value; }
             }
 
             private int _comboxIndex = 0;
@@ -874,51 +874,51 @@ namespace tyoEngineEditor
                 set { _usedFlag = value; }
             }
 
-            private int _titleX = 0;
-            public int TitleX
+            private int _tileX = 0;
+            public int TileX
             {
-                get { return _titleX; }
-                set { _titleX = value; }
+                get { return _tileX; }
+                set { _tileX = value; }
             }
 
-            private int _titleY = 0;
-            public int TitleY
+            private int _tileY = 0;
+            public int TileY
             {
-                get { return _titleY; }
-                set { _titleY = value; }
+                get { return _tileY; }
+                set { _tileY = value; }
             }
 
-            private int _titleW = 0;
-            public int TitleW
+            private int _tileW = 0;
+            public int TileW
             {
-                get { return _titleW; }
-                set { _titleW = value; }
+                get { return _tileW; }
+                set { _tileW = value; }
             }
 
-            private int _titleH = 0;
-            public int TitleH
+            private int _tileH = 0;
+            public int TileH
             {
-                get { return _titleH; }
-                set { _titleH = value; }
+                get { return _tileH; }
+                set { _tileH = value; }
             }
         }
-        private List<__MapUsedTitleInfosJson> _mapUsedTitleInfosList = new List<__MapUsedTitleInfosJson>();
-        public List<__MapUsedTitleInfosJson> MapUsedTitleInfosList
+        private List<__MapUsedTileInfosJson> _mapUsedTileInfosList = new List<__MapUsedTileInfosJson>();
+        public List<__MapUsedTileInfosJson> MapUsedTileInfosList
         {
-            get { return _mapUsedTitleInfosList; }
+            get { return _mapUsedTileInfosList; }
         }
 
-        public int[,,] MapTitle = null;
-        public int[,] MapTitleExternFlag = null;
+        public int[,,] MapTile = null;
+        public int[,] MapTileExternFlag = null;
         public bool[,] MapBlockFlag = null;
-        public int[,,] MapAnimationTitle = null;
+        public int[,,] MapAnimationTile = null;
 
-        public void InitMapTitel()
+        public void InitMapTile()
         {
-            MapTitle = new int[MapLayerInfosList.Count, MapSizeWidth, MapSizeHeight];
+            MapTile = new int[MapLayerInfosList.Count, MapSizeWidth, MapSizeHeight];
             MapBlockFlag = new bool[MapSizeWidth, MapSizeHeight];
-            MapTitleExternFlag = new int[MapSizeWidth, MapSizeHeight];
-            MapAnimationTitle = new int[MapLayerInfosList.Count, MapSizeWidth, MapSizeHeight];
+            MapTileExternFlag = new int[MapSizeWidth, MapSizeHeight];
+            MapAnimationTile = new int[MapLayerInfosList.Count, MapSizeWidth, MapSizeHeight];
 
             for (int m = 0; m < MapLayerInfosList.Count; ++m)
             {
@@ -926,7 +926,7 @@ namespace tyoEngineEditor
                 {
                     for (int p = 0; p < MapSizeHeight; ++p)
                     {
-                        MapAnimationTitle[m, n, p] = -1;
+                        MapAnimationTile[m, n, p] = -1;
                     }
                 }
             }

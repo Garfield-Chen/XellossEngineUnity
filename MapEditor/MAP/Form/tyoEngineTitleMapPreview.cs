@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace tyoEngineEditor
 {
-    public partial class tyoEngineTitleMapPreview : Form
+    public partial class tyoEngineTileMapPreview : Form
     {
         MapInfos _mapInfos = null;
 
@@ -29,7 +29,7 @@ namespace tyoEngineEditor
             }
         }
 
-        public tyoEngineTitleMapPreview()
+        public tyoEngineTileMapPreview()
         {
             InitializeComponent();
         }
@@ -60,18 +60,18 @@ namespace tyoEngineEditor
                 {
                     for (int y = 0;y <  _mapInfos.Map_Size_Height; ++y)
                     {
-                        int index = _mapInfos._mapTitle[i, x, y];
+                        int index = _mapInfos._mapTile[i, x, y];
 
                         if (index != -1)
                         {
-                            if (_mapInfos._mapTitleUseInfo[index]._image._title != null)
+                            if (_mapInfos._mapTileUseInfo[index]._image._tile != null)
                             {
                                 g.DrawImage(
-                                _mapInfos._mapTitleUseInfo[index]._image._title,
-                                x * _mapInfos.Map_Title_Width,
-                                y * _mapInfos.Map_Title_Height,
-                                _mapInfos._mapTitleUseInfo[index]._image._w,
-                                _mapInfos._mapTitleUseInfo[index]._image._h);
+                                _mapInfos._mapTileUseInfo[index]._image._tile,
+                                x * _mapInfos.Map_Tile_Width,
+                                y * _mapInfos.Map_Tile_Height,
+                                _mapInfos._mapTileUseInfo[index]._image._w,
+                                _mapInfos._mapTileUseInfo[index]._image._h);
                             }
                         }
                     }

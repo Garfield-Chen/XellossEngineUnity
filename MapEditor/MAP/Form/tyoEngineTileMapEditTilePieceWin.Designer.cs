@@ -1,6 +1,6 @@
 ﻿namespace tyoEngineEditor
 {
-    partial class tyoEngineTitleMapEditTitlePieceWin
+    partial class tyoEngineTileMapEditTilePieceWin
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.mapTitlePanel = new tyoEngineEditor.tyoEngineTitleMapEditWindow.MapEditPanel();
+            this.mapTitlePanel = new tyoEngineEditor.tyoEngineTileMapEditWindow.MapEditPanel();
             this.comboxTitleSelect = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btAddTitle = new System.Windows.Forms.Button();
@@ -45,10 +45,10 @@
             this.mapTitlePanel.Name = "mapTitlePanel";
             this.mapTitlePanel.Size = new System.Drawing.Size(683, 615);
             this.mapTitlePanel.TabIndex = 0;
-            this.mapTitlePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.mapTitlePanel_Paint);
+            this.mapTitlePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.mapTilePanel_Paint);
             this.mapTitlePanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mapTitlePanel_MouseDown);
             this.mapTitlePanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mapTitlePanel_MouseMove);
-            this.mapTitlePanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mapTitlePanel_MouseUp);
+            this.mapTitlePanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.mapTilePanel_MouseUp);
             // 
             // comboxTitleSelect
             // 
@@ -134,7 +134,7 @@
             this.MinimizeBox = false;
             this.Name = "tyoEngineTitleMapEditTitlePieceWin";
             this.Text = "tyoEngineTitleMapEditTitlePieceWin";
-            this.Shown += new System.EventHandler(this.tyoEngineTitleMapEditTitlePieceWin_Shown);
+            this.Shown += new System.EventHandler(this.tyoEngineTitleMapEditTilePieceWin_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -142,7 +142,7 @@
 
         #endregion
 
-        private tyoEngineEditor.tyoEngineTitleMapEditWindow.MapEditPanel mapTitlePanel;
+        private tyoEngineEditor.tyoEngineTileMapEditWindow.MapEditPanel mapTitlePanel;
         private System.Windows.Forms.ComboBox comboxTitleSelect;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btAddTitle;

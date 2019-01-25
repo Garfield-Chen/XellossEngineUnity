@@ -33,14 +33,14 @@
             this.txtNameCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.animationCol = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.panelAnimation = new tyoEngineEditor.tyoEngineTitleMapEditWindow.MapEditPanel();
+            this.panelAnimation = new tyoEngineEditor.tyoEngineTileMapEditWindow.MapEditPanel();
             this.timer = new System.Windows.Forms.Timer(this.components);
             this.cbPlay = new System.Windows.Forms.CheckBox();
-            this.panel = new tyoEngineEditor.tyoEngineTitleMapEditWindow.MapEditPanel();
+            this.panel = new tyoEngineEditor.tyoEngineTileMapEditWindow.MapEditPanel();
             this.timerDraw = new System.Windows.Forms.Timer(this.components);
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.panelOriginal = new tyoEngineEditor.tyoEngineTitleMapEditWindow.MapEditPanel();
+            this.panelOriginal = new tyoEngineEditor.tyoEngineTileMapEditWindow.MapEditPanel();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAnimation)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -213,15 +213,15 @@
 
         private System.Windows.Forms.DataGridView dgvAnimation;
         private System.Windows.Forms.GroupBox groupBox1;
-        private tyoEngineTitleMapEditWindow.MapEditPanel panelAnimation;
+        private tyoEngineTileMapEditWindow.MapEditPanel panelAnimation;
         private System.Windows.Forms.Timer timer;
         private System.Windows.Forms.CheckBox cbPlay;
-        private tyoEngineTitleMapEditWindow.MapEditPanel panel;
+        private tyoEngineTileMapEditWindow.MapEditPanel panel;
         private System.Windows.Forms.Timer timerDraw;
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private tyoEngineTitleMapEditWindow.MapEditPanel panelOriginal;
+        private tyoEngineTileMapEditWindow.MapEditPanel panelOriginal;
         private System.Windows.Forms.DataGridViewTextBoxColumn txtNameCol;
         private System.Windows.Forms.DataGridViewComboBoxColumn animationCol;
     }

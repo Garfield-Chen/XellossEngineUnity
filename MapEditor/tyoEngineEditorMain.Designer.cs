@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(tyoEngineEditorMain));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.titleMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tileMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.systemTime = new System.Windows.Forms.Timer(this.components);
@@ -55,15 +55,15 @@
             this.OpCol = new System.Windows.Forms.DataGridViewButtonColumn();
             this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox15 = new System.Windows.Forms.GroupBox();
-            this.panelAnimation = new tyoEngineEditor.tyoEngineTitleMapEditWindow.MapEditPanel();
+            this.panelAnimation = new tyoEngineEditor.tyoEngineTileMapEditWindow.MapEditPanel();
             this.listBoxAnimation = new System.Windows.Forms.ListBox();
             this.tabSystemMenuControl = new System.Windows.Forms.TabControl();
-            this.TitleMapEditor = new System.Windows.Forms.TabPage();
+            this.TileMapEditor = new System.Windows.Forms.TabPage();
             this.btShowMap = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
-            this.listBoxMapEditor_TitleList = new System.Windows.Forms.ListBox();
+            this.listBoxMapEditor_TileList = new System.Windows.Forms.ListBox();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.propertyGridMapEditor_TitleInfos = new System.Windows.Forms.PropertyGrid();
             this.btMAP_RefurbishMapTitles = new System.Windows.Forms.Button();
@@ -87,7 +87,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvAnimation)).BeginInit();
             this.groupBox15.SuspendLayout();
             this.tabSystemMenuControl.SuspendLayout();
-            this.TitleMapEditor.SuspendLayout();
+            this.TileMapEditor.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.groupBox10.SuspendLayout();
@@ -103,33 +103,33 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.titleMapToolStripMenuItem});
+            this.tileMapToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(784, 25);
+            this.menuStrip1.Size = new System.Drawing.Size(784, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // titleMapToolStripMenuItem
+            // tileMapToolStripMenuItem
             // 
-            this.titleMapToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tileMapToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newMapToolStripMenuItem,
             this.loadMapToolStripMenuItem});
-            this.titleMapToolStripMenuItem.Name = "titleMapToolStripMenuItem";
-            this.titleMapToolStripMenuItem.Size = new System.Drawing.Size(75, 21);
-            this.titleMapToolStripMenuItem.Text = "Title Map";
+            this.tileMapToolStripMenuItem.Name = "tileMapToolStripMenuItem";
+            this.tileMapToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
+            this.tileMapToolStripMenuItem.Text = "Tile Map";
             // 
             // newMapToolStripMenuItem
             // 
             this.newMapToolStripMenuItem.Name = "newMapToolStripMenuItem";
-            this.newMapToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.newMapToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.newMapToolStripMenuItem.Text = "New Map";
             this.newMapToolStripMenuItem.Click += new System.EventHandler(this.newMapToolStripMenuItem_Click);
             // 
             // loadMapToolStripMenuItem
             // 
             this.loadMapToolStripMenuItem.Name = "loadMapToolStripMenuItem";
-            this.loadMapToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.loadMapToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.loadMapToolStripMenuItem.Text = "Load Map";
             this.loadMapToolStripMenuItem.Click += new System.EventHandler(this.loadMapToolStripMenuItem_Click);
             // 
@@ -151,7 +151,7 @@
             // dealingToolLabel
             // 
             this.dealingToolLabel.Name = "dealingToolLabel";
-            this.dealingToolLabel.Size = new System.Drawing.Size(44, 17);
+            this.dealingToolLabel.Size = new System.Drawing.Size(46, 17);
             this.dealingToolLabel.Text = "处理中";
             this.dealingToolLabel.Visible = false;
             // 
@@ -363,7 +363,7 @@
             // 
             // tabSystemMenuControl
             // 
-            this.tabSystemMenuControl.Controls.Add(this.TitleMapEditor);
+            this.tabSystemMenuControl.Controls.Add(this.TileMapEditor);
             this.tabSystemMenuControl.Controls.Add(this.tabPage6);
             this.tabSystemMenuControl.Location = new System.Drawing.Point(10, 29);
             this.tabSystemMenuControl.Name = "tabSystemMenuControl";
@@ -371,20 +371,20 @@
             this.tabSystemMenuControl.Size = new System.Drawing.Size(765, 481);
             this.tabSystemMenuControl.TabIndex = 1;
             // 
-            // TitleMapEditor
+            // TileMapEditor
             // 
-            this.TitleMapEditor.Controls.Add(this.btShowMap);
-            this.TitleMapEditor.Controls.Add(this.tabControl1);
-            this.TitleMapEditor.Controls.Add(this.groupBox7);
-            this.TitleMapEditor.Controls.Add(this.btMAP_RenewMap);
-            this.TitleMapEditor.Controls.Add(this.btMAP_Edit);
-            this.TitleMapEditor.Location = new System.Drawing.Point(4, 22);
-            this.TitleMapEditor.Name = "TitleMapEditor";
-            this.TitleMapEditor.Padding = new System.Windows.Forms.Padding(3);
-            this.TitleMapEditor.Size = new System.Drawing.Size(757, 455);
-            this.TitleMapEditor.TabIndex = 3;
-            this.TitleMapEditor.Text = "Title Map Editor <地图编辑器>";
-            this.TitleMapEditor.UseVisualStyleBackColor = true;
+            this.TileMapEditor.Controls.Add(this.btShowMap);
+            this.TileMapEditor.Controls.Add(this.tabControl1);
+            this.TileMapEditor.Controls.Add(this.groupBox7);
+            this.TileMapEditor.Controls.Add(this.btMAP_RenewMap);
+            this.TileMapEditor.Controls.Add(this.btMAP_Edit);
+            this.TileMapEditor.Location = new System.Drawing.Point(4, 22);
+            this.TileMapEditor.Name = "TileMapEditor";
+            this.TileMapEditor.Padding = new System.Windows.Forms.Padding(3);
+            this.TileMapEditor.Size = new System.Drawing.Size(757, 455);
+            this.TileMapEditor.TabIndex = 3;
+            this.TileMapEditor.Text = "Tile Map Editor <地图编辑器>";
+            this.TileMapEditor.UseVisualStyleBackColor = true;
             // 
             // btShowMap
             // 
@@ -423,7 +423,7 @@
             // 
             // groupBox10
             // 
-            this.groupBox10.Controls.Add(this.listBoxMapEditor_TitleList);
+            this.groupBox10.Controls.Add(this.listBoxMapEditor_TileList);
             this.groupBox10.Location = new System.Drawing.Point(6, 223);
             this.groupBox10.Name = "groupBox10";
             this.groupBox10.Size = new System.Drawing.Size(239, 147);
@@ -431,16 +431,16 @@
             this.groupBox10.TabStop = false;
             this.groupBox10.Text = "图块列表";
             // 
-            // listBoxMapEditor_TitleList
+            // listBoxMapEditor_TileList
             // 
-            this.listBoxMapEditor_TitleList.FormattingEnabled = true;
-            this.listBoxMapEditor_TitleList.ItemHeight = 12;
-            this.listBoxMapEditor_TitleList.Location = new System.Drawing.Point(6, 20);
-            this.listBoxMapEditor_TitleList.Name = "listBoxMapEditor_TitleList";
-            this.listBoxMapEditor_TitleList.ScrollAlwaysVisible = true;
-            this.listBoxMapEditor_TitleList.Size = new System.Drawing.Size(227, 124);
-            this.listBoxMapEditor_TitleList.TabIndex = 3;
-            this.listBoxMapEditor_TitleList.SelectedIndexChanged += new System.EventHandler(this.listBoxMapEditor_TitleList_SelectedIndexChanged);
+            this.listBoxMapEditor_TileList.FormattingEnabled = true;
+            this.listBoxMapEditor_TileList.ItemHeight = 12;
+            this.listBoxMapEditor_TileList.Location = new System.Drawing.Point(6, 20);
+            this.listBoxMapEditor_TileList.Name = "listBoxMapEditor_TileList";
+            this.listBoxMapEditor_TileList.ScrollAlwaysVisible = true;
+            this.listBoxMapEditor_TileList.Size = new System.Drawing.Size(227, 124);
+            this.listBoxMapEditor_TileList.TabIndex = 3;
+            this.listBoxMapEditor_TileList.SelectedIndexChanged += new System.EventHandler(this.listBoxMapEditor_TileList_SelectedIndexChanged);
             // 
             // groupBox9
             // 
@@ -459,7 +459,7 @@
             this.propertyGridMapEditor_TitleInfos.Name = "propertyGridMapEditor_TitleInfos";
             this.propertyGridMapEditor_TitleInfos.Size = new System.Drawing.Size(227, 159);
             this.propertyGridMapEditor_TitleInfos.TabIndex = 4;
-            this.propertyGridMapEditor_TitleInfos.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGridMapEditor_TitleInfos_PropertyValueChanged);
+            this.propertyGridMapEditor_TitleInfos.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGridMapEditor_TileInfos_PropertyValueChanged);
             // 
             // btMAP_RefurbishMapTitles
             // 
@@ -469,7 +469,7 @@
             this.btMAP_RefurbishMapTitles.TabIndex = 2;
             this.btMAP_RefurbishMapTitles.Text = "刷新图块";
             this.btMAP_RefurbishMapTitles.UseVisualStyleBackColor = true;
-            this.btMAP_RefurbishMapTitles.Click += new System.EventHandler(this.btMAP_RefurbishMapTitles_Click);
+            this.btMAP_RefurbishMapTitles.Click += new System.EventHandler(this.btMAP_RefurbishMapTiles_Click);
             // 
             // groupBox8
             // 
@@ -634,7 +634,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvAnimation)).EndInit();
             this.groupBox15.ResumeLayout(false);
             this.tabSystemMenuControl.ResumeLayout(false);
-            this.TitleMapEditor.ResumeLayout(false);
+            this.TileMapEditor.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.groupBox10.ResumeLayout(false);
@@ -654,7 +654,7 @@
 
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.Timer systemTime;
-        private System.Windows.Forms.ToolStripMenuItem titleMapToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tileMapToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newMapToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadMapToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
@@ -677,14 +677,14 @@
         private System.Windows.Forms.DataGridViewButtonColumn OpCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn id;
         private System.Windows.Forms.GroupBox groupBox15;
-        private tyoEngineTitleMapEditWindow.MapEditPanel panelAnimation;
+        private tyoEngineTileMapEditWindow.MapEditPanel panelAnimation;
         private System.Windows.Forms.ListBox listBoxAnimation;
         private System.Windows.Forms.TabControl tabSystemMenuControl;
-        private System.Windows.Forms.TabPage TitleMapEditor;
+        private System.Windows.Forms.TabPage TileMapEditor;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.GroupBox groupBox10;
-        private System.Windows.Forms.ListBox listBoxMapEditor_TitleList;
+        private System.Windows.Forms.ListBox listBoxMapEditor_TileList;
         private System.Windows.Forms.GroupBox groupBox9;
         private System.Windows.Forms.PropertyGrid propertyGridMapEditor_TitleInfos;
         private System.Windows.Forms.Button btMAP_RefurbishMapTitles;

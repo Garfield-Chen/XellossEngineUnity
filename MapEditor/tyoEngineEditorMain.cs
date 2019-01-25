@@ -116,7 +116,7 @@ namespace tyoEngineEditor
                 return;
             }
 
-            if (_nowMapInfos._mapTitleInfosByIndex.Count == 0)
+            if (_nowMapInfos._mapTileInfosByIndex.Count == 0)
             {
                 MessageBox.Show("没有地图图块..");
 
@@ -129,7 +129,7 @@ namespace tyoEngineEditor
                 _mapeditForm = null;
             }
 
-            _mapeditForm = new tyoEngineTitleMapEditWindow();
+            _mapeditForm = new tyoEngineTileMapEditWindow();
 
             _mapeditForm.SetMapInfos(_nowMapInfos);
 
@@ -166,14 +166,14 @@ namespace tyoEngineEditor
                 _nowMapInfos = new MapInfos();
                 _nowMapInfos.loadPath = string.Empty;
                 propertyGridMapEditor_MapInfos.SelectedObject = _nowMapInfos;
-                listBoxMapEditor_TitleList.Items.Clear();
+                listBoxMapEditor_TileList.Items.Clear();
 
                 propertyGridMapEditor_MapLayer.SelectedObject = null;
                 listBoxMapEditor_MapLayer.Items.Clear();
             }
         }
 
-        private void btMAP_RefurbishMapTitles_Click(object sender, EventArgs e)
+        private void btMAP_RefurbishMapTiles_Click(object sender, EventArgs e)
         {
             if (_nowMapInfos == null)
             {
@@ -182,7 +182,7 @@ namespace tyoEngineEditor
                 return;
             }
 
-            if (listBoxMapEditor_TitleList.Items.Count > 0)
+            if (listBoxMapEditor_TileList.Items.Count > 0)
             {
                 DialogResult dr = MessageBox.Show("当前地图块列表含有已经编辑过的元素，是否刷新重置？", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
@@ -195,13 +195,13 @@ namespace tyoEngineEditor
 
             string _currentDirectory = System.Windows.Forms.Application.StartupPath;
 
-            _nowMapInfos._mapTitleInfosByIndex.Clear();
+            _nowMapInfos._mapTileInfosByIndex.Clear();
 
-            listBoxMapEditor_TitleList.Items.Clear();
+            listBoxMapEditor_TileList.Items.Clear();
 
             propertyGridMapEditor_TitleInfos.SelectedObject = null;
 
-            string abyPath = "\\MAPResource\\Titles";
+            string abyPath = "\\MAPResource\\Tiles";
 
             DirectoryInfo rootdir = new DirectoryInfo(_currentDirectory + abyPath);
 
@@ -225,7 +225,7 @@ namespace tyoEngineEditor
                 if (ext == ".jpg" || ext == ".png" || ext == ".bmp")
                 {
 
-                    MapTitleInfos tmpMapTitlesInfos = new MapTitleInfos();
+                    MapTileInfos tmpMapTitlesInfos = new MapTileInfos();
 
                     tmpMapTitlesInfos._name = dChild.Name;
                     tmpMapTitlesInfos._filename = dChild.Name;
@@ -236,35 +236,35 @@ namespace tyoEngineEditor
 
                     string listname = tmpMapTitlesInfos._name;
 
-                    int listindex = listBoxMapEditor_TitleList.Items.Add(listname);
+                    int listindex = listBoxMapEditor_TileList.Items.Add(listname);
 
                     tmpMapTitlesInfos.index = listindex;
 
-                    _nowMapInfos._mapTitleInfosByIndex[listindex] = tmpMapTitlesInfos;
+                    _nowMapInfos._mapTileInfosByIndex[listindex] = tmpMapTitlesInfos;
                 }
             }
 
         }
 
-        private void listBoxMapEditor_TitleList_SelectedIndexChanged(object sender, EventArgs e)
+        private void listBoxMapEditor_TileList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listBoxMapEditor_TitleList.SelectedIndex >= 0)
+            if (listBoxMapEditor_TileList.SelectedIndex >= 0)
             {
-                propertyGridMapEditor_TitleInfos.SelectedObject = _nowMapInfos._mapTitleInfosByIndex[listBoxMapEditor_TitleList.SelectedIndex];
+                propertyGridMapEditor_TitleInfos.SelectedObject = _nowMapInfos._mapTileInfosByIndex[listBoxMapEditor_TileList.SelectedIndex];
 
-                pictureBoxMapEditor_TitlePic.Load(_nowMapInfos._mapTitleInfosByIndex[listBoxMapEditor_TitleList.SelectedIndex].FilePath);
+                pictureBoxMapEditor_TitlePic.Load(_nowMapInfos._mapTileInfosByIndex[listBoxMapEditor_TileList.SelectedIndex].FilePath);
             }
         }
 
-        private void propertyGridMapEditor_TitleInfos_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+        private void propertyGridMapEditor_TileInfos_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
             if (e.ChangedItem.Label == "Name")
             {
-                int nowlistselectindex = listBoxMapEditor_TitleList.SelectedIndex;
+                int nowlistselectindex = listBoxMapEditor_TileList.SelectedIndex;
 
-                listBoxMapEditor_TitleList.Items.RemoveAt(nowlistselectindex);
+                listBoxMapEditor_TileList.Items.RemoveAt(nowlistselectindex);
 
-                listBoxMapEditor_TitleList.Items.Insert(nowlistselectindex, e.ChangedItem.Value);
+                listBoxMapEditor_TileList.Items.Insert(nowlistselectindex, e.ChangedItem.Value);
             }
         }
 
@@ -443,12 +443,12 @@ namespace tyoEngineEditor
             {
                 propertyGridMapEditor_MapInfos.SelectedObject = _nowMapInfos;
                 propertyGridMapEditor_MapLayer.SelectedObject = null;
-                listBoxMapEditor_TitleList.Items.Clear();
+                listBoxMapEditor_TileList.Items.Clear();
                 listBoxMapEditor_MapLayer.Items.Clear();
             }
         }
 
-        tyoEngineTitleMapEditWindow _mapeditForm = null;
+        tyoEngineTileMapEditWindow _mapeditForm = null;
         private void LoadMap(string _filePath)
         {
             if (_mapeditForm != null)
@@ -471,11 +471,11 @@ namespace tyoEngineEditor
 
 
             LoadMapName(_jsonFile);
-            LoadMapTitleInfos(_jsonFile, _filePath);
+            LoadMapTileInfos(_jsonFile, _filePath);
             LoadMapSize(_jsonFile);
             LoadLayerShowFlag(_jsonFile);
             LoadLayerInfos(_jsonFile);
-            LoadTitleUseInfo(_jsonFile, _filePath);
+            LoadTileUseInfo(_jsonFile, _filePath);
             LoadMapAllData(_jsonFile);
 
             if ( _jsonFile.AnimationUsedInfosList.Count > 0)
@@ -511,7 +511,7 @@ namespace tyoEngineEditor
 
             _nowMapInfos._IsLoadMap = true;
 
-            _mapeditForm = new tyoEngineTitleMapEditWindow();
+            _mapeditForm = new tyoEngineTileMapEditWindow();
 
             _mapeditForm.SetMapInfos(_nowMapInfos);
 
@@ -683,7 +683,7 @@ namespace tyoEngineEditor
 
         private void LoadAnimationArray(BinaryReader binFile)
         {
-            _nowMapInfos._mapAnimationTitle = new int[_nowMapInfos._mapLayerInfosByIndex.Count, _nowMapInfos.Map_Size_Width, _nowMapInfos.Map_Size_Height];
+            _nowMapInfos._mapAnimationTile = new int[_nowMapInfos._mapLayerInfosByIndex.Count, _nowMapInfos.Map_Size_Width, _nowMapInfos.Map_Size_Height];
 
             for (int i = 0; i < _nowMapInfos._mapLayerInfosByIndex.Count; ++i)
             {
@@ -691,7 +691,7 @@ namespace tyoEngineEditor
                 {
                     for (int y = 0; y < _nowMapInfos.Map_Size_Height; ++y)
                     {
-                        _nowMapInfos._mapAnimationTitle[i, x, y] = binFile.ReadInt32();
+                        _nowMapInfos._mapAnimationTile[i, x, y] = binFile.ReadInt32();
                     }
                 }
             }
@@ -810,10 +810,10 @@ namespace tyoEngineEditor
 
         private void LoadMapAllData(MapDataJsonFile _jsonFile)
         {
-            _nowMapInfos._mapTitle = new int[_nowMapInfos._mapLayerInfosByIndex.Count, _nowMapInfos.Map_Size_Width, _nowMapInfos.Map_Size_Height];
+            _nowMapInfos._mapTile = new int[_nowMapInfos._mapLayerInfosByIndex.Count, _nowMapInfos.Map_Size_Width, _nowMapInfos.Map_Size_Height];
             _nowMapInfos._mapExternFlag1 = new int[_nowMapInfos.Map_Size_Width, _nowMapInfos.Map_Size_Height];
             _nowMapInfos._mapBlockFlag = new bool[_nowMapInfos.Map_Size_Width, _nowMapInfos.Map_Size_Height];
-            _nowMapInfos._mapAnimationTitle = new int[_nowMapInfos._mapLayerInfosByIndex.Count, _nowMapInfos.Map_Size_Width, _nowMapInfos.Map_Size_Height];
+            _nowMapInfos._mapAnimationTile = new int[_nowMapInfos._mapLayerInfosByIndex.Count, _nowMapInfos.Map_Size_Width, _nowMapInfos.Map_Size_Height];
 
             for (int i = 0; i < _nowMapInfos._mapLayerInfosByIndex.Count; ++i)
             {
@@ -821,63 +821,63 @@ namespace tyoEngineEditor
                 {
                     for (int y = 0; y < _nowMapInfos.Map_Size_Height; ++y)
                     {
-                        _nowMapInfos._mapTitle[i, x, y] = _jsonFile.MapTitle[i, x, y];
+                        _nowMapInfos._mapTile[i, x, y] = _jsonFile.MapTile[i, x, y];
 
                         if (i == 0)
                         {
-                            _nowMapInfos._mapExternFlag1[x, y] = _jsonFile.MapTitle[i, x, y];
+                            _nowMapInfos._mapExternFlag1[x, y] = _jsonFile.MapTile[i, x, y];
                             _nowMapInfos._mapBlockFlag[x, y] = _jsonFile.MapBlockFlag[x, y];
                         }
 
-                        _nowMapInfos._mapAnimationTitle[i, x, y] = _jsonFile.MapAnimationTitle[i, x, y];
+                        _nowMapInfos._mapAnimationTile[i, x, y] = _jsonFile.MapAnimationTile[i, x, y];
                     }
                 }
             }
             countLoadMap++;
         }
 
-        Dictionary<string, Bitmap> _CacheMapTitle = new Dictionary<string, Bitmap>();
+        Dictionary<string, Bitmap> _CacheMapTile = new Dictionary<string, Bitmap>();
 
         private List<Thread> _LoadThradList = new List<Thread>();
-        private static object _LoadTitleUseInfoChildObj = new object();
+        private static object _LoadTileUseInfoChildObj = new object();
 
-        private void LoadTitleUseInfoChild(int _start, int _count)
+        private void LoadTileUseInfoChild(int _start, int _count)
         {
-            lock (_LoadTitleUseInfoChildObj)
+            lock (_LoadTileUseInfoChildObj)
             {
                 for (int i = _start; i < (_start + _count); ++i)
                 {
 
-                    if (i >= _nowMapInfos._mapTitleUseInfo.Count)
+                    if (i >= _nowMapInfos._mapTileUseInfo.Count)
                     {
                         break;
                     }
 
-                    if (_nowMapInfos._mapTitleUseInfo[i]._image._title != null)
+                    if (_nowMapInfos._mapTileUseInfo[i]._image._tile != null)
                     {
                         continue;
                     }
 
-                    int _comboxIndex = _nowMapInfos._mapTitleUseInfo[i]._comboIndex;
-                    Bitmap _tBmp = _CacheMapTitle[_nowMapInfos._mapTitleInfosByIndex[_comboxIndex]._filepath];
+                    int _comboxIndex = _nowMapInfos._mapTileUseInfo[i]._comboIndex;
+                    Bitmap _tBmp = _CacheMapTile[_nowMapInfos._mapTileInfosByIndex[_comboxIndex]._filepath];
 
-                    _nowMapInfos._mapTitleUseInfo[i]._image._title = _tBmp.Clone(new Rectangle(
-                            _nowMapInfos._mapTitleUseInfo[i]._image._x,
-                            _nowMapInfos._mapTitleUseInfo[i]._image._y,
-                            _nowMapInfos._mapTitleUseInfo[i]._image._w,
-                            _nowMapInfos._mapTitleUseInfo[i]._image._h)
+                    _nowMapInfos._mapTileUseInfo[i]._image._tile = _tBmp.Clone(new Rectangle(
+                            _nowMapInfos._mapTileUseInfo[i]._image._x,
+                            _nowMapInfos._mapTileUseInfo[i]._image._y,
+                            _nowMapInfos._mapTileUseInfo[i]._image._w,
+                            _nowMapInfos._mapTileUseInfo[i]._image._h)
                             , _tBmp.PixelFormat);
 
 
                     //Monitor.Exit(this);
                 }
 
-                LoadTitleUseInfoChild_Over(_start, new EventArgs());//引发完成事件
+                LoadTileUseInfoChild_Over(_start, new EventArgs());//引发完成事件
             }
         }
 
         int _OverCount = 0;
-        private void LoadTitleUseInfoChild_Over(object sender, EventArgs e)
+        private void LoadTileUseInfoChild_Over(object sender, EventArgs e)
         {
 
             _OverCount++;
@@ -903,33 +903,33 @@ namespace tyoEngineEditor
 
         //bool _LoadOver = false;
 
-        private void LoadTitleUseInfo(MapDataJsonFile _jsonFile, string path)
+        private void LoadTileUseInfo(MapDataJsonFile _jsonFile, string path)
         {
             //_LoadOver = false;
 
             //int _count = binFile.ReadInt32();
 
-            _CacheMapTitle.Clear();
+            _CacheMapTile.Clear();
             
-            for (int i = 0; i < _jsonFile.MapUsedTitleInfosList.Count; ++i)
+            for (int i = 0; i < _jsonFile.MapUsedTileInfosList.Count; ++i)
             {
-                string _name = _jsonFile.MapUsedTitleInfosList[i].Name;
-                int _id = _jsonFile.MapUsedTitleInfosList[i].TitleID;
-                int _comboxIndex = _jsonFile.MapUsedTitleInfosList[i].ComboxIndex;
-                bool _flag = _jsonFile.MapUsedTitleInfosList[i].UsedFlag;
+                string _name = _jsonFile.MapUsedTileInfosList[i].Name;
+                int _id = _jsonFile.MapUsedTileInfosList[i].TileID;
+                int _comboxIndex = _jsonFile.MapUsedTileInfosList[i].ComboxIndex;
+                bool _flag = _jsonFile.MapUsedTileInfosList[i].UsedFlag;
 
-                MapUseTitleInfo _tmp = new MapUseTitleInfo();
+                MapUseTileInfo _tmp = new MapUseTileInfo();
 
                 _tmp._name = _name;
                 _tmp._id = _id;
                 _tmp._comboIndex = _comboxIndex;
                 _tmp._flag = _flag;
 
-                _tmp._image = new tyoEngineTitleMapEditWindow.MapTitlePiece();
-                _tmp._image._x = _jsonFile.MapUsedTitleInfosList[i].TitleX;
-                _tmp._image._y = _jsonFile.MapUsedTitleInfosList[i].TitleY;
-                _tmp._image._w = _jsonFile.MapUsedTitleInfosList[i].TitleW;
-                _tmp._image._h = _jsonFile.MapUsedTitleInfosList[i].TitleH;
+                _tmp._image = new tyoEngineTileMapEditWindow.MapTilePiece();
+                _tmp._image._x = _jsonFile.MapUsedTileInfosList[i].TileX;
+                _tmp._image._y = _jsonFile.MapUsedTileInfosList[i].TileY;
+                _tmp._image._w = _jsonFile.MapUsedTileInfosList[i].TileW;
+                _tmp._image._h = _jsonFile.MapUsedTileInfosList[i].TileH;
 
                 //optimize to read use title bmp..
 #warning optimize to read use title bmp.
@@ -938,32 +938,32 @@ namespace tyoEngineEditor
 
                 if (!_name.Equals(Parameters.SYSYTEMUSE))
                 {
-                    if (_CacheMapTitle.ContainsKey(_nowMapInfos._mapTitleInfosByIndex[_comboxIndex]._filepath))// chaeck is hved?
+                    if (_CacheMapTile.ContainsKey(_nowMapInfos._mapTileInfosByIndex[_comboxIndex]._filepath))// chaeck is hved?
                     {
-                        _tBmp = _CacheMapTitle[_nowMapInfos._mapTitleInfosByIndex[_comboxIndex]._filepath];
+                        _tBmp = _CacheMapTile[_nowMapInfos._mapTileInfosByIndex[_comboxIndex]._filepath];
                     }
                     else
                     {
-                        _tBmp = (Bitmap)Image.FromFile(_nowMapInfos._mapTitleInfosByIndex[_comboxIndex]._filepath);
-                        _CacheMapTitle[_nowMapInfos._mapTitleInfosByIndex[_comboxIndex]._filepath] = _tBmp;
+                        _tBmp = (Bitmap)Image.FromFile(_nowMapInfos._mapTileInfosByIndex[_comboxIndex]._filepath);
+                        _CacheMapTile[_nowMapInfos._mapTileInfosByIndex[_comboxIndex]._filepath] = _tBmp;
                     }
 
                 }
                 else
                 {
-                    if (_CacheMapTitle.ContainsKey(_id.ToString()))// check is haved?
+                    if (_CacheMapTile.ContainsKey(_id.ToString()))// check is haved?
                     {
-                        _tBmp = _CacheMapTitle[_id.ToString()];
+                        _tBmp = _CacheMapTile[_id.ToString()];
                     }
                 }
 
-                _tmp._image._title = new Bitmap(_tmp._image._w, _tmp._image._h);
-                Graphics imgGraphics = Graphics.FromImage(_tmp._image._title);
+                _tmp._image._tile = new Bitmap(_tmp._image._w, _tmp._image._h);
+                Graphics imgGraphics = Graphics.FromImage(_tmp._image._tile);
                 Rectangle destRect = new Rectangle(new Point(0, 0), new Size(_tmp._image._w, _tmp._image._h));
                 imgGraphics.DrawImage(_tBmp, destRect, new Rectangle(_tmp._image._x, _tmp._image._y, _tmp._image._w, _tmp._image._h), GraphicsUnit.Pixel);
                 // _tBmp.Clone(new Rectangle(_tmp._image._x, _tmp._image._y, _tmp._image._w, _tmp._image._h), _tBmp.PixelFormat);
 
-                _nowMapInfos._mapTitleUseInfo.Add(_tmp);
+                _nowMapInfos._mapTileUseInfo.Add(_tmp);
 
                 //String _imagePath = System.Text.Encoding.Default.GetString(binFile.ReadBytes(binFile.ReadInt32()));
 
@@ -992,7 +992,7 @@ namespace tyoEngineEditor
             //                 Thread.Sleep(10);
             //             }
 
-            _CacheMapTitle.Clear();
+            _CacheMapTile.Clear();
             countLoadMap++;
         }
 
@@ -1048,8 +1048,8 @@ namespace tyoEngineEditor
         {
             _nowMapInfos.Map_Size_Width = _jsonFile.MapSizeWidth;
             _nowMapInfos.Map_Size_Height = _jsonFile.MapSizeHeight;
-            _nowMapInfos.Map_Title_Width = _jsonFile.MapTitleWidth;
-            _nowMapInfos.Map_Title_Height = _jsonFile.MapTitleHeight;
+            _nowMapInfos.Map_Tile_Width = _jsonFile.MapTileWidth;
+            _nowMapInfos.Map_Tile_Height = _jsonFile.MapTileHeight;
 
             countLoadMap++;
         }
@@ -1062,55 +1062,55 @@ namespace tyoEngineEditor
 
 
 
-        private void LoadMapTitleInfos(MapDataJsonFile _jsonFile, String path)
+        private void LoadMapTileInfos(MapDataJsonFile _jsonFile, String path)
         {
             //int _count = binFile.ReadInt32();
 
-            for (int i = 0; i < _jsonFile.MapTitleInfosList.Count; ++i)
+            for (int i = 0; i < _jsonFile.MapTileInfosList.Count; ++i)
             {
-                int _index = _jsonFile.MapTitleInfosList[i].Index;
-                String _name = _jsonFile.MapTitleInfosList[i].Name;
-                String _filename = _jsonFile.MapTitleInfosList[i].Directory;
+                int _index = _jsonFile.MapTileInfosList[i].Index;
+                String _name = _jsonFile.MapTileInfosList[i].Name;
+                String _filename = _jsonFile.MapTileInfosList[i].Directory;
 
                 String _filepath = Path.GetDirectoryName(path);
                 _filepath = _filepath + "\\" + _filename;
 
-                MapTitleInfos tmpMapTitlesInfos = new MapTitleInfos();
+                MapTileInfos tmpMapTilesInfos = new MapTileInfos();
 
-                tmpMapTitlesInfos._name = _name;
-                tmpMapTitlesInfos._filename = _filename;
-                tmpMapTitlesInfos._filepath = _filepath;
+                tmpMapTilesInfos._name = _name;
+                tmpMapTilesInfos._filename = _filename;
+                tmpMapTilesInfos._filepath = _filepath;
                 if (_filename.LastIndexOf("\\") < 0)
                 {
-                    tmpMapTitlesInfos.dirname = "Titles";
+                    tmpMapTilesInfos.dirname = "Tiles";
                 }
                 else
                 {
-                    tmpMapTitlesInfos.dirname = _filename.Substring(0, _filename.LastIndexOf("\\"));
+                    tmpMapTilesInfos.dirname = _filename.Substring(0, _filename.LastIndexOf("\\"));
                 }
 
-                String listname = tmpMapTitlesInfos._name;
+                String listname = tmpMapTilesInfos._name;
 
-                InsertTitleListHandle(new object[] { _index, listname });
+                InsertTileListHandle(new object[] { _index, listname });
 
-                tmpMapTitlesInfos.index = _index;
-                _nowMapInfos._mapTitleInfosByIndex[_index] = tmpMapTitlesInfos;
+                tmpMapTilesInfos.index = _index;
+                _nowMapInfos._mapTileInfosByIndex[_index] = tmpMapTilesInfos;
             }
             countLoadMap++;
         }
 
-        private void InsertTitleListHandle(object obj)
+        private void InsertTileListHandle(object obj)
         {
             //int _index = (int)((object[])obj)[0];
             //string listname = ((object[])obj)[1].ToString();
             if (this.InvokeRequired)
             {
-                LoadMapHandle loadMapHandle = new LoadMapHandle(InsertTitleListHandle);
+                LoadMapHandle loadMapHandle = new LoadMapHandle(InsertTileListHandle);
                 this.Invoke(loadMapHandle, new object[] { obj });
             }
             else
             {
-                listBoxMapEditor_TitleList.Items.Insert((int)((object[])obj)[0], ((object[])obj)[1].ToString());
+                listBoxMapEditor_TileList.Items.Insert((int)((object[])obj)[0], ((object[])obj)[1].ToString());
             }
         }
 

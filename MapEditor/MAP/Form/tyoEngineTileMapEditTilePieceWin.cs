@@ -10,23 +10,23 @@ using System.IO;
 
 namespace tyoEngineEditor
 {
-    public partial class tyoEngineTitleMapEditTitlePieceWin : Form
+    public partial class tyoEngineTileMapEditTilePieceWin : Form
     {
-        public tyoEngineTitleMapEditTitlePieceWin()
+        public tyoEngineTileMapEditTilePieceWin()
         {
             InitializeComponent();
         }
 
-        tyoEngineTitleMapEditWindow _MapEditWin = null;
+        tyoEngineTileMapEditWindow _MapEditWin = null;
 
-        private const int MapTitlePanelSizeW = 800;
-        private const int MapTitlePanelSizeH = 800;
+        private const int MapTilePanelSizeW = 800;
+        private const int MapTilePanelSizeH = 800;
 
-        public void InitData( tyoEngineTitleMapEditWindow _dlg )
+        public void InitData( tyoEngineTileMapEditWindow _dlg )
         {
             _MapEditWin = _dlg;
 
-            mapTitlePanel.Size = new Size(MapTitlePanelSizeW, MapTitlePanelSizeH);
+            mapTitlePanel.Size = new Size(MapTilePanelSizeW, MapTilePanelSizeH);
             this.Size = new Size(830, 890);
         }
 
@@ -35,17 +35,17 @@ namespace tyoEngineEditor
             mapTitlePanel.Refresh();
         }
 
-        private void tyoEngineTitleMapEditTitlePieceWin_Shown(object sender, EventArgs e)
+        private void tyoEngineTitleMapEditTilePieceWin_Shown(object sender, EventArgs e)
         {
-            UpdateTitleCombox();
+            UpdateTileCombox();
         }
 
-        private void UpdateTitleCombox()
+        private void UpdateTileCombox()
         {
             this.comboxTitleDirSelect.Items.Clear();
 
             string currentPath = System.Environment.CurrentDirectory
-                + "\\MAPResource\\Titles";
+                + "\\MAPResource\\Tiles";
             if (!_MapEditWin.GetMapInfos().loadPath.Equals(string.Empty)) 
             {
                 currentPath = _MapEditWin.GetMapInfos().loadPath.Substring(0,
@@ -54,9 +54,9 @@ namespace tyoEngineEditor
             string[] dirs = Directory.GetDirectories(currentPath);
 
             string dirName = string.Empty;
-            if (!this.comboxTitleDirSelect.Items.Contains("Titles")) 
+            if (!this.comboxTitleDirSelect.Items.Contains("Tiles")) 
             {
-                this.comboxTitleDirSelect.Items.Add("Titles");
+                this.comboxTitleDirSelect.Items.Add("Tiles");
             }
             
             for (int i = 0; i < dirs.Length; i++) 
@@ -81,19 +81,19 @@ namespace tyoEngineEditor
         {
             if (comboxTitleSelect.SelectedIndex >= 0)
             {
-                MapTitleInfos tempTitle = (MapTitleInfos)comboxTitleSelect.SelectedItem;
-                _MapEditWin.SetMapTitelSelect(Image.FromFile(_MapEditWin.GetMapInfos()
-                    ._mapTitleInfosByIndex[tempTitle.index]._filepath));
+                MapTileInfos tempTitle = (MapTileInfos)comboxTitleSelect.SelectedItem;
+                _MapEditWin.SetMapTileSelect(Image.FromFile(_MapEditWin.GetMapInfos()
+                    ._mapTileInfosByIndex[tempTitle.index]._filepath));
 
-                _MapEditWin.GetTitleImageList().Clear();
+                _MapEditWin.GetTileImageList().Clear();
 
                 // 先切割图片，看看长宽可以分割成多少个快快。
-                _maxTitleW = _MapEditWin.GetMapTitleSelect().Width / _MapEditWin.GetMapInfos().Map_Title_Width;
-                _maxTitleH = _MapEditWin.GetMapTitleSelect().Height / _MapEditWin.GetMapInfos().Map_Title_Height;
+                _maxTitleW = _MapEditWin.GetMapTileSelect().Width / _MapEditWin.GetMapInfos().Map_Tile_Width;
+                _maxTitleH = _MapEditWin.GetMapTileSelect().Height / _MapEditWin.GetMapInfos().Map_Tile_Height;
 
 
-                float _wScale = (float)MapTitlePanelSizeW / (float)_MapEditWin.GetMapTitleSelect().Width ;
-                float _hScale = (float)MapTitlePanelSizeH / (float)_MapEditWin.GetMapTitleSelect().Height;
+                float _wScale = (float)MapTilePanelSizeW / (float)_MapEditWin.GetMapTileSelect().Width ;
+                float _hScale = (float)MapTilePanelSizeH / (float)_MapEditWin.GetMapTileSelect().Height;
 
                 if(_wScale < 1.0f || _hScale < 1.0f)
                 {
@@ -113,19 +113,19 @@ namespace tyoEngineEditor
                 {
                     for (int x = 0; x < _maxTitleW; ++x)
                     {
-                        Bitmap imgTitle = new Bitmap(_MapEditWin.GetMapInfos().Map_Title_Width, _MapEditWin.GetMapInfos().Map_Title_Height);
+                        Bitmap imgTile = new Bitmap(_MapEditWin.GetMapInfos().Map_Tile_Width, _MapEditWin.GetMapInfos().Map_Tile_Height);
 
-                        Graphics imgGraphics = Graphics.FromImage(imgTitle);
+                        Graphics imgGraphics = Graphics.FromImage(imgTile);
 
-                        Rectangle destRect = new Rectangle(new Point(0, 0), new Size(_MapEditWin.GetMapInfos().Map_Title_Width, _MapEditWin.GetMapInfos().Map_Title_Height));//目标位置
+                        Rectangle destRect = new Rectangle(new Point(0, 0), new Size(_MapEditWin.GetMapInfos().Map_Tile_Width, _MapEditWin.GetMapInfos().Map_Tile_Height));//目标位置
 
                         Rectangle origRect = new Rectangle(
-                            new Point(x * _MapEditWin.GetMapInfos().Map_Title_Width, y * _MapEditWin.GetMapInfos().Map_Title_Height),
-                            new Size(_MapEditWin.GetMapInfos().Map_Title_Width, _MapEditWin.GetMapInfos().Map_Title_Height));//原图位置（默认从原图中截取的图片大小等于目标图片的大小）
+                            new Point(x * _MapEditWin.GetMapInfos().Map_Tile_Width, y * _MapEditWin.GetMapInfos().Map_Tile_Height),
+                            new Size(_MapEditWin.GetMapInfos().Map_Tile_Width, _MapEditWin.GetMapInfos().Map_Tile_Height));//原图位置（默认从原图中截取的图片大小等于目标图片的大小）
 
-                        imgGraphics.DrawImage(_MapEditWin.GetMapTitleSelect(), destRect, origRect, GraphicsUnit.Pixel);
+                        imgGraphics.DrawImage(_MapEditWin.GetMapTileSelect(), destRect, origRect, GraphicsUnit.Pixel);
 
-                        tyoEngineTitleMapEditWindow.MapTitlePiece _piece = new tyoEngineTitleMapEditWindow.MapTitlePiece();
+                        tyoEngineTileMapEditWindow.MapTilePiece _piece = new tyoEngineTileMapEditWindow.MapTilePiece();
                         
                         _piece._x = origRect.X;
                         _piece._y = origRect.Y;
@@ -133,22 +133,22 @@ namespace tyoEngineEditor
                         _piece._h = origRect.Height;
 
                         //_piece._titleinfo = _MapEditWin.GetMapInfos()._mapTitleInfosByIndex[comboxTitleSelect.SelectedIndex];
-                        _piece._title = imgTitle;
+                        _piece._tile = imgTile;
 
-                        _MapEditWin.GetTitleImageList().Add(_piece);
+                        _MapEditWin.GetTileImageList().Add(_piece);
                     }
                 }
             }
         }
 
-        private void mapTitlePanel_Paint(object sender, PaintEventArgs e)
+        private void mapTilePanel_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.Clear(Color.White);
             e.Graphics.ScaleTransform(_TitleScale, _TitleScale);
 
-            if (_MapEditWin.GetMapTitleSelect() != null)
+            if (_MapEditWin.GetMapTileSelect() != null)
             {
-                int __iw = _MapEditWin.GetMapTitleSelect().Width;
+                int __iw = _MapEditWin.GetMapTileSelect().Width;
 
                 //e.Graphics.DrawImage(_MapEditWin.GetMapTitleSelect(), 0, 0);
 
@@ -167,14 +167,14 @@ namespace tyoEngineEditor
 //                             continue;
 //                         }
 
-                        if ((y * _maxTitleW + x) >= _MapEditWin.GetTitleImageList().Count)
+                        if ((y * _maxTitleW + x) >= _MapEditWin.GetTileImageList().Count)
                         {
                             continue;
                         }
 
-                        e.Graphics.DrawImage(_MapEditWin.GetTitleImageList()[y * _maxTitleW + x]._title, 
-                            drawx * _MapEditWin.GetMapInfos().Map_Title_Width,
-                            drawy * _MapEditWin.GetMapInfos().Map_Title_Height);
+                        e.Graphics.DrawImage(_MapEditWin.GetTileImageList()[y * _maxTitleW + x]._tile, 
+                            drawx * _MapEditWin.GetMapInfos().Map_Tile_Width,
+                            drawy * _MapEditWin.GetMapInfos().Map_Tile_Height);
 
 
                         drawy++;
@@ -188,32 +188,32 @@ namespace tyoEngineEditor
 
             UpdateMouseRect();
 
-            e.Graphics.DrawRectangle(_MapEditWin.GetWhilePen(), _TitleMousePointX, _TitleMousePointY, _TitleMousePointW, _TitleMousePointH);
-            e.Graphics.DrawRectangle(_MapEditWin.GetBlackPen(), _TitleMousePointX + 1, _TitleMousePointY + 1, _TitleMousePointW - 2, _TitleMousePointH - 2);
-            e.Graphics.DrawRectangle(_MapEditWin.GetWhilePen(), _TitleMousePointX + 2, _TitleMousePointY + 2, _TitleMousePointW - 4, _TitleMousePointH - 4);
+            e.Graphics.DrawRectangle(_MapEditWin.GetWhilePen(), _TileMousePointX, _TileMousePointY, _TileMousePointW, _TileMousePointH);
+            e.Graphics.DrawRectangle(_MapEditWin.GetBlackPen(), _TileMousePointX + 1, _TileMousePointY + 1, _TileMousePointW - 2, _TileMousePointH - 2);
+            e.Graphics.DrawRectangle(_MapEditWin.GetWhilePen(), _TileMousePointX + 2, _TileMousePointY + 2, _TileMousePointW - 4, _TileMousePointH - 4);
         }
 
-        private void mapTitlePanel_MouseUp(object sender, MouseEventArgs e)
+        private void mapTilePanel_MouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
                 int _mx = e.X;
                 int _my = e.Y;
 
-                _StartSelectTitle = false;
+                _StartSelectTile = false;
 
-                int x = mapTitlePanel.Width / GetTitleWidthInScale();
-                int y = mapTitlePanel.Height / GetTitleHeightInScale();
+                int x = mapTitlePanel.Width / GetTileWidthInScale();
+                int y = mapTitlePanel.Height / GetTileHeightInScale();
 
                 for (int i = 0; i < x; ++i)
                 {
                     for (int j = 0; j < y; ++j)
                     {
-                        if (_mx >= i * GetTitleWidthInScale() && _mx < (i * GetTitleWidthInScale() + GetTitleWidthInScale()) &&
-                            _my >= j * GetTitleHeightInScale() && _my < (j * GetTitleHeightInScale() + GetTitleHeightInScale()))
+                        if (_mx >= i * GetTileWidthInScale() && _mx < (i * GetTileWidthInScale() + GetTileWidthInScale()) &&
+                            _my >= j * GetTileHeightInScale() && _my < (j * GetTileHeightInScale() + GetTileHeightInScale()))
                         {
-                            _TitleMousePointEnd.X = i * _MapEditWin.GetMapInfos().Map_Title_Width;
-                            _TitleMousePointEnd.Y = j * _MapEditWin.GetMapInfos().Map_Title_Height;
+                            _TileMousePointEnd.X = i * _MapEditWin.GetMapInfos().Map_Tile_Width;
+                            _TileMousePointEnd.Y = j * _MapEditWin.GetMapInfos().Map_Tile_Height;
 
                             return;
                         }
@@ -224,54 +224,54 @@ namespace tyoEngineEditor
 
         float _TitleScale = 1.0f;
 
-        private int GetTitleWidthInScale()
+        private int GetTileWidthInScale()
         {
-            return (int)(_MapEditWin.GetMapInfos().Map_Title_Width * _TitleScale);
+            return (int)(_MapEditWin.GetMapInfos().Map_Tile_Width * _TitleScale);
         }
 
-        private int GetTitleHeightInScale()
+        private int GetTileHeightInScale()
         {
-            return (int)(_MapEditWin.GetMapInfos().Map_Title_Height * _TitleScale);
+            return (int)(_MapEditWin.GetMapInfos().Map_Tile_Height * _TitleScale);
         }
 
-        bool _StartSelectTitle = false;
+        bool _StartSelectTile = false;
 
-        Point _TitleMousePointStart = new Point();
-        Point _TitleMousePointEnd = new Point();
+        Point _TileMousePointStart = new Point();
+        Point _TileMousePointEnd = new Point();
 
-        public int _TitleMousePointW = 0;
-        public int _TitleMousePointH = 0;
-        public int _TitleMousePointX = 0;
-        public int _TitleMousePointY = 0;
+        public int _TileMousePointW = 0;
+        public int _TileMousePointH = 0;
+        public int _TileMousePointX = 0;
+        public int _TileMousePointY = 0;
 
         private void mapTitlePanel_MouseDown(object sender, MouseEventArgs e)
         {
             _MapEditWin.GetMapInfos()._IsLoadMonstor = false;
             if (e.Button == MouseButtons.Left)
             {
-                _StartSelectTitle = true;
+                _StartSelectTile = true;
 
                 int _mx = e.X ;
                 int _my = e.Y ;
 
-                _TitleMousePointStart.X = _mx;
-                _TitleMousePointStart.Y = _my;
+                _TileMousePointStart.X = _mx;
+                _TileMousePointStart.Y = _my;
 
-                _TitleMousePointEnd.X = _mx;
-                _TitleMousePointEnd.Y = _my;
+                _TileMousePointEnd.X = _mx;
+                _TileMousePointEnd.Y = _my;
 
-                int x = mapTitlePanel.Width / GetTitleWidthInScale();
-                int y = mapTitlePanel.Height / GetTitleHeightInScale();
+                int x = mapTitlePanel.Width / GetTileWidthInScale();
+                int y = mapTitlePanel.Height / GetTileHeightInScale();
 
                 for (int i = 0; i < x; ++i)
                 {
                     for (int j = 0; j < y; ++j)
                     {
-                        if (_mx >= i * GetTitleWidthInScale() && _mx < (i * GetTitleWidthInScale() + GetTitleWidthInScale()) &&
-                            _my >= j * GetTitleHeightInScale() && _my < (j * GetTitleHeightInScale() + GetTitleHeightInScale()))
+                        if (_mx >= i * GetTileWidthInScale() && _mx < (i * GetTileWidthInScale() + GetTileWidthInScale()) &&
+                            _my >= j * GetTileHeightInScale() && _my < (j * GetTileHeightInScale() + GetTileHeightInScale()))
                         {
-                            _TitleMousePointStart.X = i * _MapEditWin.GetMapInfos().Map_Title_Width;
-                            _TitleMousePointStart.Y = j * _MapEditWin.GetMapInfos().Map_Title_Height;
+                            _TileMousePointStart.X = i * _MapEditWin.GetMapInfos().Map_Tile_Width;
+                            _TileMousePointStart.Y = j * _MapEditWin.GetMapInfos().Map_Tile_Height;
 
                             return;
                         }
@@ -283,15 +283,15 @@ namespace tyoEngineEditor
             {
                 UpdateMouseRect();
 
-                _MapEditWin.SetNowSelectPiece( new Bitmap(_TitleMousePointW, _TitleMousePointH) );
+                _MapEditWin.SetNowSelectPiece( new Bitmap(_TileMousePointW, _TileMousePointH) );
 
                 Graphics imgGraphics = Graphics.FromImage(_MapEditWin.GetNowSelectPiece());
 
-                Rectangle destRect = new Rectangle(new Point(0, 0), new Size(_TitleMousePointW, _TitleMousePointH));//目标位置
-                Rectangle origRect = new Rectangle(new Point(_TitleMousePointX , _TitleMousePointY )
-                    , new Size(_TitleMousePointW, _TitleMousePointH));//原图位置（默认从原图中截取的图片大小等于目标图片的大小）
+                Rectangle destRect = new Rectangle(new Point(0, 0), new Size(_TileMousePointW, _TileMousePointH));//目标位置
+                Rectangle origRect = new Rectangle(new Point(_TileMousePointX , _TileMousePointY )
+                    , new Size(_TileMousePointW, _TileMousePointH));//原图位置（默认从原图中截取的图片大小等于目标图片的大小）
 
-                imgGraphics.DrawImage(_MapEditWin.GetMapTitleSelect(), destRect, origRect, GraphicsUnit.Pixel);
+                imgGraphics.DrawImage(_MapEditWin.GetMapTileSelect(), destRect, origRect, GraphicsUnit.Pixel);
 
                 AddTitlePieceImage();
             }
@@ -299,34 +299,34 @@ namespace tyoEngineEditor
 
         private void AddTitlePieceImage()
         {
-            int titlePanelPieceW = mapTitlePanel.Width / _MapEditWin.GetMapInfos().Map_Title_Width;
-            int titlePanelPieceH = mapTitlePanel.Height / _MapEditWin.GetMapInfos().Map_Title_Height;
+            int titlePanelPieceW = mapTitlePanel.Width / _MapEditWin.GetMapInfos().Map_Tile_Width;
+            int titlePanelPieceH = mapTitlePanel.Height / _MapEditWin.GetMapInfos().Map_Tile_Height;
 
             _MapEditWin._nowSelectPieceIndexByMap.Clear();
 
-            int x = _TitleMousePointX / _MapEditWin.GetMapInfos().Map_Title_Width;
-            int y = _TitleMousePointY / _MapEditWin.GetMapInfos().Map_Title_Height;
+            int x = _TileMousePointX / _MapEditWin.GetMapInfos().Map_Tile_Width;
+            int y = _TileMousePointY / _MapEditWin.GetMapInfos().Map_Tile_Height;
 
-            _MapEditWin._nowSelectPieceW = _TitleMousePointW / _MapEditWin.GetMapInfos().Map_Title_Width;
-            _MapEditWin._nowSelectPieceH = _TitleMousePointH / _MapEditWin.GetMapInfos().Map_Title_Height;
+            _MapEditWin._nowSelectPieceW = _TileMousePointW / _MapEditWin.GetMapInfos().Map_Tile_Width;
+            _MapEditWin._nowSelectPieceH = _TileMousePointH / _MapEditWin.GetMapInfos().Map_Tile_Height;
 
-            MapTitleInfos tempTitle = null;
+            MapTileInfos tempTitle = null;
             for (int x1 = 0; x1 < _MapEditWin._nowSelectPieceW; ++x1)
             {
                 for (int y1 = 0; y1 < _MapEditWin._nowSelectPieceH; ++y1)
                 {
-                    if (((y + y1) * _maxTitleW + (x + x1)) >= _MapEditWin.GetTitleImageList().Count)
+                    if (((y + y1) * _maxTitleW + (x + x1)) >= _MapEditWin.GetTileImageList().Count)
                     {
                         continue;
                     }
-                    tempTitle = (MapTitleInfos)comboxTitleSelect.SelectedItem;
-                    int index = _MapEditWin.GetMapInfos().AddMapUseTitleInfo(
-                        _MapEditWin.GetTitleImageList()[(y + y1) * _maxTitleW + (x + x1)],
+                    tempTitle = (MapTileInfos)comboxTitleSelect.SelectedItem;
+                    int index = _MapEditWin.GetMapInfos().AddMapUseTileInfo(
+                        _MapEditWin.GetTileImageList()[(y + y1) * _maxTitleW + (x + x1)],
                         tempTitle.index,
-                        _MapEditWin.GetMapInfos()._mapTitleInfosByIndex[tempTitle.index]._name,
+                        _MapEditWin.GetMapInfos()._mapTileInfosByIndex[tempTitle.index]._name,
                         (y + y1) * _maxTitleW + (x + x1));
 
-                    tyoEngineTitleMapEditWindow.SelectIndexType stype = new tyoEngineTitleMapEditWindow.SelectIndexType();
+                    tyoEngineTileMapEditWindow.SelectIndexType stype = new tyoEngineTileMapEditWindow.SelectIndexType();
 
                     stype._x = x1;
                     stype._y = y1;
@@ -340,7 +340,7 @@ namespace tyoEngineEditor
 
         private void mapTitlePanel_MouseMove(object sender, MouseEventArgs e)
         {
-            if (_StartSelectTitle == false)
+            if (_StartSelectTile == false)
             {
                 return;
             }
@@ -348,18 +348,18 @@ namespace tyoEngineEditor
             int _mx = e.X;
             int _my = e.Y;
 
-            int x = mapTitlePanel.Width / GetTitleWidthInScale();
-            int y = mapTitlePanel.Height / GetTitleHeightInScale();
+            int x = mapTitlePanel.Width / GetTileWidthInScale();
+            int y = mapTitlePanel.Height / GetTileHeightInScale();
 
             for (int i = 0; i < x; ++i)
             {
                 for (int j = 0; j < y; ++j)
                 {
-                    if (_mx >= i * GetTitleWidthInScale() && _mx < (i * GetTitleWidthInScale() + GetTitleWidthInScale()) &&
-                        _my >= j * GetTitleHeightInScale() && _my < (j * GetTitleHeightInScale() + GetTitleHeightInScale()))
+                    if (_mx >= i * GetTileWidthInScale() && _mx < (i * GetTileWidthInScale() + GetTileWidthInScale()) &&
+                        _my >= j * GetTileHeightInScale() && _my < (j * GetTileHeightInScale() + GetTileHeightInScale()))
                     {
-                        _TitleMousePointEnd.X = i * _MapEditWin.GetMapInfos().Map_Title_Width;
-                        _TitleMousePointEnd.Y = j * _MapEditWin.GetMapInfos().Map_Title_Height;
+                        _TileMousePointEnd.X = i * _MapEditWin.GetMapInfos().Map_Tile_Width;
+                        _TileMousePointEnd.Y = j * _MapEditWin.GetMapInfos().Map_Tile_Height;
 
                         return;
                     }
@@ -369,45 +369,45 @@ namespace tyoEngineEditor
 
         private void UpdateMouseRect()
         {
-            _TitleMousePointW = Math.Abs(_TitleMousePointStart.X - _TitleMousePointEnd.X);
-            _TitleMousePointH = Math.Abs(_TitleMousePointStart.Y - _TitleMousePointEnd.Y);
-            _TitleMousePointX = 0;
-            _TitleMousePointY = 0;
+            _TileMousePointW = Math.Abs(_TileMousePointStart.X - _TileMousePointEnd.X);
+            _TileMousePointH = Math.Abs(_TileMousePointStart.Y - _TileMousePointEnd.Y);
+            _TileMousePointX = 0;
+            _TileMousePointY = 0;
 
-            if (_TitleMousePointStart.X >= _TitleMousePointEnd.X)
+            if (_TileMousePointStart.X >= _TileMousePointEnd.X)
             {
-                _TitleMousePointX = _TitleMousePointEnd.X;
+                _TileMousePointX = _TileMousePointEnd.X;
             }
             else
             {
-                _TitleMousePointX = _TitleMousePointStart.X;
+                _TileMousePointX = _TileMousePointStart.X;
             }
 
-            if (_TitleMousePointStart.Y >= _TitleMousePointEnd.Y)
+            if (_TileMousePointStart.Y >= _TileMousePointEnd.Y)
             {
-                _TitleMousePointY = _TitleMousePointEnd.Y;
+                _TileMousePointY = _TileMousePointEnd.Y;
             }
             else
             {
-                _TitleMousePointY = _TitleMousePointStart.Y;
+                _TileMousePointY = _TileMousePointStart.Y;
             }
 
-            if (_TitleMousePointW < _MapEditWin.GetMapInfos().Map_Title_Width)
+            if (_TileMousePointW < _MapEditWin.GetMapInfos().Map_Tile_Width)
             {
-                _TitleMousePointW = _MapEditWin.GetMapInfos().Map_Title_Width;
+                _TileMousePointW = _MapEditWin.GetMapInfos().Map_Tile_Width;
             }
             else
             {
-                _TitleMousePointW += _MapEditWin.GetMapInfos().Map_Title_Width;
+                _TileMousePointW += _MapEditWin.GetMapInfos().Map_Tile_Width;
             }
 
-            if (_TitleMousePointH < _MapEditWin.GetMapInfos().Map_Title_Height)
+            if (_TileMousePointH < _MapEditWin.GetMapInfos().Map_Tile_Height)
             {
-                _TitleMousePointH = _MapEditWin.GetMapInfos().Map_Title_Height;
+                _TileMousePointH = _MapEditWin.GetMapInfos().Map_Tile_Height;
             }
             else
             {
-                _TitleMousePointH += _MapEditWin.GetMapInfos().Map_Title_Height;
+                _TileMousePointH += _MapEditWin.GetMapInfos().Map_Tile_Height;
             }
         }
 
@@ -430,7 +430,7 @@ namespace tyoEngineEditor
                 Path.GetExtension(_filePath).ToLower() == ".jpg" ||
                 Path.GetExtension(_filePath).ToLower() == ".bmp")
             {
-                MapTitleInfos tmpMapTitlesInfos = new MapTitleInfos();
+                MapTileInfos tmpMapTitlesInfos = new MapTileInfos();
 
                 tmpMapTitlesInfos._name = textTitleName.Text;
                 tmpMapTitlesInfos._filename = Path.GetFileName(_filePath);
@@ -441,11 +441,11 @@ namespace tyoEngineEditor
 
                 //int listindex = listBoxMapEditor_TitleList.Items.Add(listname);
 
-                int _index = _MapEditWin.GetMapInfos()._mapTitleInfosByIndex.Count;
+                int _index = _MapEditWin.GetMapInfos()._mapTileInfosByIndex.Count;
                 tmpMapTitlesInfos.index = _index;
-                _MapEditWin.GetMapInfos()._mapTitleInfosByIndex[_index] = tmpMapTitlesInfos;
+                _MapEditWin.GetMapInfos()._mapTileInfosByIndex[_index] = tmpMapTitlesInfos;
 
-                UpdateTitleCombox();
+                UpdateTileCombox();
 
                 textTitleName.Text = "";
 
@@ -497,12 +497,12 @@ namespace tyoEngineEditor
         {
             comboxTitleSelect.Items.Clear();
 
-            foreach (int index in _MapEditWin.GetMapInfos()._mapTitleInfosByIndex.Keys)
+            foreach (int index in _MapEditWin.GetMapInfos()._mapTileInfosByIndex.Keys)
             {
-                if (this.comboxTitleDirSelect.SelectedItem.ToString().Equals(_MapEditWin.GetMapInfos()._mapTitleInfosByIndex[index].dirname))
+                if (this.comboxTitleDirSelect.SelectedItem.ToString().Equals(_MapEditWin.GetMapInfos()._mapTileInfosByIndex[index].dirname))
                 {
                     comboxTitleSelect.Items.Add(_MapEditWin.GetMapInfos()
-                        ._mapTitleInfosByIndex[index]);
+                        ._mapTileInfosByIndex[index]);
                 }
             }
 

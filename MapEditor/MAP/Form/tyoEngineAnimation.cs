@@ -19,7 +19,7 @@ namespace tyoEngineEditor
         private List<AnimationImageInfo> animationImageInfos = null;
         private AnimationInfo animationInfo = null;
 
-        private tyoEngineTitleMapEditWindow _mainDlg;
+        private tyoEngineTileMapEditWindow _mainDlg;
 
         public int _TitleMousePointW = 0;
         public int _TitleMousePointH = 0;
@@ -31,7 +31,7 @@ namespace tyoEngineEditor
 
         bool _StartSelectTitle = false;
 
-        public tyoEngineAnimation(string path, tyoEngineTitleMapEditWindow mainDlg)
+        public tyoEngineAnimation(string path, tyoEngineTileMapEditWindow mainDlg)
         {
             InitializeComponent();
             _mainDlg = mainDlg;

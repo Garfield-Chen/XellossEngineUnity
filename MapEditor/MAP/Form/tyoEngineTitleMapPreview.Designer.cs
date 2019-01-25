@@ -1,6 +1,6 @@
 ﻿namespace tyoEngineEditor
 {
-    partial class tyoEngineTitleMapPreview
+    partial class tyoEngineTileMapPreview
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.panelPreView = new tyoEngineEditor.tyoEngineTitleMapEditWindow.MapEditPanel();
+            this.panelPreView = new tyoEngineEditor.tyoEngineTileMapEditWindow.MapEditPanel();
             this.label2 = new System.Windows.Forms.Label();
             this.buttonZoom = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
@@ -111,7 +111,7 @@
 
         #endregion
 
-        private tyoEngineTitleMapEditWindow.MapEditPanel panelPreView;
+        private tyoEngineTileMapEditWindow.MapEditPanel panelPreView;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button buttonZoom;
         private System.Windows.Forms.Label label3;

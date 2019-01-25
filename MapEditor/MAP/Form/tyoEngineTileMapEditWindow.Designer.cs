@@ -1,6 +1,6 @@
 ﻿namespace tyoEngineEditor
 {
-    partial class tyoEngineTitleMapEditWindow
+    partial class tyoEngineTileMapEditWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -31,8 +31,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(tyoEngineTitleMapEditWindow));
-            this.panelMap = new tyoEngineEditor.tyoEngineTitleMapEditWindow.MapEditPanel();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(tyoEngineTileMapEditWindow));
+            this.panelMap = new tyoEngineEditor.tyoEngineTileMapEditWindow.MapEditPanel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.labelMapMousPos = new System.Windows.Forms.Label();
             this.btMapSharp = new System.Windows.Forms.Button();
@@ -455,7 +455,7 @@
             this.Name = "tyoEngineTitleMapEditWindow";
             this.Text = "新的地图";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.tyoEngineTitleMapEditWindow_FormClosing);
-            this.Shown += new System.EventHandler(this.tyoEngineTitleMapEditWindow_Shown);
+            this.Shown += new System.EventHandler(this.tyoEngineTileMapEditWindow_Shown);
             this.ResizeEnd += new System.EventHandler(this.tyoEngineTitleMapEditWindow_ResizeEnd);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tyoEngineTitleMapEditWindow_KeyDown);
             this.groupBox2.ResumeLayout(false);
@@ -491,7 +491,7 @@
         private System.Windows.Forms.Timer updateTimer;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.PictureBox pictureBoxNowSelect;
-        private tyoEngineTitleMapEditWindow.MapEditPanel panelMap;
+        private tyoEngineTileMapEditWindow.MapEditPanel panelMap;
         private System.Windows.Forms.Label labelMapMousPos;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
