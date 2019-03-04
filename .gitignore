@@ -2,3 +2,11 @@ MapEditor/obj
 MapEditor/bin
 MapEditor/Newtonsoft.Json/obj
 MapEditor/Newtonsoft.Json/bin
+*.meta
+/Game/GameInUnity/obj
+/Game/GameInUnity/Temp
+/Game/GameInUnity/Library
+/Game/GameInUnity/.vscode
+/Game/GameInUnity/build
+/Game/GameInUnity/Assets/Resources
+/Game/GameInUnity/Assets/Plugins
