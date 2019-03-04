@@ -938,16 +938,23 @@ namespace tyoEngineEditor
 
                 if (!_name.Equals(Parameters.SYSYTEMUSE))
                 {
-                    if (_CacheMapTile.ContainsKey(_nowMapInfos._mapTileInfosByIndex[_comboxIndex]._filepath))// chaeck is hved?
+                    if (_comboxIndex >= _nowMapInfos._mapTileInfosByIndex.Count || _comboxIndex < 0)
                     {
-                        _tBmp = _CacheMapTile[_nowMapInfos._mapTileInfosByIndex[_comboxIndex]._filepath];
+                        continue;
                     }
                     else
                     {
-                        _tBmp = (Bitmap)Image.FromFile(_nowMapInfos._mapTileInfosByIndex[_comboxIndex]._filepath);
-                        _CacheMapTile[_nowMapInfos._mapTileInfosByIndex[_comboxIndex]._filepath] = _tBmp;
+                        if (_CacheMapTile.ContainsKey(_nowMapInfos._mapTileInfosByIndex[_comboxIndex]._filepath))// chaeck is hved?
+                        {
+                            _tBmp = _CacheMapTile[_nowMapInfos._mapTileInfosByIndex[_comboxIndex]._filepath];
+                        }
+                        else
+                        {
+                            _tBmp = (Bitmap)Image.FromFile(_nowMapInfos._mapTileInfosByIndex[_comboxIndex]._filepath);
+                            _CacheMapTile[_nowMapInfos._mapTileInfosByIndex[_comboxIndex]._filepath] = _tBmp;
+                        }
                     }
-
+                   
                 }
                 else
                 {
@@ -1062,17 +1069,17 @@ namespace tyoEngineEditor
 
 
 
-        private void LoadMapTileInfos(MapDataJsonFile _jsonFile, String path)
+        private void LoadMapTileInfos(MapDataJsonFile _jsonFile, string path)
         {
             //int _count = binFile.ReadInt32();
 
             for (int i = 0; i < _jsonFile.MapTileInfosList.Count; ++i)
             {
                 int _index = _jsonFile.MapTileInfosList[i].Index;
-                String _name = _jsonFile.MapTileInfosList[i].Name;
-                String _filename = _jsonFile.MapTileInfosList[i].Directory;
+                string _name = _jsonFile.MapTileInfosList[i].Name;
+                string _filename = _jsonFile.MapTileInfosList[i].Directory;
 
-                String _filepath = Path.GetDirectoryName(path);
+                string _filepath = Path.GetDirectoryName(path);
                 _filepath = _filepath + "\\" + _filename;
 
                 MapTileInfos tmpMapTilesInfos = new MapTileInfos();
@@ -1089,7 +1096,7 @@ namespace tyoEngineEditor
                     tmpMapTilesInfos.dirname = _filename.Substring(0, _filename.LastIndexOf("\\"));
                 }
 
-                String listname = tmpMapTilesInfos._name;
+                string listname = tmpMapTilesInfos._name;
 
                 InsertTileListHandle(new object[] { _index, listname });
 

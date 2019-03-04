@@ -499,7 +499,7 @@ namespace tyoEngineEditor
                         //    MapUseTitleInfo m = _mapInfos._mapTitleUseInfo[index];
                         //}
 
-                        if (index != -1)
+                        if (index != -1 && index < _mapInfos._mapTileUseInfo.Count)
                         {
                             //e.Graphics.DrawImage(_mapInfos._mapTitleUseInfo[index]._image, (x - mapHScrollBar.Value) * _mapInfos.Map_Title_Width, (y - mapVScrollBar.Value) * _mapInfos.Map_Title_Height);
 
@@ -1891,7 +1891,8 @@ namespace tyoEngineEditor
             //_pPath = _pDir + Path.GetFileName(_path.Replace(".tmd",".json"));
 
             FileStream fs = new FileStream(_pPath, FileMode.OpenOrCreate);
-            BinaryWriter binFile = new BinaryWriter(fs);
+
+            StreamWriter txtFile = new StreamWriter(fs);
 
             byte[] _bytelist = System.Text.Encoding.Default.GetBytes(_jsonString);
             string _b64string = Convert.ToBase64String(_bytelist);
@@ -1907,11 +1908,11 @@ namespace tyoEngineEditor
             _b64string = _b64string.Replace('8', '[');
             _b64string = _b64string.Replace('9', ']');
 
-            byte[] _bytelistSave = System.Text.Encoding.Default.GetBytes(_b64string);
-            binFile.Write(_bytelistSave.Length);
-            binFile.Write(_bytelistSave);
+            //byte[] _bytelistSave = System.Text.Encoding.Default.GetBytes(_b64string);
 
-            binFile.Close();
+            txtFile.Write(_b64string);
+
+            txtFile.Close();
             fs.Close();
         }
 
@@ -2114,13 +2115,13 @@ namespace tyoEngineEditor
         private void btOutputMapDataFile_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveDlg = new SaveFileDialog();
-            saveDlg.Filter = "tyo Engine Game Map Data|*.tyomap";
+            saveDlg.Filter = "tyo Engine Game Map Data|*.txt";
 
             saveDlg.ShowDialog();
 
             String _filePath = saveDlg.FileName;
 
-            if (Path.GetExtension(_filePath).ToLower() == ".tyomap")
+            if (Path.GetExtension(_filePath).ToLower() == ".txt")
             {
                 SaveMapDataToGame(_filePath);
                 return;
