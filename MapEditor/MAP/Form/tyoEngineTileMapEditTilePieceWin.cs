@@ -319,6 +319,7 @@ namespace tyoEngineEditor
                     {
                         continue;
                     }
+
                     tempTitle = (MapTileInfos)comboxTitleSelect.SelectedItem;
                     int index = _MapEditWin.GetMapInfos().AddMapUseTileInfo(
                         _MapEditWin.GetTileImageList()[(y + y1) * _maxTitleW + (x + x1)],
@@ -478,13 +479,25 @@ namespace tyoEngineEditor
             }
             else if (comboBoxTitleScale.SelectedIndex == 1)
             {
-                _TitleScale = maxScale * 0.75f;
+                _TitleScale = maxScale * 3.0f;
             }
             else if (comboBoxTitleScale.SelectedIndex == 2)
             {
-                _TitleScale = maxScale * 0.5f;
+                _TitleScale = maxScale * 2.0f;
             }
             else if (comboBoxTitleScale.SelectedIndex == 3)
+            {
+                _TitleScale = maxScale * 1.5f;
+            }
+            else if (comboBoxTitleScale.SelectedIndex == 4)
+            {
+                _TitleScale = maxScale * 0.75f;
+            }
+            else if (comboBoxTitleScale.SelectedIndex == 5)
+            {
+                _TitleScale = maxScale * 0.5f;
+            }
+            else if (comboBoxTitleScale.SelectedIndex == 6)
             {
                 _TitleScale = maxScale * 0.25f;
             }

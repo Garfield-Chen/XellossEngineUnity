@@ -40,7 +40,7 @@ public class BattleScene : tyoScene.tyoSceneNode
         }
 
         battleMap.UpdateMap(_dt);
-        battleMap.RenderMap(this); 
+        battleMap.RenderMap(); 
 		
         base.SceneUpdate(_dt);
     }
@@ -57,7 +57,7 @@ public class BattleScene : tyoScene.tyoSceneNode
             battleMap = new tyoMap();
         }
 
-        battleMap.LoadMap("Map\\castle");
+        battleMap.LoadMap("Map\\castle",this);
 
         mainPlayer = new tyoPlayer();
         mainPlayer.InitPlayerSprite("Player2");
@@ -79,7 +79,10 @@ public class BattleScene : tyoScene.tyoSceneNode
 			{
 				controlPadUI.name = "control pad";
 				controlPadUI.AddSceneRender(this);
-				controlPadUI.SetPosition(controlPadUI.GetTextureWidthInScreen() + 120, Screen.height - controlPadUI.GetTextureHeightInScreen() - 100, -100.0f);
+
+				controlPadUI.SetPosition((50.0f + 170.0f + 170.0f / 2) - controlPadUI.GetTextureWidthInScreen() / 2 + 40.0f, 
+                                (Screen.height - 170.0f * 2 - 50.0f + 170.0f / 2) - controlPadUI.GetTextureHeightInScreen() / 2 + 50.0f,
+                                 -100.0f);
 			}
 		}
 

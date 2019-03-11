@@ -302,6 +302,7 @@ public class tyoMap
 
     int mapPosX = 0;
     int mapPosY = 0;
+
     float mapTileScaleX = 1.0f;
     float mapTileScaleY = 1.0f;
 
@@ -310,15 +311,32 @@ public class tyoMap
 
     uint playerUID = 0;
 
+    tyoStructure.tyoPointInt mapRenderOffset = new tyoStructure.tyoPointInt();
     List<tyoStructure.tyoPointInt> allowPathPointList = new List<tyoStructure.tyoPointInt>();
     List<tyoPlayer> playerList = new List<tyoPlayer>();
-    List<tyoSprite> currentRenderMapTileSpriteList = new List<tyoSprite>();
+
+    tyoScene.tyoSceneNode mapRenderSceneNode = null;
+
+    public class MapRenderSprite
+    {
+        public MapRenderSprite()
+        {
+
+        }   
+
+        public tyoSprite sprite = null;
+        public int x = 0;
+        public int y = 0;
+        public int depth = 0;
+    }
+    List<MapRenderSprite> currentRenderMapTileSpriteList = new List<MapRenderSprite>();
+
 	public tyoMap()
 	{
 		
 	}
 	
-	public void LoadMap(string _mapFile)
+	public void LoadMap(string _mapFile,tyoScene.tyoSceneNode _renderSceneNode)
 	{
         try
         {
@@ -342,6 +360,7 @@ public class tyoMap
             //tyoCore.Log(_jsonString);
             mapJsonFile = Newtonsoft.Json.JsonConvert.DeserializeObject<MapDataJsonFile>(_jsonString);
             InitMap();
+            mapRenderSceneNode = _renderSceneNode;
 
         }
         catch (System.Exception ex)
@@ -409,23 +428,72 @@ public class tyoMap
     }
 
     tyoStructure.tyoPointInt lastRenderMapPos = new tyoStructure.tyoPointInt(-1,-1);
-    
-    public void RenderMap(tyoScene.tyoSceneNode _scene)
+
+    float GetMapRenderOffsetX()
+    {
+        if ( mapPosX <= 1 || mapPosX >= mapJsonFile.MapSizeWidth - mapCenterOffsetX * 2 - 3)
+        {
+            return 0.0f;
+        }
+
+        return mapRenderOffset.X;
+    }
+
+    float GetMapRenderOffsetY()
+    {
+        if ( mapPosY <= 1 || mapPosY >=  mapJsonFile.MapSizeHeight - mapCenterOffsetY * 2 - 2)
+        {
+            return 0.0f;
+        }
+
+        return mapRenderOffset.Y;
+    }
+
+    float GetPlayerRenderOffsetX(tyoPlayer _player)
+    {
+        if ( mapPosX <= 1 || mapPosX >= mapJsonFile.MapSizeWidth - mapCenterOffsetX * 2 - 3)
+        {
+            return _player.moveOffset.X;
+        }
+
+        return 0.0f;
+    }
+
+    float GetPlayerRenderOffsetY(tyoPlayer _player)
+    {
+        if ( mapPosY <= 1 || mapPosY >=  mapJsonFile.MapSizeHeight - mapCenterOffsetY * 2 - 2)
+        {
+            return _player.moveOffset.Y;
+        }
+
+        return 0.0f;
+    }
+
+    public void RenderMap()
     {
         if (lastRenderMapPos.X == mapPosX && lastRenderMapPos.Y == mapPosY)
         {
             for (int i = 0; i < mapJsonFile.MapLayerInfosList.Count; ++i)
             {
-                if ( mapJsonFile.MapLayerInfosList[i].Name == "人物层" || mapJsonFile.MapLayerInfosList[i].Name == "角色层" 
-                || mapJsonFile.MapLayerInfosList[i].Name == "角色" || mapJsonFile.MapLayerInfosList[i].Name == "人物" || i == 4)
+                if ( mapJsonFile.MapLayerInfosList[i].Name == "player" )
                 {
                     foreach(tyoPlayer _player in playerList)
                     {
-                        float _pos_x = (float)((_player.currentPosition.X - mapPosX) * mapJsonFile.MapTileWidth);
-                        float _pos_y = (float)((_player.currentPosition.Y - mapPosY) * mapJsonFile.MapTileHeight);
+                        float _pos_x = (float)((_player.currentPosition.X - mapPosX) * mapJsonFile.MapTileWidth) + GetPlayerRenderOffsetX(_player);
+                        float _pos_y = (float)((_player.currentPosition.Y - mapPosY) * mapJsonFile.MapTileHeight) + GetPlayerRenderOffsetY(_player);
                         float _pos_z = (float)( mapJsonFile.MapLayerInfosList[i].Depth * -1.0f);
 
-                        _player.GetPlayerSprite().SetPosition(_pos_x,_pos_y,_pos_z);
+                        _player.GetPlayerSprite().SetPosition(_pos_x,_pos_y,_pos_z);     
+
+                        
+                        foreach(MapRenderSprite _renderSprite in currentRenderMapTileSpriteList)
+                        {
+                            _pos_x = (float)(_renderSprite.x * mapJsonFile.MapTileWidth) + GetMapRenderOffsetX();
+                            _pos_y = (float)(_renderSprite.y * mapJsonFile.MapTileHeight) + GetMapRenderOffsetY();
+                            _pos_z = (float)(_renderSprite.depth) * -1.0f;
+
+                            _renderSprite.sprite.SetPosition(_pos_x,_pos_y,_pos_z);
+                        }
                     }
 
                     break;
@@ -436,12 +504,9 @@ public class tyoMap
         }
         else
         {
-            lastRenderMapPos.X = mapPosX;
-            lastRenderMapPos.Y = mapPosY;
-
-            foreach(tyoSprite _tileSprite in currentRenderMapTileSpriteList)
+            foreach(MapRenderSprite _renderSprite in currentRenderMapTileSpriteList)
             {
-                _tileSprite.RemoveSceneRender(_scene);
+                _renderSprite.sprite.RemoveSceneRender(mapRenderSceneNode);
             }
 
             currentRenderMapTileSpriteList.Clear();
@@ -452,13 +517,12 @@ public class tyoMap
 
         for (int i = 0; i < mapJsonFile.MapLayerInfosList.Count; ++i)
         {
-            if ( mapJsonFile.MapLayerInfosList[i].Name == "人物层" || mapJsonFile.MapLayerInfosList[i].Name == "角色层" 
-            || mapJsonFile.MapLayerInfosList[i].Name == "角色" || mapJsonFile.MapLayerInfosList[i].Name == "人物" || i == 4)
+            if ( mapJsonFile.MapLayerInfosList[i].Name == "player" )
             {
                 foreach(tyoPlayer _player in playerList)
                 {
-                    float _pos_x = (float)((_player.currentPosition.X - mapPosX) * mapJsonFile.MapTileWidth);
-                    float _pos_y = (float)((_player.currentPosition.Y - mapPosY) * mapJsonFile.MapTileHeight);
+                    float _pos_x = (float)((_player.currentPosition.X - mapPosX) * mapJsonFile.MapTileWidth) + GetPlayerRenderOffsetX(_player);
+                    float _pos_y = (float)((_player.currentPosition.Y - mapPosY) * mapJsonFile.MapTileHeight) + GetPlayerRenderOffsetY(_player);
                     float _pos_z = (float)( mapJsonFile.MapLayerInfosList[i].Depth * -1.0f);
 
                     _player.GetPlayerSprite().SetPosition(_pos_x,_pos_y,_pos_z);
@@ -467,7 +531,6 @@ public class tyoMap
                 continue;
             }
             
-
             for (int x = mapPosX; x < mapPosX + _wcount + 1; ++x)
             {
                 if (x >= mapJsonFile.MapSizeWidth)
@@ -491,20 +554,32 @@ public class tyoMap
                         {
                             if ( _tileSprite.spriteObject != null )
                             {
-                                tyoSprite _sprite = new tyoSprite(_tileSprite.spriteObject);
-                                _sprite.name = "tile sprite";
-                                float _pos_x = (float)((x - mapPosX) * mapJsonFile.MapTileWidth);
-                                float _pos_y = (float)((y - mapPosY) * mapJsonFile.MapTileHeight);
-                                float _pos_z = (float)mapJsonFile.MapLayerInfosList[i].Depth * -1.0f;
-                                _sprite.SetPosition(_pos_x,_pos_y,_pos_z);
-                                _sprite.AddSceneRender(_scene);
-                                currentRenderMapTileSpriteList.Add(_sprite);
+                                MapRenderSprite _renderSprite = new MapRenderSprite();
+
+                                _renderSprite.sprite = new tyoSprite(_tileSprite.spriteObject);
+                                _renderSprite.sprite.name = "tile sprite";
+
+                                _renderSprite.x = x - mapPosX;
+                                _renderSprite.y = y - mapPosY;
+                                _renderSprite.depth = mapJsonFile.MapLayerInfosList[i].Depth;
+
+                                float _pos_x = (float)(_renderSprite.x * mapJsonFile.MapTileWidth) + GetMapRenderOffsetX();
+                                float _pos_y = (float)(_renderSprite.y * mapJsonFile.MapTileHeight) + GetMapRenderOffsetY();
+                                float _pos_z = (float)(_renderSprite.depth) * -1.0f;
+
+                                _renderSprite.sprite.SetPosition(_pos_x,_pos_y,_pos_z);
+                                _renderSprite.sprite.AddSceneRender(mapRenderSceneNode);
+
+                                currentRenderMapTileSpriteList.Add(_renderSprite);
                             }
                         }
                     }
                 }
             }
         }
+        
+        lastRenderMapPos.X = mapPosX;
+        lastRenderMapPos.Y = mapPosY;
     }
 
     public uint AddMapPlayer(tyoPlayer _player)
@@ -584,42 +659,118 @@ public class tyoMap
         {
             if ( _player.CheckMoveDt() )
             {
-                if ( _player.currentAction == tyoPlayer.PlayerAction._move_left )
+                if ( _player.currentAction == tyoPlayer.PlayerAction._move_left)
                 {
                     int _next_x = _player.currentPosition.X - 1;
                     int _next_y = _player.currentPosition.Y;
 
                     if (!(_next_x < 0 || mapJsonFile.MapBlockFlag[_next_x,_next_y]))
                     {
-                        _player.currentPosition.X = _next_x;
-                        _player.currentPosition.Y = _next_y;
-                        UpdateMapPosFromPlayer(_player);
+                        int _t_ofx = _player.moveOffset.X - _player.moveSpeed;
+                        int _t_mfx = mapRenderOffset.X + _player.moveSpeed;
+
+                        if ( Mathf.Abs(_t_ofx) >= mapJsonFile.MapTileWidth )
+                        {
+                            _player.currentPosition.X = _next_x;
+                            _player.currentPosition.Y = _next_y;
+
+                            _player.moveOffset.X = _t_ofx + mapJsonFile.MapTileWidth;
+                            
+                            if ( _player.currentRoleType == tyoPlayer.PlayerRoleType._main )
+                            {
+                                mapRenderOffset.X = _t_mfx - mapJsonFile.MapTileWidth;
+                            }
+
+                            UpdateMapPosFromPlayer(_player);
+                        }
+                        else
+                        {
+                            _player.moveOffset.X = _t_ofx;
+
+                            if ( _player.currentRoleType == tyoPlayer.PlayerRoleType._main )
+                            {
+                                mapRenderOffset.X = _t_mfx;
+                            }
+                            
+                        }   
                     }
 
                 }
-                else if ( _player.currentAction == tyoPlayer.PlayerAction._move_right )
+                else if ( _player.currentAction == tyoPlayer.PlayerAction._move_right)
                 {
                     int _next_x = _player.currentPosition.X + 1;
                     int _next_y = _player.currentPosition.Y;
 
                     if (!(_next_x >= mapJsonFile.MapSizeWidth || mapJsonFile.MapBlockFlag[_next_x,_next_y]))
                     {
-                        _player.currentPosition.X = _next_x;
-                        _player.currentPosition.Y = _next_y;
-                        UpdateMapPosFromPlayer(_player);
+                        int _t_ofx = _player.moveOffset.X + _player.moveSpeed;
+                        int _t_mfx = mapRenderOffset.X - _player.moveSpeed;
+
+                        if ( Mathf.Abs(_t_ofx) >= mapJsonFile.MapTileWidth )
+                        {
+                        
+                                _player.currentPosition.X = _next_x;
+                                _player.currentPosition.Y = _next_y;
+
+                                _player.moveOffset.X = _t_ofx - mapJsonFile.MapTileWidth ;
+
+                                if ( _player.currentRoleType == tyoPlayer.PlayerRoleType._main )
+                                {
+                                    mapRenderOffset.X = _t_mfx + mapJsonFile.MapTileWidth;
+                                }
+
+                                UpdateMapPosFromPlayer(_player);
+                            
+                        }
+                        else
+                        {
+                            _player.moveOffset.X = _t_ofx;
+
+                            if ( _player.currentRoleType == tyoPlayer.PlayerRoleType._main )
+                            {
+                                mapRenderOffset.X = _t_mfx;
+                            }
+                        }
                     }
                 }
-                else if ( _player.currentAction == tyoPlayer.PlayerAction._move_up )
+                else if ( _player.currentAction == tyoPlayer.PlayerAction._move_up)
                 {
                     int _next_x = _player.currentPosition.X;
-                    int _next_y = _player.currentPosition.Y -1;
+                    int _next_y = _player.currentPosition.Y - 1;
 
                     if (!(_next_y < 0 || mapJsonFile.MapBlockFlag[_next_x,_next_y]))
                     {
-                        _player.currentPosition.X = _next_x;
-                        _player.currentPosition.Y = _next_y;
-                        UpdateMapPosFromPlayer(_player);
+                        int _t_ofy = _player.moveOffset.Y - _player.moveSpeed;
+                        int _t_mfy = mapRenderOffset.Y + _player.moveSpeed;
+
+                        if ( Mathf.Abs(_t_ofy) >= mapJsonFile.MapTileHeight )
+                        {
+                            
+                            _player.currentPosition.X = _next_x;
+                            _player.currentPosition.Y = _next_y;
+
+                            _player.moveOffset.Y = _t_ofy + mapJsonFile.MapTileHeight ;
+
+                            if ( _player.currentRoleType == tyoPlayer.PlayerRoleType._main )
+                            {
+                                mapRenderOffset.Y = _t_mfy - mapJsonFile.MapTileHeight;
+                            }
+
+                            UpdateMapPosFromPlayer(_player);
+                        
+                            
+                        }
+                        else
+                        {
+                            _player.moveOffset.Y = _t_ofy;
+
+                            if ( _player.currentRoleType == tyoPlayer.PlayerRoleType._main )
+                            {
+                                mapRenderOffset.Y = _t_mfy;
+                            }
+                        }
                     }
+                
                 }
                 else if ( _player.currentAction == tyoPlayer.PlayerAction._move_down )
                 {
@@ -628,13 +779,38 @@ public class tyoMap
 
                     if (!(_next_y >= mapJsonFile.MapSizeHeight || mapJsonFile.MapBlockFlag[_next_x,_next_y]))
                     {
-                        _player.currentPosition.X = _next_x;
-                        _player.currentPosition.Y = _next_y;
-                        UpdateMapPosFromPlayer(_player);
+                        int _t_ofy = _player.moveOffset.Y + _player.moveSpeed;
+                        int _t_mfy = mapRenderOffset.Y - _player.moveSpeed;
+
+                        if ( Mathf.Abs(_t_ofy) >= mapJsonFile.MapTileHeight )
+                        {
+                            
+                            _player.currentPosition.X = _next_x;
+                            _player.currentPosition.Y = _next_y;
+
+                            _player.moveOffset.Y = _t_ofy - mapJsonFile.MapTileHeight;
+
+                            if ( _player.currentRoleType == tyoPlayer.PlayerRoleType._main )
+                            {
+                                mapRenderOffset.Y = _t_mfy + mapJsonFile.MapTileHeight;
+                            }
+
+                            UpdateMapPosFromPlayer(_player);
+                            
+                        }
+                        else
+                        {
+                            _player.moveOffset.Y = _t_ofy;
+
+                            if ( _player.currentRoleType == tyoPlayer.PlayerRoleType._main )
+                            {
+                                mapRenderOffset.Y = _t_mfy;
+                            }
+                        }
                     }
                 }
             }
-            
+
             _player.Update(_dt);
         }
     }

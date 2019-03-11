@@ -94,6 +94,9 @@
             this.comboBoxTitleScale.FormattingEnabled = true;
             this.comboBoxTitleScale.Items.AddRange(new object[] {
             "100%",
+            "300%",
+            "200%",
+            "150%",
             "75%",
             "50%",
             "25%"});
@@ -114,7 +117,7 @@
             this.comboxTitleDirSelect.TabIndex = 6;
             this.comboxTitleDirSelect.SelectedIndexChanged += new System.EventHandler(this.comboxTitleDirSelect_SelectedIndexChanged);
             // 
-            // tyoEngineTitleMapEditTitlePieceWin
+            // tyoEngineTileMapEditTilePieceWin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -132,7 +135,7 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "tyoEngineTitleMapEditTitlePieceWin";
+            this.Name = "tyoEngineTileMapEditTilePieceWin";
             this.Text = "tyoEngineTitleMapEditTitlePieceWin";
             this.Shown += new System.EventHandler(this.tyoEngineTitleMapEditTilePieceWin_Shown);
             this.ResumeLayout(false);

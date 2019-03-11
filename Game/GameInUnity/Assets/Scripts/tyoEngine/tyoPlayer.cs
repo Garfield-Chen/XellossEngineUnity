@@ -34,8 +34,10 @@ public class tyoPlayer
 
 	tyoSprite playerSprite = null;
 	
-	float moveSpeed = 1.0f;
-	float moveDelay = 500.0f;
+	public int moveSpeed = 24;
+	float moveDelay = 70.0f;
+	public tyoStructure.tyoPointInt moveOffset = new tyoStructure.tyoPointInt();
+
 	float currentMoveDt = 0;
 
 	int playerDepth = 0;
@@ -43,6 +45,7 @@ public class tyoPlayer
 	public tyoStructure.tyoPointInt currentPosition = new tyoStructure.tyoPointInt();
 
 	public PlayerAction currentAction = PlayerAction._null;
+	public PlayerAction lastAction = PlayerAction._null;
 
 	public PlayerRoleType currentRoleType = PlayerRoleType._null;
 
@@ -50,13 +53,15 @@ public class tyoPlayer
 
 	public uint playerUIDInMap = 0;
 
-	UnityEngine.Rect leftControl_rect = new Rect(50.0f /* + 100.0f * 0*/,Screen.height -100.0f * 2 - 50.0f,100.0f,100.0f);
+	const float inputControlGridSize = 170.0f;
+
+	UnityEngine.Rect leftControl_rect = new Rect(50.0f /* + 100.0f * 0*/,Screen.height - inputControlGridSize * 2 - 50.0f, inputControlGridSize, inputControlGridSize);
 		//right
-	UnityEngine.Rect rightControl_rect = new Rect(50.0f + 100.0f * 2,Screen.height -100.0f * 2 - 50.0f,100.0f,100.0f);
+	UnityEngine.Rect rightControl_rect = new Rect(50.0f + inputControlGridSize * 2,Screen.height -inputControlGridSize* 2 - 50.0f, inputControlGridSize, inputControlGridSize);
 	//up
-	UnityEngine.Rect upControl_rect = new Rect(50.0f + 100.0f * 1,Screen.height - 100.0f * 3 - 50.0f,100.0f,100.0f);
+	UnityEngine.Rect upControl_rect = new Rect(50.0f + inputControlGridSize * 1,Screen.height - inputControlGridSize * 3 - 50.0f, inputControlGridSize, inputControlGridSize);
 	//down
-	UnityEngine.Rect downControl_rect = new Rect(50.0f + 100.0f * 1,Screen.height - 100.0f * 1 - 50.0f,100.0f,100.0f);
+	UnityEngine.Rect downControl_rect = new Rect(50.0f + inputControlGridSize * 1,Screen.height - inputControlGridSize * 1 - 50.0f, inputControlGridSize, inputControlGridSize);
 
 	public tyoPlayer()
 	{
@@ -90,6 +95,7 @@ public class tyoPlayer
 	public void Update(float _dt)
 	{
 		Vector2 _touchPos = new Vector2(-1.0f,-1.0f);
+
 		if ( tyoCore.input.IsTouch() )
 		{
 			_touchPos = tyoCore.input.GetCurMousePos();
@@ -97,7 +103,7 @@ public class tyoPlayer
 
 		if ( Input.GetKey( KeyCode.A ) || leftControl_rect.Contains(_touchPos))
 		{
-			if ( currentAction != PlayerAction._move_left)
+			if ( currentAction != PlayerAction._move_left && moveOffset.X == 0 && moveOffset.Y == 0)
 			{
 				currentAction = PlayerAction._move_left;
 
@@ -106,11 +112,10 @@ public class tyoPlayer
 					perfebAniamtionObject.ChangeAnimation("left");
 				}
 			}
-            
 		}
 		else if ( Input.GetKey( KeyCode.D ) || rightControl_rect.Contains(_touchPos))
 		{
-			if ( currentAction != PlayerAction._move_right)
+			if ( currentAction != PlayerAction._move_right && moveOffset.X == 0 && moveOffset.Y == 0)
 			{
 				currentAction = PlayerAction._move_right;
 
@@ -123,7 +128,7 @@ public class tyoPlayer
 		}
 		else if ( Input.GetKey( KeyCode.W ) || upControl_rect.Contains(_touchPos))
 		{
-			if ( currentAction != PlayerAction._move_up)
+			if ( currentAction != PlayerAction._move_up && moveOffset.X == 0 && moveOffset.Y == 0)
 			{
 				currentAction = PlayerAction._move_up;
 
@@ -136,7 +141,7 @@ public class tyoPlayer
 		}
 		else if ( Input.GetKey( KeyCode.S ) || downControl_rect.Contains(_touchPos))
 		{
-			if ( currentAction != PlayerAction._move_down)
+			if ( currentAction != PlayerAction._move_down && moveOffset.X == 0 && moveOffset.Y == 0)
 			{
 				currentAction = PlayerAction._move_down;
 
@@ -148,7 +153,11 @@ public class tyoPlayer
 		}
 		else
 		{
-			currentAction = PlayerAction._move_stop;
+			if ( moveOffset.X == 0 && moveOffset.Y == 0 )
+			{
+				currentAction = PlayerAction._move_stop;
+			}
+			
 		}
 
 		currentMoveDt += _dt;
