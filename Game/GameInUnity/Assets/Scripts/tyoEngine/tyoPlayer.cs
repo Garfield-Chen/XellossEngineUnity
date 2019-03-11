@@ -39,7 +39,6 @@ public class tyoPlayer
 	public tyoStructure.tyoPointInt moveOffset = new tyoStructure.tyoPointInt();
 
 	float currentMoveDt = 0;
-
 	int playerDepth = 0;
 	
 	public tyoStructure.tyoPointInt currentPosition = new tyoStructure.tyoPointInt();
@@ -50,25 +49,24 @@ public class tyoPlayer
 	public PlayerRoleType currentRoleType = PlayerRoleType._null;
 
 	tyoPerfebAnimation perfebAniamtionObject = null;
+	BoxCollider2D boxCollider2DObject = null;
+	Rigidbody2D rigidbody2DObject = null;
 
 	public uint playerUIDInMap = 0;
 
-	const float inputControlGridSize = 170.0f;
 
-	UnityEngine.Rect leftControl_rect = new Rect(50.0f /* + 100.0f * 0*/,Screen.height - inputControlGridSize * 2 - 50.0f, inputControlGridSize, inputControlGridSize);
-		//right
-	UnityEngine.Rect rightControl_rect = new Rect(50.0f + inputControlGridSize * 2,Screen.height -inputControlGridSize* 2 - 50.0f, inputControlGridSize, inputControlGridSize);
-	//up
-	UnityEngine.Rect upControl_rect = new Rect(50.0f + inputControlGridSize * 1,Screen.height - inputControlGridSize * 3 - 50.0f, inputControlGridSize, inputControlGridSize);
-	//down
-	UnityEngine.Rect downControl_rect = new Rect(50.0f + inputControlGridSize * 1,Screen.height - inputControlGridSize * 1 - 50.0f, inputControlGridSize, inputControlGridSize);
 
 	public tyoPlayer()
 	{
 
 	}
 
-	public void InitPlayerSprite(string _perfebName)
+	public tyoPerfebAnimation GetPerfebAnimationObject()
+	{
+		return perfebAniamtionObject;
+	}
+
+	public void InitPlayerSprite(string _perfebName,PlayerRoleType _roleType,PlayerAction _action)
 	{
 		GameObject _perfeb = tyoCore.resources.GetPerfebByName(_perfebName);
 
@@ -77,6 +75,18 @@ public class tyoPlayer
 			playerSprite = new tyoSprite(_perfeb);
 
 			perfebAniamtionObject = playerSprite.renderNodeObject.GetComponent<tyoPerfebAnimation>();
+			boxCollider2DObject = playerSprite.renderNodeObject.AddComponent<BoxCollider2D>();
+
+			if (_roleType == PlayerRoleType._main)
+			{
+				rigidbody2DObject = playerSprite.renderNodeObject.AddComponent<Rigidbody2D>();
+				//rigidbody2DObject.isKinematic = true;
+				rigidbody2DObject.freezeRotation = true;
+			}
+
+			currentRoleType = _roleType;
+			currentAction = _action;
+
 		}
 	}
 
@@ -91,75 +101,14 @@ public class tyoPlayer
 		currentPosition.Y = _y;
 	}
 
-
 	public void Update(float _dt)
 	{
-		Vector2 _touchPos = new Vector2(-1.0f,-1.0f);
-
-		if ( tyoCore.input.IsTouch() )
+		if (currentRoleType == PlayerRoleType._main)
 		{
-			_touchPos = tyoCore.input.GetCurMousePos();
-		}
-
-		if ( Input.GetKey( KeyCode.A ) || leftControl_rect.Contains(_touchPos))
-		{
-			if ( currentAction != PlayerAction._move_left && moveOffset.X == 0 && moveOffset.Y == 0)
-			{
-				currentAction = PlayerAction._move_left;
-
-				if ( perfebAniamtionObject != null )
-				{
-					perfebAniamtionObject.ChangeAnimation("left");
-				}
-			}
-		}
-		else if ( Input.GetKey( KeyCode.D ) || rightControl_rect.Contains(_touchPos))
-		{
-			if ( currentAction != PlayerAction._move_right && moveOffset.X == 0 && moveOffset.Y == 0)
-			{
-				currentAction = PlayerAction._move_right;
-
-				if ( perfebAniamtionObject != null )
-				{
-					perfebAniamtionObject.ChangeAnimation("right");
-				}
-			}
 			
 		}
-		else if ( Input.GetKey( KeyCode.W ) || upControl_rect.Contains(_touchPos))
-		{
-			if ( currentAction != PlayerAction._move_up && moveOffset.X == 0 && moveOffset.Y == 0)
-			{
-				currentAction = PlayerAction._move_up;
-
-				if ( perfebAniamtionObject != null )
-				{
-					perfebAniamtionObject.ChangeAnimation("up");
-				}
-			}
-			
-		}
-		else if ( Input.GetKey( KeyCode.S ) || downControl_rect.Contains(_touchPos))
-		{
-			if ( currentAction != PlayerAction._move_down && moveOffset.X == 0 && moveOffset.Y == 0)
-			{
-				currentAction = PlayerAction._move_down;
-
-				if ( perfebAniamtionObject != null )
-				{
-					perfebAniamtionObject.ChangeAnimation("down");
-				}
-			}
-		}
-		else
-		{
-			if ( moveOffset.X == 0 && moveOffset.Y == 0 )
-			{
-				currentAction = PlayerAction._move_stop;
-			}
-			
-		}
-
+		
+		boxCollider2DObject.size = playerSprite.GetSpriteTextureRectSize();
 		currentMoveDt += _dt;
 	}
 

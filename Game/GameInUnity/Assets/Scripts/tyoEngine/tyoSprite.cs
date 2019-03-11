@@ -370,4 +370,24 @@ public class tyoSprite : tyoRenderNode
 		return spriteRenderer.sprite.textureRect.height;
 	}
 
+	public Vector2 GetSpriteRectSize()
+	{
+		if ( spriteRenderer != null && spriteRenderer.sprite != null )
+		{
+			return spriteRenderer.sprite.rect.size;
+		}
+
+		return new Vector2(1.0f,1.0f);
+	}
+
+	public Vector2 GetSpriteTextureRectSize()
+	{
+		if ( spriteRenderer != null && spriteRenderer.sprite != null )
+		{
+			return spriteRenderer.sprite.textureRect.size;
+		}
+
+		return new Vector2(1.0f,1.0f);
+	}
+
 }

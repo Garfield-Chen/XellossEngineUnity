@@ -56,6 +56,7 @@
      <Compile Include="Assets\Scripts\Extern\AndroidStatusBar.cs" />
      <Compile Include="Assets\Scripts\Extern\StatusBar.cs" />
      <Compile Include="Assets\Scripts\Game\BattleScene.cs" />
+     <Compile Include="Assets\Scripts\Game\GamePlayer.cs" />
      <Compile Include="Assets\Scripts\GameF\AdvScene.cs" />
      <Compile Include="Assets\Scripts\GameF\Bullet.cs" />
      <Compile Include="Assets\Scripts\GameF\Monster.cs" />
