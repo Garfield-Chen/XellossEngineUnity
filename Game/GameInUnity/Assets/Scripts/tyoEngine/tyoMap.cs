@@ -7,6 +7,15 @@ public class tyoMap
 {
 	public class MapDataJsonFile
     {
+        public enum MapTileAttributeType
+        {
+            string_attr = 0x1,
+            float_attr ,
+            int_attr ,
+            bool_attr ,
+            double_attr ,
+        }
+
         private string _mapName = "";
         public string MapName
         {
@@ -280,6 +289,114 @@ public class tyoMap
         public List<__AnimationOffsets> AnimationOffsetList
         {
             get { return _animationOffsetList; }
+        }
+
+        public class __MapTileAttribute
+        {
+            public string Value1
+            {
+                set{ _value1 = value; }
+                get{ return _value1; }
+            }
+
+            public MapTileAttributeType Value1_Type
+            {
+                set { _value1_type = value; }
+                get { return _value1_type; }
+            }
+
+            public string Value1_Description
+            {
+                set { _value1_description = value; }
+                get { return _value1_description; }
+            }
+
+            string _value1 = "0";
+            MapTileAttributeType _value1_type = MapTileAttributeType.string_attr;
+            string _value1_description = "default";
+
+            public string Value2
+            {
+                set { _value2 = value; }
+                get { return _value2; }
+            }
+
+            public MapTileAttributeType Value2_Type
+            {
+                set { _value2_type = value; }
+                get { return _value2_type; }
+            }
+
+            public string Value2_Description
+            {
+                set { _value2_description = value; }
+                get { return _value2_description; }
+            }
+
+            string _value2 = "0";
+            MapTileAttributeType _value2_type = MapTileAttributeType.string_attr;
+            string _value2_description = "default";
+
+            public string Value3
+            {
+                set { _value3 = value; }
+                get { return _value3; }
+            }
+
+            public MapTileAttributeType Value3_Type
+            {
+                set { _value3_type = value; }
+                get { return _value3_type; }
+            }
+
+            public string Value3_Description
+            {
+                set { _value3_description = value; }
+                get { return _value3_description; }
+            }
+
+            string _value3 = "0";
+            MapTileAttributeType _value3_type = MapTileAttributeType.string_attr;
+            string _value3_description = "default";
+
+            public string Value4
+            {
+                set { _value4 = value; }
+                get { return _value4; }
+            }
+
+            public MapTileAttributeType Value4_Type
+            {
+                set { _value4_type = value; }
+                get { return _value4_type; }
+            }
+
+            public string Value4_Description
+            {
+                set { _value4_description = value; }
+                get { return _value4_description; }
+            }
+
+            string _value4 = "0";
+            MapTileAttributeType _value4_type = MapTileAttributeType.string_attr;
+            string _value4_description = "default";
+
+            public __MapTileAttribute(int _x, int _y, int _layer)
+            {
+                _tile_x = _x;
+                _tile_y = _y;
+                _tile_layer = _layer;
+            }
+
+            public int _tile_x = -1;
+            public int _tile_y = -1;
+            public int _tile_layer = -1;
+        }
+
+        private List<__MapTileAttribute> _mapTileAttributeList = new List<__MapTileAttribute>();
+        public List<__MapTileAttribute> MapTileAttributeList
+        {
+            get { return _mapTileAttributeList; }
         }
     }
 

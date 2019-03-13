@@ -160,6 +160,240 @@ namespace tyoEngineEditor
         public List<ActionInfoNode> _ActionNodeList = new List<ActionInfoNode>(256);
     }
 
+    public enum MapTileAttributeType
+    {
+        string_attr = 0x1,
+        float_attr ,
+        int_attr ,
+        bool_attr ,
+        double_attr ,
+    }
+
+    public class MapTileAttribute
+    {
+        [Description("属性_1"), Category("属性1")]
+        public string Value1
+        {
+            set
+            {
+                _value1 = value;
+            }
+
+            get
+            {
+                return _value1;
+            }
+        }
+
+        [Description("属性_1_类型"), Category("属性1")]
+        public MapTileAttributeType Value1_Type
+        {
+            set
+            {
+                _value1_type = value;
+            }
+
+            get
+            {
+                return _value1_type;
+            }
+        }
+
+        [Description("属性_1_描述"), Category("属性1")]
+        public string Value1_Description
+        {
+            set
+            {
+                _value1_description = value;
+            }
+
+            get
+            {
+                return _value1_description;
+            }
+        }
+
+        string _value1 = "0";
+        MapTileAttributeType _value1_type = MapTileAttributeType.string_attr;
+        string _value1_description = "default";
+
+        [Description("属性_2"), Category("属性2")]
+        public string Value2
+        {
+            set
+            {
+                _value2 = value;
+            }
+
+            get
+            {
+                return _value2;
+            }
+        }
+
+        [Description("属性_2_类型"), Category("属性2")]
+        public MapTileAttributeType Value2_Type
+        {
+            set
+            {
+                _value2_type = value;
+            }
+
+            get
+            {
+                return _value1_type;
+            }
+        }
+
+        [Description("属性_2_描述"), Category("属性2")]
+        public string Value2_Description
+        {
+            set
+            {
+                _value2_description = value;
+            }
+
+            get
+            {
+                return _value2_description;
+            }
+        }
+
+        string _value2 = "0";
+        MapTileAttributeType _value2_type = MapTileAttributeType.string_attr;
+        string _value2_description = "default";
+
+        [Description("属性_3"), Category("属性3")]
+        public string Value3
+        {
+            set
+            {
+                _value3 = value;
+            }
+
+            get
+            {
+                return _value3;
+            }
+        }
+
+        [Description("属性_3_类型"), Category("属性3")]
+        public MapTileAttributeType Value3_Type
+        {
+            set
+            {
+                _value3_type = value;
+            }
+
+            get
+            {
+                return _value1_type;
+            }
+        }
+
+        [Description("属性_3_描述"), Category("属性3")]
+        public string Value3_Description
+        {
+            set
+            {
+                _value3_description = value;
+            }
+
+            get
+            {
+                return _value3_description;
+            }
+        }
+
+        string _value3 = "0";
+        MapTileAttributeType _value3_type = MapTileAttributeType.string_attr;
+        string _value3_description = "default";
+
+        [Description("属性_4"), Category("属性4")]
+        public string Value4
+        {
+            set
+            {
+                _value4 = value;
+            }
+
+            get
+            {
+                return _value4;
+            }
+        }
+
+        [Description("属性_4_类型"), Category("属性4")]
+        public MapTileAttributeType Value4_Type
+        {
+            set
+            {
+                _value4_type = value;
+            }
+
+            get
+            {
+                return _value1_type;
+            }
+        }
+
+        [Description("属性_4_描述"), Category("属性4")]
+        public string Value4_Description
+        {
+            set
+            {
+                _value4_description = value;
+            }
+
+            get
+            {
+                return _value4_description;
+            }
+        }
+
+        string _value4 = "0";
+        MapTileAttributeType _value4_type = MapTileAttributeType.string_attr;
+        string _value4_description = "default";
+
+        public MapTileAttribute(int _x,int _y,int _layer)
+        {
+            _tile_x = _x;
+            _tile_y = _y;
+            _tile_layer = _layer;
+        }
+
+        public bool Find(int _x, int _y, int _layer)
+        {
+            if( _tile_x == _x && _tile_y == _y && _tile_layer == _layer)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+
+        public int _tile_x = -1;
+        public int _tile_y = -1;
+        public int _tile_layer = -1;
+
+        [Description("删除[标记True后,结束编辑将会从列表清除]"), Category("编辑属性")]
+        public bool DeleteFlag
+        {
+            set
+            {
+                _deleteFlag = value;
+            }
+
+            get
+            {
+                return _deleteFlag;
+            }
+        }
+
+        public bool _deleteFlag = false;
+    }
+
     public class MapInfos
     {
         public MapInfos()
@@ -280,6 +514,8 @@ namespace tyoEngineEditor
 
         public Dictionary<int, MapLayerInfos> _mapLayerInfosByIndex = new Dictionary<int, MapLayerInfos>();
 
+        public List<MapTileAttribute> _mapTileAttributeList = new List<MapTileAttribute>();
+
         int _ActionIndex = -1;
         int _ActionCount = 0;
         int _UnDoCount = 0;
@@ -320,6 +556,22 @@ namespace tyoEngineEditor
                 _UnDoCount--;
                 
             }
+        }
+
+        public MapTileAttribute GetMapTileAttribute(int _x,int _y,int _layer)
+        {
+            MapTileAttribute _attribute = _mapTileAttributeList.Find(t => t.Find(_x, _y, _layer) == true);
+
+            if (_attribute != null)
+            {
+                return _attribute;
+            }
+
+            _attribute = new MapTileAttribute(_x, _y, _layer);
+
+            _mapTileAttributeList.Add(_attribute);
+
+            return _attribute;
         }
 
         void SetMapDataByAction(int _actionIndex)
@@ -803,6 +1055,7 @@ namespace tyoEngineEditor
                 set { _index = value; }
             }
         }
+
         private List<__MapTileInfosJson> _mapTileInfosList = new List<__MapTileInfosJson>();
         public List<__MapTileInfosJson> MapTileInfosList
         {
@@ -832,6 +1085,7 @@ namespace tyoEngineEditor
                 set { _depth = value; }
             }
         }
+
         private List<__MapLayerInfosJson> _mapLayerInfosList = new List<__MapLayerInfosJson>();
         public List<__MapLayerInfosJson> MapLayerInfosList
         {
@@ -1018,6 +1272,114 @@ namespace tyoEngineEditor
         public List<__AnimationOffsets> AnimationOffsetList
         {
             get { return _animationOffsetList; }
+        }
+
+        public class __MapTileAttribute
+        {
+            public string Value1
+            {
+                set{ _value1 = value; }
+                get{ return _value1; }
+            }
+
+            public MapTileAttributeType Value1_Type
+            {
+                set { _value1_type = value; }
+                get { return _value1_type; }
+            }
+
+            public string Value1_Description
+            {
+                set { _value1_description = value; }
+                get { return _value1_description; }
+            }
+
+            string _value1 = "0";
+            MapTileAttributeType _value1_type = MapTileAttributeType.string_attr;
+            string _value1_description = "default";
+
+            public string Value2
+            {
+                set { _value2 = value; }
+                get { return _value2; }
+            }
+
+            public MapTileAttributeType Value2_Type
+            {
+                set { _value2_type = value; }
+                get { return _value2_type; }
+            }
+
+            public string Value2_Description
+            {
+                set { _value2_description = value; }
+                get { return _value2_description; }
+            }
+
+            string _value2 = "0";
+            MapTileAttributeType _value2_type = MapTileAttributeType.string_attr;
+            string _value2_description = "default";
+
+            public string Value3
+            {
+                set { _value3 = value; }
+                get { return _value3; }
+            }
+
+            public MapTileAttributeType Value3_Type
+            {
+                set { _value3_type = value; }
+                get { return _value3_type; }
+            }
+
+            public string Value3_Description
+            {
+                set { _value3_description = value; }
+                get { return _value3_description; }
+            }
+
+            string _value3 = "0";
+            MapTileAttributeType _value3_type = MapTileAttributeType.string_attr;
+            string _value3_description = "default";
+
+            public string Value4
+            {
+                set { _value4 = value; }
+                get { return _value4; }
+            }
+
+            public MapTileAttributeType Value4_Type
+            {
+                set { _value4_type = value; }
+                get { return _value4_type; }
+            }
+
+            public string Value4_Description
+            {
+                set { _value4_description = value; }
+                get { return _value4_description; }
+            }
+
+            string _value4 = "0";
+            MapTileAttributeType _value4_type = MapTileAttributeType.string_attr;
+            string _value4_description = "default";
+
+            public __MapTileAttribute(int _x, int _y, int _layer)
+            {
+                _tile_x = _x;
+                _tile_y = _y;
+                _tile_layer = _layer;
+            }
+
+            public int _tile_x = -1;
+            public int _tile_y = -1;
+            public int _tile_layer = -1;
+        }
+
+        private List<__MapTileAttribute> _mapTileAttributeList = new List<__MapTileAttribute>();
+        public List<__MapTileAttribute> MapTileAttributeList
+        {
+            get { return _mapTileAttributeList; }
         }
     }
 }

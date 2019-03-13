@@ -168,6 +168,7 @@ namespace tyoEngineEditor
 
         tyoEngineTileMapEditTilePieceWin _PieceDlg = null;
         tyoEngineTileMapPreview _PreviewDlg = null;
+        int _SetMapTileFlagLayerIndex = -1;
 
         private void tyoEngineTileMapEditWindow_Shown(object sender, EventArgs e)
         {
@@ -423,6 +424,8 @@ namespace tyoEngineEditor
         Brush _blockBrush1 = new SolidBrush(Color.FromArgb(120, Color.DeepPink));
         Brush _blockBrush2 = new SolidBrush(Color.FromArgb(120, Color.BlueViolet));
         Brush _blockBrush_Green = new SolidBrush(Color.FromArgb(120, Color.SeaGreen));
+        Brush _setTileFlagLayerBrush = new SolidBrush(Color.FromArgb(120, Color.OrangeRed));
+        Brush _setTileFlagBrush = new SolidBrush(Color.FromArgb(180, Color.PapayaWhip));
 
         private void AnimationPaint(int key,Graphics e,int x,int y,int id) 
         {
@@ -458,10 +461,12 @@ namespace tyoEngineEditor
 
             for (int i = 0; i < _mapInfos._mapLayerInfosByIndex.Count/*comboBoxMapLayer.Items.Count*/; ++i)
             {
+
                 if (_mapInfos._LayerShowFlag[_mapLayerDepth[i]._index] == false)
                 {
                     continue;
                 }
+
 
                 int _tmpXOffsetByRender = 0;
 
@@ -505,14 +510,26 @@ namespace tyoEngineEditor
 
                             if (_mapInfos._mapTileUseInfo[index]._image._tile != null)
                             {
+                                
                                 e.Graphics.DrawImage(
                                 _mapInfos._mapTileUseInfo[index]._image._tile,
                                 (x - mapHScrollBar.Value) * _mapInfos.Map_Tile_Width,
                                 (y - mapVScrollBar.Value) * _mapInfos.Map_Tile_Height,
                                 _mapInfos._mapTileUseInfo[index]._image._w,
                                 _mapInfos._mapTileUseInfo[index]._image._h);
+
+                                if (_SetMapTileFlagLayerIndex >= 0 && _SetMapTileFlagLayerIndex == i)
+                                {
+                                    e.Graphics.FillRectangle(
+                                    _setTileFlagLayerBrush,
+                                    (x - mapHScrollBar.Value) * _mapInfos.Map_Tile_Width,
+                                    (y - mapVScrollBar.Value) * _mapInfos.Map_Tile_Height,
+                                    _mapInfos._mapTileUseInfo[index]._image._w,
+                                    _mapInfos._mapTileUseInfo[index]._image._h);
+                                }
                             }
                         }
+
                         if (_mapInfos._mapAnimationTile != null)
                         {
                             int key = _mapInfos._mapAnimationTile[_mapLayerDepth[i]._index, x, y];
@@ -635,6 +652,11 @@ namespace tyoEngineEditor
                     e.Graphics.DrawRectangle(_blackPen, _mapMouse.X + 1, _mapMouse.Y + 1, _nowSelectPiece.Width - 2, _nowSelectPiece.Height - 2);
                     e.Graphics.DrawRectangle(_whilePen, _mapMouse.X + 2, _mapMouse.Y + 2, _nowSelectPiece.Width - 4, _nowSelectPiece.Height - 4);
                 }
+            }
+
+            if (_SetMapTileFlagLayerIndex >= 0)
+            {
+                e.Graphics.FillRectangle(_setTileFlagBrush, _mapMouse.X, _mapMouse.Y, _mapInfos.Map_Tile_Width, _mapInfos.Map_Tile_Height);
             }
 
             if (_showMeshGrid)
@@ -1066,17 +1088,57 @@ namespace tyoEngineEditor
             FillMapPieceByPosList();
         }
 
+        void SetMapTileAttribute()
+        {
+            int _cur_x = (_mapMouse.X / _mapInfos.Map_Tile_Width) + mapHScrollBar.Value;
+            int _cur_y = (_mapMouse.Y / _mapInfos.Map_Tile_Height) + mapVScrollBar.Value;
+            string _layer_name = checkedListBoxMapLayerShow.Items[_SetMapTileFlagLayerIndex].ToString();
+
+            int _index = _mapInfos._mapTile[_mapLayerDepth[_SetMapTileFlagLayerIndex]._index, _cur_x, _cur_y];
+
+            //if (_mapInfos._mapTitle[1, x, y] != -1)
+            //{
+            //    index = _mapInfos._mapTitle[1, x, y];
+            //    MapUseTitleInfo m = _mapInfos._mapTitleUseInfo[index];
+            //}
+            Image _tileImage = null;
+
+            if (_index != -1 && _index < _mapInfos._mapTileUseInfo.Count)
+            {
+                //e.Graphics.DrawImage(_mapInfos._mapTitleUseInfo[index]._image, (x - mapHScrollBar.Value) * _mapInfos.Map_Title_Width, (y - mapVScrollBar.Value) * _mapInfos.Map_Title_Height);
+
+                if (_mapInfos._mapTileUseInfo[_index]._image._tile != null)
+                {
+                    _tileImage = _mapInfos._mapTileUseInfo[_index]._image._tile;
+                }
+            }
+
+            if (_tileImage != null)
+            {
+                tyoEngineTileAttributeDlg _dlg = new tyoEngineTileAttributeDlg(_cur_x, _cur_y, _SetMapTileFlagLayerIndex, _layer_name, _tileImage,_mapInfos);
+                _dlg.ShowDialog();
+                TileAttributeDeleteUpdate();
+            }
+            
+        }
+
         private void panelMap_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
                 _IsMapPanelLBtDown = true;
                 this.panelMap.Focus();
-                DrawAnimation(_nowAnimationKey);
-                SetMonstorProperties();
 
-                DrawMapTitlePiece();
-
+                if ( _SetMapTileFlagLayerIndex > 0 )
+                {
+                    SetMapTileAttribute();
+                }
+                else
+                {
+                    DrawAnimation(_nowAnimationKey);
+                    SetMonstorProperties();
+                    DrawMapTitlePiece();
+                }               
             }
             else if (e.Button == MouseButtons.Right)
             {
@@ -1172,6 +1234,8 @@ namespace tyoEngineEditor
 
         private void comboBoxFun1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            _SetMapTileFlagLayerIndex = -1;
+
             if (comboBoxFun1.SelectedIndex == 2 || comboBoxFun1.SelectedIndex == 3)
             {
                 comboBoxFun3.SelectedIndex = 2;
@@ -1192,6 +1256,47 @@ namespace tyoEngineEditor
                             _mapInfos.SetMapTile(comboBoxMapLayer.SelectedIndex, x, y, -1);
                         }
                     }
+
+                    _mapInfos.ActionEnd();
+
+                    comboBoxFun1.SelectedIndex = 0;
+                }
+                else
+                {
+                    comboBoxFun1.SelectedIndex = 0;
+                }
+
+            }
+            else if (comboBoxFun1.SelectedIndex == 6)
+            {
+                if (comboBoxMapLayer.SelectedIndex >= 0 )
+                {
+                    _SetMapTileFlagLayerIndex = comboBoxMapLayer.SelectedIndex;
+
+                    pictureBoxNowSelect.Image = null;
+                    _nowSelectPieceIndexByMap.Clear();
+                    _nowSelectPiece = null;
+                }
+            }
+            else if (comboBoxFun1.SelectedIndex == 7)
+            {
+                DialogResult dr = MessageBox.Show("是否要清空所有图层的图块?", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (dr == DialogResult.Yes)
+                {
+                    _mapInfos.ActionBegin(false, true);
+
+                    for ( int i = 0; i< comboBoxMapLayer.Items.Count; ++i)
+                    {
+                        for (int x = 0; x < _mapInfos.Map_Size_Width; ++x)
+                        {
+                            for (int y = 0; y < _mapInfos.Map_Size_Height; ++y)
+                            {
+                                _mapInfos.SetMapTile(i, x, y, -1);
+                            }
+                        }
+                    }
+                    
 
                     _mapInfos.ActionEnd();
 
@@ -1384,6 +1489,7 @@ namespace tyoEngineEditor
             SaveLayerInfos(_jsonFile);
             SaveTileUseInfo(_jsonFile, _pPath);
             SaveMapAllData(_jsonFile);
+            SaveMapTileAttributeData(_jsonFile);
 
             SaveUsedAnimationInfos(_jsonFile);
             SaveAnimationOffsets(_jsonFile);
@@ -1565,6 +1671,32 @@ namespace tyoEngineEditor
                         _file.MapAnimationTile[i, x, y] = _mapInfos._mapAnimationTile[i, x, y];
                     }
                 }
+            }
+        }
+
+        private void SaveMapTileAttributeData(MapDataJsonFile _file)
+        {
+            foreach(MapTileAttribute _attr in _mapInfos._mapTileAttributeList)
+            {
+                MapDataJsonFile.__MapTileAttribute _tileAttribute = new MapDataJsonFile.__MapTileAttribute(_attr._tile_x, _attr._tile_y, _attr._tile_layer);
+
+                _tileAttribute.Value1 = _attr.Value1;
+                _tileAttribute.Value1_Type = _attr.Value1_Type;
+                _tileAttribute.Value1_Description = _attr.Value1_Description;
+
+                _tileAttribute.Value2 = _attr.Value2;
+                _tileAttribute.Value2_Type = _attr.Value2_Type;
+                _tileAttribute.Value2_Description = _attr.Value2_Description;
+
+                _tileAttribute.Value3 = _attr.Value3;
+                _tileAttribute.Value3_Type = _attr.Value3_Type;
+                _tileAttribute.Value3_Description = _attr.Value3_Description;
+
+                _tileAttribute.Value4 = _attr.Value4;
+                _tileAttribute.Value4_Type = _attr.Value4_Type;
+                _tileAttribute.Value4_Description = _attr.Value4_Description;
+
+                _file.MapTileAttributeList.Add(_tileAttribute);
             }
         }
 
@@ -1874,6 +2006,7 @@ namespace tyoEngineEditor
             SaveLayerInfos(_jsonFile);
             SaveTileUseInfo(_jsonFile, _pPath);
             SaveMapAllData(_jsonFile);
+            SaveMapTileAttributeData(_jsonFile);
 
             SaveUsedAnimationInfos(_jsonFile);
             SaveAnimationOffsets(_jsonFile);
@@ -2660,5 +2793,23 @@ namespace tyoEngineEditor
         }
         #endregion
 
+        private void btTileAttribute_Click(object sender, EventArgs e)
+        {
+            tyoEngineTileAttributeDlg _dlg = new tyoEngineTileAttributeDlg(_mapInfos);
+            _dlg.ShowDialog();
+            TileAttributeDeleteUpdate();
+        }
+
+        private void TileAttributeDeleteUpdate()
+        {
+            for(int i = 0; i < _mapInfos._mapTileAttributeList.Count; i++ )
+            {
+                if(_mapInfos._mapTileAttributeList[i]._deleteFlag)
+                {
+                    _mapInfos._mapTileAttributeList.RemoveAt(i);
+                }
+                
+            }
+        }
     }
 }

@@ -89,6 +89,12 @@
     <Compile Include="MAP\Form\tyoEngineOffset.Designer.cs">
       <DependentUpon>tyoEngineOffset.cs</DependentUpon>
     </Compile>
+    <Compile Include="MAP\Form\tyoEngineTileAttributeDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MAP\Form\tyoEngineTileAttributeDlg.Designer.cs">
+      <DependentUpon>tyoEngineTileAttributeDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="MAP\ModelFolder\Animation.cs" />
     <Compile Include="MAP\Form\tyoEngineTitleMapPreview.cs">
       <SubType>Form</SubType>
@@ -129,6 +135,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MAP\Form\tyoEngineOffset.resx">
       <DependentUpon>tyoEngineOffset.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MAP\Form\tyoEngineTileAttributeDlg.resx">
+      <DependentUpon>tyoEngineTileAttributeDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MAP\Form\tyoEngineTitleMapPreview.resx">
       <DependentUpon>tyoEngineTitleMapPreview.cs</DependentUpon>

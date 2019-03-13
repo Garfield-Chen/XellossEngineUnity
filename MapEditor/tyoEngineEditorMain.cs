@@ -477,6 +477,7 @@ namespace tyoEngineEditor
             LoadLayerInfos(_jsonFile);
             LoadTileUseInfo(_jsonFile, _filePath);
             LoadMapAllData(_jsonFile);
+            LoadMapTileAttributeData(_jsonFile);
 
             if ( _jsonFile.AnimationUsedInfosList.Count > 0)
             {
@@ -806,6 +807,32 @@ namespace tyoEngineEditor
                 propertyGridMapEditor_MapInfos.Refresh();
             }
             countLoadMap++;
+        }
+
+        private void LoadMapTileAttributeData(MapDataJsonFile _jsonFile)
+        {
+            foreach(MapDataJsonFile.__MapTileAttribute _attr in _jsonFile.MapTileAttributeList)
+            {
+                MapTileAttribute _tileAttribute = new MapTileAttribute(_attr._tile_x, _attr._tile_y, _attr._tile_layer);
+
+                _tileAttribute.Value1 = _attr.Value1;
+                _tileAttribute.Value1_Type = _attr.Value1_Type;
+                _tileAttribute.Value1_Description = _attr.Value1_Description;
+
+                _tileAttribute.Value2 = _attr.Value2;
+                _tileAttribute.Value2_Type = _attr.Value2_Type;
+                _tileAttribute.Value2_Description = _attr.Value2_Description;
+
+                _tileAttribute.Value3 = _attr.Value3;
+                _tileAttribute.Value3_Type = _attr.Value3_Type;
+                _tileAttribute.Value3_Description = _attr.Value3_Description;
+
+                _tileAttribute.Value4 = _attr.Value4;
+                _tileAttribute.Value4_Type = _attr.Value4_Type;
+                _tileAttribute.Value4_Description = _attr.Value4_Description;
+
+                _nowMapInfos._mapTileAttributeList.Add(_tileAttribute);
+            }
         }
 
         private void LoadMapAllData(MapDataJsonFile _jsonFile)
