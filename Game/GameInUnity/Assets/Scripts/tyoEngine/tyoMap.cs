@@ -420,6 +420,9 @@ public class tyoMap
     int mapPosX = 0;
     int mapPosY = 0;
 
+    int mapNextPosX = 0;
+    int mapNextPosY = 0;
+
     float mapTileScaleX = 1.0f;
     float mapTileScaleY = 1.0f;
 
@@ -550,9 +553,19 @@ public class tyoMap
     {
         if ( mapPosX <= 1 || mapPosX >= mapJsonFile.MapSizeWidth - mapCenterOffsetX * 2 - 3)
         {
+            if(mapPosX == 1 && mapNextPosX == 2)
+            {
+                return mapRenderOffset.X;
+            }
+
+            if(mapPosX == mapJsonFile.MapSizeWidth - mapCenterOffsetX * 2 - 3 && mapNextPosX == mapJsonFile.MapSizeWidth - mapCenterOffsetX * 2 - 4)
+            {
+                return mapRenderOffset.X;
+            }
+
             return 0.0f;
         }
-
+        
         return mapRenderOffset.X;
     }
 
@@ -560,6 +573,16 @@ public class tyoMap
     {
         if ( mapPosY <= 1 || mapPosY >=  mapJsonFile.MapSizeHeight - mapCenterOffsetY * 2 - 2)
         {
+            if(mapPosY == 1 && mapNextPosY == 2)
+            {
+                return mapRenderOffset.Y;
+            }
+
+            if(mapPosY ==  mapJsonFile.MapSizeHeight - mapCenterOffsetY * 2 - 2 && mapNextPosY == mapJsonFile.MapSizeHeight - mapCenterOffsetY * 2 - 3)
+            {
+                return mapRenderOffset.Y;
+            }
+
             return 0.0f;
         }
 
@@ -570,6 +593,16 @@ public class tyoMap
     {
         if ( mapPosX <= 1 || mapPosX >= mapJsonFile.MapSizeWidth - mapCenterOffsetX * 2 - 3)
         {
+            if(mapPosX == 1 && mapNextPosX == 2)
+            {
+                return 0.0f;
+            }
+
+            if(mapPosX == mapJsonFile.MapSizeWidth - mapCenterOffsetX * 2 - 3 && mapNextPosX == mapJsonFile.MapSizeWidth - mapCenterOffsetX * 2 - 4)
+            {
+                return 0.0f;
+            }
+
             return _player.moveOffset.X;
         }
 
@@ -580,6 +613,16 @@ public class tyoMap
     {
         if ( mapPosY <= 1 || mapPosY >=  mapJsonFile.MapSizeHeight - mapCenterOffsetY * 2 - 2)
         {
+            if(mapPosY == 1 && mapNextPosY == 2)
+            {
+                return 0.0f;
+            }
+
+            if(mapPosY ==  mapJsonFile.MapSizeHeight - mapCenterOffsetY * 2 - 2 && mapNextPosY == mapJsonFile.MapSizeHeight - mapCenterOffsetY * 2 - 3)
+            {
+                return 0.0f;
+            }
+
             return _player.moveOffset.Y;
         }
 
@@ -792,6 +835,29 @@ public class tyoMap
         }
     }
 
+    void UpdateNextMapPosFromNextPlayerPos(int _posX,int _posY)
+    {
+        if ( _posX - mapCenterOffsetX >= 0)
+        {
+            mapNextPosX = _posX - mapCenterOffsetX + 1;
+        }
+
+        if ( _posX + mapCenterOffsetX + 3 >= mapJsonFile.MapSizeWidth)
+        {
+            mapNextPosX = mapJsonFile.MapSizeWidth - mapCenterOffsetX * 2 - 3;
+        }
+
+        if ( _posY - mapCenterOffsetY >= 0)
+        {
+            mapNextPosY = _posY - mapCenterOffsetY + 1;
+        }
+
+        if ( _posY + mapCenterOffsetY + 2 >= mapJsonFile.MapSizeHeight)
+        {
+            mapNextPosY = mapJsonFile.MapSizeHeight - mapCenterOffsetY * 2 - 2;
+        }
+    }
+
     public void UpdateMap(float _dt)
     {
         foreach(tyoPlayer _player in playerList)
@@ -802,6 +868,8 @@ public class tyoMap
                 {
                     int _next_x = _player.currentPosition.X - 1;
                     int _next_y = _player.currentPosition.Y;
+
+                    UpdateNextMapPosFromNextPlayerPos(_next_x,_next_y);
 
                     if (!(_next_x < 0 || mapJsonFile.MapBlockFlag[_next_x,_next_y]))
                     {
@@ -840,6 +908,8 @@ public class tyoMap
                     int _next_x = _player.currentPosition.X + 1;
                     int _next_y = _player.currentPosition.Y;
 
+                    UpdateNextMapPosFromNextPlayerPos(_next_x,_next_y);
+
                     if (!(_next_x >= mapJsonFile.MapSizeWidth || mapJsonFile.MapBlockFlag[_next_x,_next_y]))
                     {
                         int _t_ofx = _player.moveOffset.X + _player.moveSpeed;
@@ -876,6 +946,8 @@ public class tyoMap
                 {
                     int _next_x = _player.currentPosition.X;
                     int _next_y = _player.currentPosition.Y - 1;
+
+                    UpdateNextMapPosFromNextPlayerPos(_next_x,_next_y);
 
                     if (!(_next_y < 0 || mapJsonFile.MapBlockFlag[_next_x,_next_y]))
                     {
@@ -915,6 +987,8 @@ public class tyoMap
                 {
                     int _next_x = _player.currentPosition.X;
                     int _next_y = _player.currentPosition.Y + 1;
+
+                    UpdateNextMapPosFromNextPlayerPos(_next_x,_next_y);
 
                     if (!(_next_y >= mapJsonFile.MapSizeHeight || mapJsonFile.MapBlockFlag[_next_x,_next_y]))
                     {
