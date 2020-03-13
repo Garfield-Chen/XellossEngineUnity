@@ -56,8 +56,8 @@ public class tyoCore : MonoBehaviour
 	public bool runLogicFlag = false;
 	void Awake()
 	{
-		Camera.main.orthographicSize = Screen.height / 2;
-		Camera.main.aspect =  2208.0f /  1242.0f;
+		Camera.main.orthographicSize = Screen.height / 2.0f;
+		Camera.main.aspect =  Screen.width * 1.0f / Screen.height;
 
 		input.MouseTouchSameFlag(TouchMouseIsSame);
 
