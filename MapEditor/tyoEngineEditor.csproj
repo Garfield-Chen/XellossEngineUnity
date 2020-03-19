@@ -71,23 +71,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MAP\Form\tyoEngineAnimation.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MAP\Form\tyoEngineAnimation.Designer.cs">
-      <DependentUpon>tyoEngineAnimation.cs</DependentUpon>
-    </Compile>
     <Compile Include="MAP\Form\tyoEngineLayerEdit.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MAP\Form\tyoEngineLayerEdit.Designer.cs">
       <DependentUpon>tyoEngineLayerEdit.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MAP\Form\tyoEngineOffset.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MAP\Form\tyoEngineOffset.Designer.cs">
-      <DependentUpon>tyoEngineOffset.cs</DependentUpon>
     </Compile>
     <Compile Include="MAP\Form\tyoEngineTileAttributeDlg.cs">
       <SubType>Form</SubType>
@@ -127,14 +115,8 @@
     <Compile Include="MAP\Form\tyoEngineTileMapEditTilePieceWin.Designer.cs">
       <DependentUpon>tyoEngineTileMapEditTilePieceWin.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="MAP\Form\tyoEngineAnimation.resx">
-      <DependentUpon>tyoEngineAnimation.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="MAP\Form\tyoEngineLayerEdit.resx">
       <DependentUpon>tyoEngineLayerEdit.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MAP\Form\tyoEngineOffset.resx">
-      <DependentUpon>tyoEngineOffset.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MAP\Form\tyoEngineTileAttributeDlg.resx">
       <DependentUpon>tyoEngineTileAttributeDlg.cs</DependentUpon>

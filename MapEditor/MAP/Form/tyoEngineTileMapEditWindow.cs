@@ -123,8 +123,6 @@ namespace tyoEngineEditor
         }
 
         MapInfos _mapInfos = null;
-        tyoEngineOffset _offset = null;
-        AnimationOffset _selectedAnimationKey = new AnimationOffset();
 
         public MapInfos GetMapInfos()
         {
@@ -341,8 +339,6 @@ namespace tyoEngineEditor
         //记录选中的动态图的键
         public List<int> _nowAnimationKeys = new List<int>();
 
-        private int _nowAnimationKey = -1;
-
         Point _mapMouse = new Point(0, 0);
 
         public int _nowSelectPieceW = 0;
@@ -427,30 +423,7 @@ namespace tyoEngineEditor
         Brush _setTileFlagLayerBrush = new SolidBrush(Color.FromArgb(120, Color.OrangeRed));
         Brush _setTileFlagBrush = new SolidBrush(Color.FromArgb(180, Color.PapayaWhip));
 
-        private void AnimationPaint(int key,Graphics e,int x,int y,int id) 
-        {
-            if (_mapInfos._mapAnimationUseInfo.ContainsKey(key))
-            {
-                int offsetx=0, offsety = 0;
-                if (_mapInfos._mapAnimationOffsets.ContainsKey(id)) 
-                {
-                    offsetx = _mapInfos._mapAnimationOffsets[id]._offsetX;
-                    offsety = _mapInfos._mapAnimationOffsets[id]._offsetY;
-                }
-
-                e.DrawImage(
-                _mapInfos._mapAnimationUseInfo[key].animationImageInfos[_mapInfos._mapAnimationUseInfo[key].count].onPanelBitmap,
-                (x - mapHScrollBar.Value) * _mapInfos.Map_Tile_Width + offsetx,
-                (y - mapVScrollBar.Value) * _mapInfos.Map_Tile_Height + offsety,
-                 _mapInfos._mapAnimationUseInfo[key].animationImageInfos[_mapInfos._mapAnimationUseInfo[key].count].onPanelBitmap.Width,
-                 _mapInfos._mapAnimationUseInfo[key].animationImageInfos[_mapInfos._mapAnimationUseInfo[key].count].onPanelBitmap.Height);
-
-                e.FillRectangle(_blockBrush_Green, (x - mapHScrollBar.Value) * _mapInfos.Map_Tile_Width,
-                    (y - mapVScrollBar.Value) * _mapInfos.Map_Tile_Height,
-                    _mapInfos.Map_Tile_Width, _mapInfos.Map_Tile_Height);
-            }
-        }
-
+       
         private void panelMap_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.ScaleTransform(_MapTileScale, _MapTileScale);
@@ -528,54 +501,6 @@ namespace tyoEngineEditor
                                     _mapInfos._mapTileUseInfo[index]._image._h);
                                 }
                             }
-                        }
-
-                        if (_mapInfos._mapAnimationTile != null)
-                        {
-                            int key = _mapInfos._mapAnimationTile[_mapLayerDepth[i]._index, x, y];
-                            int id = -1;
-                            foreach (KeyValuePair<int, AnimationOffset> items in _mapInfos._mapAnimationOffsets)
-                            {
-                                if (items.Value._x == x && items.Value._y == y)
-                                {
-                                    id = items.Key;
-                                    break;
-                                }
-                            }
-
-                            if (key!=-1&&_offset != null)
-                            {
-                                if (_selectedAnimationKey._layer == _mapLayerDepth[i]._index &&
-                                    _selectedAnimationKey._x == x && _selectedAnimationKey._y == y) 
-                                {
-
-                                    e.Graphics.DrawImage(
-                                        _mapInfos._mapAnimationUseInfo[key].animationImageInfos[_mapInfos._mapAnimationUseInfo[key].count].onPanelBitmap,
-                                        (x - mapHScrollBar.Value) * _mapInfos.Map_Tile_Width + _offset._offsetX,
-                                        (y - mapVScrollBar.Value) * _mapInfos.Map_Tile_Height + _offset._offsetY,
-                                         _mapInfos._mapAnimationUseInfo[key].animationImageInfos[_mapInfos._mapAnimationUseInfo[key].count].onPanelBitmap.Width,
-                                         _mapInfos._mapAnimationUseInfo[key].animationImageInfos[_mapInfos._mapAnimationUseInfo[key].count].onPanelBitmap.Height);
-
-                                    e.Graphics.FillRectangle(_blockBrush_Green, (x - mapHScrollBar.Value) * _mapInfos.Map_Tile_Width,
-                                        (y - mapVScrollBar.Value) * _mapInfos.Map_Tile_Height,
-                                        _mapInfos.Map_Tile_Width, _mapInfos.Map_Tile_Height);
-
-                                    
-                                        _mapInfos._mapAnimationOffsets[id]._offsetX = _offset._offsetX;
-                                        _mapInfos._mapAnimationOffsets[id]._offsetY = _offset._offsetY;
-                                    
-                                }
-                                else 
-                                {
-                                    AnimationPaint(key, e.Graphics, x, y, id);
-                                }
-                            }
-
-                            if (key != -1 && _offset == null)
-                            {
-                                AnimationPaint(key, e.Graphics, x, y, id);
-                            }
-                            
                         }
                     }
                 }
@@ -745,38 +670,13 @@ namespace tyoEngineEditor
                 (_mapMouse.X / _mapInfos.Map_Tile_Width) + mapHScrollBar.Value,
                     (_mapMouse.Y / _mapInfos.Map_Tile_Height) + mapVScrollBar.Value];
 
-            int id = -1;
-            foreach (KeyValuePair<int, AnimationOffset> items in _mapInfos._mapAnimationOffsets)
-            {
-                if (items.Value._x == (_mapMouse.X / _mapInfos.Map_Tile_Width) + mapHScrollBar.Value
-                    && items.Value._y == (_mapMouse.Y / _mapInfos.Map_Tile_Height) + mapVScrollBar.Value)
-                {
-                    id = items.Key;
-                    break;
-                }
-            }
-
             //Console.WriteLine("double X:" + (_mapMouse.X / _mapInfos.Map_Title_Width) + mapHScrollBar.Value
             //    + " Y:" + (_mapMouse.Y / _mapInfos.Map_Title_Height) + mapVScrollBar.Value
             //    + " layer:" + comboBoxMapLayer.SelectedIndex);
 
             if (i != -1) 
             {
-                _selectedAnimationKey = new AnimationOffset(comboBoxMapLayer.SelectedIndex,
-                    (_mapMouse.X / _mapInfos.Map_Tile_Width) + mapHScrollBar.Value,
-                _mapMouse.Y / _mapInfos.Map_Tile_Height + mapVScrollBar.Value,-1);
-
-                if (_mapInfos._mapAnimationOffsets.ContainsKey(id)) 
-                {
-                    _offset = new tyoEngineOffset(_mapInfos._mapAnimationOffsets[id]._offsetX, 
-                        _mapInfos._mapAnimationOffsets[id]._offsetY);
-                }
-                else 
-                {
-                    _offset = new tyoEngineOffset();
-                }
-                
-                _offset.ShowDialog();
+               
             }
         }
 
@@ -1135,7 +1035,7 @@ namespace tyoEngineEditor
                 }
                 else
                 {
-                    DrawAnimation(_nowAnimationKey);
+                   
                     SetMonstorProperties();
                     DrawMapTitlePiece();
                 }               
@@ -1148,70 +1048,6 @@ namespace tyoEngineEditor
             }
         }
 
-        private void DrawAnimation(int key)
-        {
-            if (comboBoxFun1.SelectedIndex == 0) //设置
-            {
-                if (pictureBoxNowSelect.Image != null && key >= 0)
-                {
-                    _mapInfos.ActionBegin(false, false);
-
-                    _mapInfos.SetMapAnimationTile(comboBoxMapLayer.SelectedIndex,
-                        (_mapMouse.X / _mapInfos.Map_Tile_Width) + mapHScrollBar.Value,
-                        (_mapMouse.Y / _mapInfos.Map_Tile_Height) + mapVScrollBar.Value,
-                        key);
-
-                    //Console.WriteLine("draw X:" + (_mapMouse.X / _mapInfos.Map_Title_Width) + mapHScrollBar.Value
-                    //+ " Y:" + (_mapMouse.Y / _mapInfos.Map_Title_Height) + mapVScrollBar.Value
-                    //+ " layer:" + comboBoxMapLayer.SelectedIndex);
-                    int id = _mapInfos._mapAnimationOffsets.Count + 1;
-                    _mapInfos._mapAnimationOffsets.Add(id,
-                        new AnimationOffset(comboBoxMapLayer.SelectedIndex, (_mapMouse.X / _mapInfos.Map_Tile_Width) + mapHScrollBar.Value,
-                            (_mapMouse.Y / _mapInfos.Map_Tile_Height) + mapVScrollBar.Value, id));
-
-                    _mapInfos.ActionEnd();
-
-                    pictureBoxNowSelect.Image = null;
-                    _nowSelectPieceIndexByMap.Clear();
-                    _nowSelectPiece = null;
-
-                }
-            }
-            else if (comboBoxFun1.SelectedIndex == 1) //清楚
-            {
-                _mapInfos.ActionBegin(false, true);
-
-                int id = -1;
-                foreach (KeyValuePair<int, AnimationOffset> items in _mapInfos._mapAnimationOffsets)
-                {
-                    if (items.Value._x == (_mapMouse.X / _mapInfos.Map_Tile_Width) + mapHScrollBar.Value
-                        && items.Value._y == (_mapMouse.Y / _mapInfos.Map_Tile_Height) + mapVScrollBar.Value)
-                    {
-                        id = items.Key;
-                        break;
-                    }
-                }
-
-                if (id >= 0)
-                {
-                    _mapInfos._mapAnimationOffsets.Remove(id);
-                }
-
-                _mapInfos.SetMapAnimationTile(comboBoxMapLayer.SelectedIndex,
-                    (_mapMouse.X / _mapInfos.Map_Tile_Width) + mapHScrollBar.Value,
-                    (_mapMouse.Y / _mapInfos.Map_Tile_Height) + mapVScrollBar.Value,
-                    -1);
-
-                _mapInfos.ActionEnd();
-
-                pictureBoxNowSelect.Image = null;
-                _nowSelectPieceIndexByMap.Clear();
-                _nowSelectPiece = null;
-
-            }
-
-
-        }
 
         private void SetMonstorProperties()
         {
@@ -1491,12 +1327,6 @@ namespace tyoEngineEditor
             SaveMapAllData(_jsonFile);
             SaveMapTileAttributeData(_jsonFile);
 
-            SaveUsedAnimationInfos(_jsonFile);
-            SaveAnimationOffsets(_jsonFile);
-            //SaveAnimationArray(binFile);
-            //SaveUseAnimationInfo(binFile);
-            SaveAnimationPNG(_pPath);
-            SaveAnimationXML(_pPath);
 
             //binFile.Close();
             //fs.Close();
@@ -1514,123 +1344,9 @@ namespace tyoEngineEditor
 
         }
 
-        private void SaveAnimationArray(BinaryWriter _file)
-        {
-            for (int i = 0; i < _mapInfos._mapLayerInfosByIndex.Count; ++i)
-            {
-                for (int x = 0; x < _mapInfos.Map_Size_Width; ++x)
-                {
-                    for (int y = 0; y < _mapInfos.Map_Size_Height; ++y)
-                    {
-                        _file.Write(_mapInfos._mapAnimationTile[i, x, y]);
-                    }
-                }
-            }
-        }
 
-        private void SaveUsedAnimationInfos(MapDataJsonFile _file)
-        {
-            //_file.Write(_mapInfos._mapAnimationUseInfo.Count);
 
-            foreach (KeyValuePair<int, MapUseAnimationInfo> item in _mapInfos._mapAnimationUseInfo)
-            {
-                MapDataJsonFile.__AnimationUsedInfosJson _animationUsedInfos = new MapDataJsonFile.__AnimationUsedInfosJson();
-
-                _animationUsedInfos.Index = item.Key;
-                _animationUsedInfos.FilePath = item.Value.animationInfo.xmlPath;
-                _animationUsedInfos.NodeName = item.Value.animationInfo.name;
-                _animationUsedInfos.Direction = Animation.TransDirectionCN2EN(item.Value.animationInfo.direction);
-
-                _file.AnimationUsedInfosList.Add(_animationUsedInfos);
-            }
-        }
-
-        private void SaveUseAnimationInfo(BinaryWriter _file)
-        {
-            _file.Write(_mapInfos._mapAnimationUseInfo.Count);
-
-            foreach (KeyValuePair<int, MapUseAnimationInfo> item in _mapInfos._mapAnimationUseInfo)
-            {
-                //多少帧
-                _file.Write(item.Value.bitmapsLength);
-
-                //放到地图上的宽
-                _file.Write(item.Value.w);
-
-                //放到地图上的高
-                _file.Write(item.Value.h);
-
-                for (int i = 0; i < item.Value.bitmapsLength; i++)
-                {
-                    //每一帧的宽
-                    _file.Write(item.Value.animationImageInfos[i].w);
-
-                    //每一帧的高
-                    _file.Write(item.Value.animationImageInfos[i].h);
-
-                    //帧在大图中的X坐标
-                    _file.Write(item.Value.animationImageInfos[i].xClone);
-
-                    //帧在大图中的Y坐标
-                    _file.Write(item.Value.animationImageInfos[i].yClone);
-
-                    //原图的宽
-                    _file.Write(item.Value.animationImageInfos[i].originalW);
-
-                    //原图的高
-                    _file.Write(item.Value.animationImageInfos[i].originalH);
-
-                    //原图的X坐标
-                    _file.Write(item.Value.animationImageInfos[i].x);
-
-                    //原图的Y坐标
-                    _file.Write(item.Value.animationImageInfos[i].y);
-
-                    //帧图名称
-                    byte[] pathNames = System.Text.Encoding.Default.GetBytes(item.Value.animationImageInfos[i].path);
-                    _file.Write(pathNames.Length);
-                    _file.Write(pathNames, 0, pathNames.Length);
-                }
-
-                _file.Write(item.Key);
-            }
-
-        }
-
-        private void SaveAnimationPNG(string _path)
-        {
-            DirectoryInfo d = Directory.GetParent(_path);
-            string mapPNGPath = string.Empty;
-
-            foreach (string s in _mapInfos.animationPNGpath)
-            {
-                mapPNGPath = s.Substring(s.LastIndexOf('\\'));
-                if (!Directory.Exists(d.FullName + Parameters.PICFILE))
-                {
-                    Directory.CreateDirectory(d.FullName + Parameters.PICFILE);
-                }
-                if (File.Exists(d.FullName + Parameters.PICFILE + mapPNGPath))
-                {
-                    File.Delete(d.FullName + Parameters.PICFILE + mapPNGPath);
-                }
-                System.IO.File.Copy(s, d.FullName + Parameters.PICFILE + mapPNGPath);
-            }
-        }
-
-        private void SaveAnimationXML(string _path)
-        {
-            string fileName = string.Empty;
-            DirectoryInfo dir = Directory.GetParent(_path);
-            foreach (string s in _mapInfos.animationXML)
-            {
-                fileName = s.Substring(s.LastIndexOf('\\'));
-                if (File.Exists(dir.FullName + fileName))
-                {
-                    File.Delete(dir.FullName + fileName);
-                }
-                System.IO.File.Copy(s, dir.FullName + fileName);
-            }
-        }
+       
 
         //保存地图数据
         private void SaveMapAllData(MapDataJsonFile _file)
@@ -1703,8 +1419,6 @@ namespace tyoEngineEditor
         private void SaveTileUseInfo(MapDataJsonFile _file, string _path)
         {
             //_file.Write(_mapInfos._mapTitleUseInfo.Count);
-
-            int _ttmCount = 0;
 
             for (int i = 0; i < _mapInfos._mapTileUseInfo.Count; ++i)
             {
@@ -2008,12 +1722,6 @@ namespace tyoEngineEditor
             SaveMapAllData(_jsonFile);
             SaveMapTileAttributeData(_jsonFile);
 
-            SaveUsedAnimationInfos(_jsonFile);
-            SaveAnimationOffsets(_jsonFile);
-            //SaveAnimationArray(binFile);
-            //SaveUseAnimationInfo(binFile);
-            SaveAnimationPNG(_pPath);
-            SaveAnimationXML(_pPath);
 
             //binFile.Close();
             //fs.Close();
@@ -2154,22 +1862,6 @@ namespace tyoEngineEditor
                     _file.Write(alldataModel.x);
                     _file.Write(alldataModel.y);
                     _file.Write(alldataModel.data);
-
-
-                    foreach (AnimationOffset itemOffset in _mapInfos._mapAnimationOffsets.Values)
-                    {
-                        if (itemOffset._x == alldataModel.x && itemOffset._y == alldataModel.y) 
-                        {
-                            //偏移量X
-                            _file.Write(itemOffset._offsetX);
-
-                            //偏移量Y
-                            _file.Write(itemOffset._offsetY);
-
-                            break;
-                        }
-
-                    }
                 }
 
                 layerIndex++;
@@ -2229,21 +1921,7 @@ namespace tyoEngineEditor
 
         #endregion
 
-        private void SaveAnimationOffsets(MapDataJsonFile _file) 
-        {
-            foreach (AnimationOffset item in _mapInfos._mapAnimationOffsets.Values)
-            {
-                MapDataJsonFile.__AnimationOffsets _offset = new MapDataJsonFile.__AnimationOffsets();
-                _offset.Index = item._id;
-                _offset.X = item._x;
-                _offset.Y = item._y;
-                _offset.Layer = item._layer;
-                _offset.OffsetX = item._offsetX;
-                _offset.OffsetY = item._offsetY;
-
-                _file.AnimationOffsetList.Add(_offset);
-            }
-        }
+  
 
         private void btOutputMapDataFile_Click(object sender, EventArgs e)
         {
@@ -2486,67 +2164,10 @@ namespace tyoEngineEditor
              * */
         }
 
-        private void btTest_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = Parameters.FILTERXML;
-            ofd.Multiselect = false;
-            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                tyoEngineAnimation tea = new tyoEngineAnimation(ofd.FileName, this);
-                tea.Show();
-            }
-        }
-
-        public void AddAnimationPiece(List<AnimationImageInfo> animationImageInfos, AnimationInfo animationInfo)
-        //public void AddAnimationPiece(List<AnimationImageInfo> animationImageInfos, int w, int h)
-        {
-            MapUseAnimationInfo model = new MapUseAnimationInfo();
-
-            model.w = animationImageInfos[0].onPanelBitmap.Width;
-            model.h = animationImageInfos[0].onPanelBitmap.Height;
-
-            model.bitmapsLength = animationImageInfos.Count;
-
-            model.animationImageInfos = animationImageInfos;
-
-            model.animationInfo = animationInfo;
-
-            for (int i = 0; i < _mapInfos._mapAnimationUseInfo.Count; ++i)
-            {
-                if (_mapInfos._mapAnimationUseInfo[i].animationInfo.name == animationInfo.name &&
-                    _mapInfos._mapAnimationUseInfo[i].animationInfo.direction == animationInfo.direction)
-                {
-                    _nowAnimationKey = i;
-                    SetNowSelectPiece(animationImageInfos[0].onPanelBitmap);
-                    return;
-                }
-            }
-
-            _nowAnimationKey = _mapInfos._mapAnimationUseInfo.Count;
-
-            _mapInfos._mapAnimationUseInfo.Add(_nowAnimationKey, model);
-
-            SetNowSelectPiece(animationImageInfos[0].onPanelBitmap);
-        }
-
-        private void timerAnimation_Tick(object sender, EventArgs e)
-        {
-            for (int i = 0; i < _mapInfos._mapAnimationUseInfo.Count; i++)
-            {
-                _mapInfos._mapAnimationUseInfo[i].count =
-                    _mapInfos._mapAnimationUseInfo[i].count == _mapInfos._mapAnimationUseInfo[i].bitmapsLength - 1 ?
-                    0 : _mapInfos._mapAnimationUseInfo[i].count + 1;
-            }
-
-            panelMap.Refresh();
-        }
-
+        
         private void hSystemFPSBar_ValueChanged(object sender, EventArgs e)
         {
-            timerAnimation.Stop();
-            timerAnimation.Interval = 1000 / hSystemFPSBar.Value;
-            timerAnimation.Start();
+            
         }
 
         #region 编辑图层

@@ -34,8 +34,8 @@ public class tyoPlayer
 
 	tyoSprite playerSprite = null;
 	
-	public int moveSpeed = 24;
-	float moveDelay = 70.0f;
+	public int moveSpeed = 12;
+	float moveDelay = 30.0f;
 	public tyoStructure.tyoPointInt moveOffset = new tyoStructure.tyoPointInt();
 
 	float currentMoveDt = 0;

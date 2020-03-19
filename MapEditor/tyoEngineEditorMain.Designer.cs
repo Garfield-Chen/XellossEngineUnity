@@ -38,25 +38,19 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.dealingToolLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.dealingToolProgressBar = new System.Windows.Forms.ToolStripProgressBar();
-            this.timerAnimation = new System.Windows.Forms.Timer(this.components);
             this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.cbPlay = new System.Windows.Forms.CheckBox();
-            this.btPicDel = new System.Windows.Forms.Button();
-            this.btPicAdd = new System.Windows.Forms.Button();
-            this.groupBox16 = new System.Windows.Forms.GroupBox();
-            this.txtAnimation = new System.Windows.Forms.TextBox();
-            this.label31 = new System.Windows.Forms.Label();
-            this.btLoadAnimation = new System.Windows.Forms.Button();
-            this.btSaveAnimation = new System.Windows.Forms.Button();
-            this.btNewAnimation = new System.Windows.Forms.Button();
-            this.dgvAnimation = new System.Windows.Forms.DataGridView();
-            this.NameCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DirectionCol = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.OpCol = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.groupBox15 = new System.Windows.Forms.GroupBox();
-            this.panelAnimation = new tyoEngineEditor.tyoEngineTileMapEditWindow.MapEditPanel();
-            this.listBoxAnimation = new System.Windows.Forms.ListBox();
+            this.btAni_DelAniTexture = new System.Windows.Forms.Button();
+            this.btAni_AddAniTexture = new System.Windows.Forms.Button();
+            this.aniListBox_FrameList = new System.Windows.Forms.ListBox();
+            this.aniPropertyGrid_Infos = new System.Windows.Forms.PropertyGrid();
+            this.btAni_PlayAnimation = new System.Windows.Forms.Button();
+            this.btAni_LoadAnimation = new System.Windows.Forms.Button();
+            this.btAni_ClearAnimation = new System.Windows.Forms.Button();
+            this.btAni_SaveAnimation = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.aniPictureBox_frameTexture = new System.Windows.Forms.PictureBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.aniPictureBox_AniShow = new System.Windows.Forms.PictureBox();
             this.tabSystemMenuControl = new System.Windows.Forms.TabControl();
             this.TileMapEditor = new System.Windows.Forms.TabPage();
             this.btShowMap = new System.Windows.Forms.Button();
@@ -80,12 +74,19 @@
             this.propertyGridMapEditor_MapInfos = new System.Windows.Forms.PropertyGrid();
             this.btMAP_RenewMap = new System.Windows.Forms.Button();
             this.btMAP_Edit = new System.Windows.Forms.Button();
+            this.aniTextBox_Name = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.aniTimer_AnimationPlayDt = new System.Windows.Forms.Timer(this.components);
+            this.aniTextBox_FPS = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.btAni_SortAnimationFrameList = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabPage6.SuspendLayout();
-            this.groupBox16.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvAnimation)).BeginInit();
-            this.groupBox15.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.aniPictureBox_frameTexture)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.aniPictureBox_AniShow)).BeginInit();
             this.tabSystemMenuControl.SuspendLayout();
             this.TileMapEditor.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -106,7 +107,7 @@
             this.tileMapToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(784, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(784, 25);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -116,20 +117,20 @@
             this.newMapToolStripMenuItem,
             this.loadMapToolStripMenuItem});
             this.tileMapToolStripMenuItem.Name = "tileMapToolStripMenuItem";
-            this.tileMapToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
+            this.tileMapToolStripMenuItem.Size = new System.Drawing.Size(71, 21);
             this.tileMapToolStripMenuItem.Text = "Tile Map";
             // 
             // newMapToolStripMenuItem
             // 
             this.newMapToolStripMenuItem.Name = "newMapToolStripMenuItem";
-            this.newMapToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.newMapToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.newMapToolStripMenuItem.Text = "New Map";
             this.newMapToolStripMenuItem.Click += new System.EventHandler(this.newMapToolStripMenuItem_Click);
             // 
             // loadMapToolStripMenuItem
             // 
             this.loadMapToolStripMenuItem.Name = "loadMapToolStripMenuItem";
-            this.loadMapToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.loadMapToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.loadMapToolStripMenuItem.Text = "Load Map";
             this.loadMapToolStripMenuItem.Click += new System.EventHandler(this.loadMapToolStripMenuItem_Click);
             // 
@@ -151,7 +152,7 @@
             // dealingToolLabel
             // 
             this.dealingToolLabel.Name = "dealingToolLabel";
-            this.dealingToolLabel.Size = new System.Drawing.Size(46, 17);
+            this.dealingToolLabel.Size = new System.Drawing.Size(44, 17);
             this.dealingToolLabel.Text = "处理中";
             this.dealingToolLabel.Visible = false;
             // 
@@ -163,19 +164,23 @@
             this.dealingToolProgressBar.Step = 1;
             this.dealingToolProgressBar.Visible = false;
             // 
-            // timerAnimation
-            // 
-            this.timerAnimation.Tick += new System.EventHandler(this.timerAnimation_Tick);
-            // 
             // tabPage6
             // 
-            this.tabPage6.Controls.Add(this.cbPlay);
-            this.tabPage6.Controls.Add(this.btPicDel);
-            this.tabPage6.Controls.Add(this.btPicAdd);
-            this.tabPage6.Controls.Add(this.groupBox16);
-            this.tabPage6.Controls.Add(this.dgvAnimation);
-            this.tabPage6.Controls.Add(this.groupBox15);
-            this.tabPage6.Controls.Add(this.listBoxAnimation);
+            this.tabPage6.Controls.Add(this.btAni_SortAnimationFrameList);
+            this.tabPage6.Controls.Add(this.aniTextBox_FPS);
+            this.tabPage6.Controls.Add(this.label2);
+            this.tabPage6.Controls.Add(this.label1);
+            this.tabPage6.Controls.Add(this.aniTextBox_Name);
+            this.tabPage6.Controls.Add(this.btAni_DelAniTexture);
+            this.tabPage6.Controls.Add(this.btAni_AddAniTexture);
+            this.tabPage6.Controls.Add(this.aniListBox_FrameList);
+            this.tabPage6.Controls.Add(this.aniPropertyGrid_Infos);
+            this.tabPage6.Controls.Add(this.btAni_PlayAnimation);
+            this.tabPage6.Controls.Add(this.btAni_LoadAnimation);
+            this.tabPage6.Controls.Add(this.btAni_ClearAnimation);
+            this.tabPage6.Controls.Add(this.btAni_SaveAnimation);
+            this.tabPage6.Controls.Add(this.groupBox2);
+            this.tabPage6.Controls.Add(this.groupBox1);
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
@@ -184,182 +189,123 @@
             this.tabPage6.Text = "Animation Edit<动态素材编辑>";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
-            // cbPlay
+            // btAni_DelAniTexture
             // 
-            this.cbPlay.AutoSize = true;
-            this.cbPlay.Location = new System.Drawing.Point(511, 66);
-            this.cbPlay.Name = "cbPlay";
-            this.cbPlay.Size = new System.Drawing.Size(72, 16);
-            this.cbPlay.TabIndex = 7;
-            this.cbPlay.Text = "播放动画";
-            this.cbPlay.UseVisualStyleBackColor = true;
-            this.cbPlay.CheckedChanged += new System.EventHandler(this.cbPlay_CheckedChanged);
+            this.btAni_DelAniTexture.Location = new System.Drawing.Point(87, 18);
+            this.btAni_DelAniTexture.Name = "btAni_DelAniTexture";
+            this.btAni_DelAniTexture.Size = new System.Drawing.Size(75, 23);
+            this.btAni_DelAniTexture.TabIndex = 2;
+            this.btAni_DelAniTexture.Text = "删除素材";
+            this.btAni_DelAniTexture.UseVisualStyleBackColor = true;
+            this.btAni_DelAniTexture.Click += new System.EventHandler(this.btAni_DelAniTexture_Click);
             // 
-            // btPicDel
+            // btAni_AddAniTexture
             // 
-            this.btPicDel.Enabled = false;
-            this.btPicDel.Location = new System.Drawing.Point(87, 66);
-            this.btPicDel.Name = "btPicDel";
-            this.btPicDel.Size = new System.Drawing.Size(75, 23);
-            this.btPicDel.TabIndex = 6;
-            this.btPicDel.Text = "删除动态图";
-            this.btPicDel.UseVisualStyleBackColor = true;
-            this.btPicDel.Click += new System.EventHandler(this.btPicDel_Click);
+            this.btAni_AddAniTexture.Location = new System.Drawing.Point(6, 18);
+            this.btAni_AddAniTexture.Name = "btAni_AddAniTexture";
+            this.btAni_AddAniTexture.Size = new System.Drawing.Size(75, 23);
+            this.btAni_AddAniTexture.TabIndex = 2;
+            this.btAni_AddAniTexture.Text = "添加素材";
+            this.btAni_AddAniTexture.UseVisualStyleBackColor = true;
+            this.btAni_AddAniTexture.Click += new System.EventHandler(this.btAni_AddAniTexture_Click);
             // 
-            // btPicAdd
+            // aniListBox_FrameList
             // 
-            this.btPicAdd.Enabled = false;
-            this.btPicAdd.Location = new System.Drawing.Point(6, 66);
-            this.btPicAdd.Name = "btPicAdd";
-            this.btPicAdd.Size = new System.Drawing.Size(75, 23);
-            this.btPicAdd.TabIndex = 5;
-            this.btPicAdd.Text = "增加动态图";
-            this.btPicAdd.UseVisualStyleBackColor = true;
-            this.btPicAdd.Click += new System.EventHandler(this.btPicAdd_Click);
+            this.aniListBox_FrameList.FormattingEnabled = true;
+            this.aniListBox_FrameList.ItemHeight = 12;
+            this.aniListBox_FrameList.Location = new System.Drawing.Point(6, 47);
+            this.aniListBox_FrameList.Name = "aniListBox_FrameList";
+            this.aniListBox_FrameList.ScrollAlwaysVisible = true;
+            this.aniListBox_FrameList.Size = new System.Drawing.Size(224, 364);
+            this.aniListBox_FrameList.TabIndex = 3;
+            this.aniListBox_FrameList.SelectedIndexChanged += new System.EventHandler(this.aniListBox_FrameList_SelectedIndexChanged);
             // 
-            // groupBox16
+            // aniPropertyGrid_Infos
             // 
-            this.groupBox16.Controls.Add(this.txtAnimation);
-            this.groupBox16.Controls.Add(this.label31);
-            this.groupBox16.Controls.Add(this.btLoadAnimation);
-            this.groupBox16.Controls.Add(this.btSaveAnimation);
-            this.groupBox16.Controls.Add(this.btNewAnimation);
-            this.groupBox16.Location = new System.Drawing.Point(6, 6);
-            this.groupBox16.Name = "groupBox16";
-            this.groupBox16.Size = new System.Drawing.Size(745, 54);
-            this.groupBox16.TabIndex = 4;
-            this.groupBox16.TabStop = false;
-            this.groupBox16.Text = "操作栏";
+            this.aniPropertyGrid_Infos.Location = new System.Drawing.Point(236, 47);
+            this.aniPropertyGrid_Infos.Name = "aniPropertyGrid_Infos";
+            this.aniPropertyGrid_Infos.Size = new System.Drawing.Size(241, 388);
+            this.aniPropertyGrid_Infos.TabIndex = 3;
+            this.aniPropertyGrid_Infos.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.aniPropertyGrid_Infos_PropertyValueChanged);
             // 
-            // txtAnimation
+            // btAni_PlayAnimation
             // 
-            this.txtAnimation.Location = new System.Drawing.Point(68, 20);
-            this.txtAnimation.Name = "txtAnimation";
-            this.txtAnimation.Size = new System.Drawing.Size(431, 21);
-            this.txtAnimation.TabIndex = 4;
+            this.btAni_PlayAnimation.Location = new System.Drawing.Point(509, 96);
+            this.btAni_PlayAnimation.Name = "btAni_PlayAnimation";
+            this.btAni_PlayAnimation.Size = new System.Drawing.Size(75, 23);
+            this.btAni_PlayAnimation.TabIndex = 2;
+            this.btAni_PlayAnimation.Text = "播放动画";
+            this.btAni_PlayAnimation.UseVisualStyleBackColor = true;
+            this.btAni_PlayAnimation.Click += new System.EventHandler(this.btAni_PlayAnimation_Click);
             // 
-            // label31
+            // btAni_LoadAnimation
             // 
-            this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(6, 25);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(65, 12);
-            this.label31.TabIndex = 3;
-            this.label31.Text = "动画名称：";
+            this.btAni_LoadAnimation.Location = new System.Drawing.Point(509, 67);
+            this.btAni_LoadAnimation.Name = "btAni_LoadAnimation";
+            this.btAni_LoadAnimation.Size = new System.Drawing.Size(75, 23);
+            this.btAni_LoadAnimation.TabIndex = 2;
+            this.btAni_LoadAnimation.Text = "加载动画";
+            this.btAni_LoadAnimation.UseVisualStyleBackColor = true;
+            this.btAni_LoadAnimation.Click += new System.EventHandler(this.btAni_LoadAnimation_Click);
             // 
-            // btLoadAnimation
+            // btAni_ClearAnimation
             // 
-            this.btLoadAnimation.Location = new System.Drawing.Point(586, 20);
-            this.btLoadAnimation.Name = "btLoadAnimation";
-            this.btLoadAnimation.Size = new System.Drawing.Size(75, 23);
-            this.btLoadAnimation.TabIndex = 2;
-            this.btLoadAnimation.Text = "加载动画";
-            this.btLoadAnimation.UseVisualStyleBackColor = true;
-            this.btLoadAnimation.Click += new System.EventHandler(this.btLoadAnimation_Click);
+            this.btAni_ClearAnimation.Location = new System.Drawing.Point(509, 9);
+            this.btAni_ClearAnimation.Name = "btAni_ClearAnimation";
+            this.btAni_ClearAnimation.Size = new System.Drawing.Size(75, 23);
+            this.btAni_ClearAnimation.TabIndex = 2;
+            this.btAni_ClearAnimation.Text = "清空动画";
+            this.btAni_ClearAnimation.UseVisualStyleBackColor = true;
+            this.btAni_ClearAnimation.Click += new System.EventHandler(this.btAni_ClearAnimation_Click);
             // 
-            // btSaveAnimation
+            // btAni_SaveAnimation
             // 
-            this.btSaveAnimation.Location = new System.Drawing.Point(667, 20);
-            this.btSaveAnimation.Name = "btSaveAnimation";
-            this.btSaveAnimation.Size = new System.Drawing.Size(75, 23);
-            this.btSaveAnimation.TabIndex = 1;
-            this.btSaveAnimation.Text = "保存动画";
-            this.btSaveAnimation.UseVisualStyleBackColor = true;
-            this.btSaveAnimation.Click += new System.EventHandler(this.btSaveAnimation_Click);
+            this.btAni_SaveAnimation.Location = new System.Drawing.Point(509, 38);
+            this.btAni_SaveAnimation.Name = "btAni_SaveAnimation";
+            this.btAni_SaveAnimation.Size = new System.Drawing.Size(75, 23);
+            this.btAni_SaveAnimation.TabIndex = 2;
+            this.btAni_SaveAnimation.Text = "保存动画";
+            this.btAni_SaveAnimation.UseVisualStyleBackColor = true;
+            this.btAni_SaveAnimation.Click += new System.EventHandler(this.btAni_SaveAnimation_Click);
             // 
-            // btNewAnimation
+            // groupBox2
             // 
-            this.btNewAnimation.Location = new System.Drawing.Point(505, 20);
-            this.btNewAnimation.Name = "btNewAnimation";
-            this.btNewAnimation.Size = new System.Drawing.Size(75, 23);
-            this.btNewAnimation.TabIndex = 0;
-            this.btNewAnimation.Text = "新建动画";
-            this.btNewAnimation.UseVisualStyleBackColor = true;
-            this.btNewAnimation.Click += new System.EventHandler(this.btNewAnimation_Click);
+            this.groupBox2.Controls.Add(this.aniPictureBox_frameTexture);
+            this.groupBox2.Location = new System.Drawing.Point(607, 3);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(144, 158);
+            this.groupBox2.TabIndex = 1;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "素材预览";
             // 
-            // dgvAnimation
+            // aniPictureBox_frameTexture
             // 
-            this.dgvAnimation.AllowUserToAddRows = false;
-            this.dgvAnimation.AllowUserToDeleteRows = false;
-            this.dgvAnimation.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvAnimation.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.dgvAnimation.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvAnimation.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.NameCol,
-            this.DirectionCol,
-            this.OpCol,
-            this.id});
-            this.dgvAnimation.Location = new System.Drawing.Point(6, 90);
-            this.dgvAnimation.Name = "dgvAnimation";
-            this.dgvAnimation.RowTemplate.Height = 23;
-            this.dgvAnimation.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvAnimation.Size = new System.Drawing.Size(319, 352);
-            this.dgvAnimation.TabIndex = 1;
-            this.dgvAnimation.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAnimation_CellClick);
-            this.dgvAnimation.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAnimation_CellValueChanged);
+            this.aniPictureBox_frameTexture.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.aniPictureBox_frameTexture.Location = new System.Drawing.Point(6, 20);
+            this.aniPictureBox_frameTexture.Name = "aniPictureBox_frameTexture";
+            this.aniPictureBox_frameTexture.Size = new System.Drawing.Size(128, 128);
+            this.aniPictureBox_frameTexture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.aniPictureBox_frameTexture.TabIndex = 0;
+            this.aniPictureBox_frameTexture.TabStop = false;
             // 
-            // NameCol
+            // groupBox1
             // 
-            this.NameCol.FillWeight = 121.8274F;
-            this.NameCol.HeaderText = "动态图名称";
-            this.NameCol.Name = "NameCol";
+            this.groupBox1.Controls.Add(this.aniPictureBox_AniShow);
+            this.groupBox1.Location = new System.Drawing.Point(483, 154);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(268, 281);
+            this.groupBox1.TabIndex = 1;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "动画预览";
             // 
-            // DirectionCol
+            // aniPictureBox_AniShow
             // 
-            this.DirectionCol.HeaderText = "图片方向";
-            this.DirectionCol.Items.AddRange(new object[] {
-            "0-无",
-            "1-上",
-            "2-右上",
-            "3-右",
-            "4-右下",
-            "5-下",
-            "6-左下",
-            "7-左",
-            "8-左上"});
-            this.DirectionCol.Name = "DirectionCol";
-            // 
-            // OpCol
-            // 
-            this.OpCol.FillWeight = 78.17259F;
-            this.OpCol.HeaderText = "上传素材";
-            this.OpCol.Name = "OpCol";
-            this.OpCol.Text = "上传素材";
-            this.OpCol.UseColumnTextForButtonValue = true;
-            // 
-            // id
-            // 
-            this.id.HeaderText = "id";
-            this.id.Name = "id";
-            this.id.Visible = false;
-            // 
-            // groupBox15
-            // 
-            this.groupBox15.Controls.Add(this.panelAnimation);
-            this.groupBox15.Location = new System.Drawing.Point(503, 90);
-            this.groupBox15.Name = "groupBox15";
-            this.groupBox15.Size = new System.Drawing.Size(248, 352);
-            this.groupBox15.TabIndex = 3;
-            this.groupBox15.TabStop = false;
-            this.groupBox15.Text = "图片预览";
-            // 
-            // panelAnimation
-            // 
-            this.panelAnimation.Location = new System.Drawing.Point(6, 20);
-            this.panelAnimation.Name = "panelAnimation";
-            this.panelAnimation.Size = new System.Drawing.Size(236, 326);
-            this.panelAnimation.TabIndex = 0;
-            this.panelAnimation.Paint += new System.Windows.Forms.PaintEventHandler(this.panelAnimation_Paint);
-            // 
-            // listBoxAnimation
-            // 
-            this.listBoxAnimation.FormattingEnabled = true;
-            this.listBoxAnimation.ItemHeight = 12;
-            this.listBoxAnimation.Location = new System.Drawing.Point(331, 90);
-            this.listBoxAnimation.Name = "listBoxAnimation";
-            this.listBoxAnimation.Size = new System.Drawing.Size(166, 352);
-            this.listBoxAnimation.TabIndex = 2;
-            this.listBoxAnimation.SelectedIndexChanged += new System.EventHandler(this.listBoxAnimation_SelectedIndexChanged);
+            this.aniPictureBox_AniShow.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.aniPictureBox_AniShow.Location = new System.Drawing.Point(6, 20);
+            this.aniPictureBox_AniShow.Name = "aniPictureBox_AniShow";
+            this.aniPictureBox_AniShow.Size = new System.Drawing.Size(256, 256);
+            this.aniPictureBox_AniShow.TabIndex = 0;
+            this.aniPictureBox_AniShow.TabStop = false;
             // 
             // tabSystemMenuControl
             // 
@@ -605,6 +551,53 @@
             this.btMAP_Edit.UseVisualStyleBackColor = true;
             this.btMAP_Edit.Click += new System.EventHandler(this.btMAP_Edit_Click);
             // 
+            // aniTextBox_Name
+            // 
+            this.aniTextBox_Name.Location = new System.Drawing.Point(311, 18);
+            this.aniTextBox_Name.Name = "aniTextBox_Name";
+            this.aniTextBox_Name.Size = new System.Drawing.Size(166, 21);
+            this.aniTextBox_Name.TabIndex = 5;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(234, 23);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(71, 12);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "动画名字 ：";
+            // 
+            // aniTimer_AnimationPlayDt
+            // 
+            this.aniTimer_AnimationPlayDt.Tick += new System.EventHandler(this.aniTimer_AnimationPlayDt_Tick);
+            // 
+            // aniTextBox_FPS
+            // 
+            this.aniTextBox_FPS.Location = new System.Drawing.Point(540, 125);
+            this.aniTextBox_FPS.Name = "aniTextBox_FPS";
+            this.aniTextBox_FPS.Size = new System.Drawing.Size(44, 21);
+            this.aniTextBox_FPS.TabIndex = 7;
+            this.aniTextBox_FPS.Text = "60";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(490, 130);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(41, 12);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "FPS ：";
+            // 
+            // btAni_SortAnimationFrameList
+            // 
+            this.btAni_SortAnimationFrameList.Location = new System.Drawing.Point(152, 418);
+            this.btAni_SortAnimationFrameList.Name = "btAni_SortAnimationFrameList";
+            this.btAni_SortAnimationFrameList.Size = new System.Drawing.Size(75, 23);
+            this.btAni_SortAnimationFrameList.TabIndex = 8;
+            this.btAni_SortAnimationFrameList.Text = "重新排序";
+            this.btAni_SortAnimationFrameList.UseVisualStyleBackColor = true;
+            this.btAni_SortAnimationFrameList.Click += new System.EventHandler(this.btAni_SortAnimationFrameList_Click);
+            // 
             // tyoEngineEditorMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -629,10 +622,10 @@
             this.statusStrip1.PerformLayout();
             this.tabPage6.ResumeLayout(false);
             this.tabPage6.PerformLayout();
-            this.groupBox16.ResumeLayout(false);
-            this.groupBox16.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvAnimation)).EndInit();
-            this.groupBox15.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.aniPictureBox_frameTexture)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.aniPictureBox_AniShow)).EndInit();
             this.tabSystemMenuControl.ResumeLayout(false);
             this.TileMapEditor.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
@@ -660,25 +653,7 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel dealingToolLabel;
         private System.Windows.Forms.ToolStripProgressBar dealingToolProgressBar;
-        private System.Windows.Forms.Timer timerAnimation;
         private System.Windows.Forms.TabPage tabPage6;
-        private System.Windows.Forms.CheckBox cbPlay;
-        private System.Windows.Forms.Button btPicDel;
-        private System.Windows.Forms.Button btPicAdd;
-        private System.Windows.Forms.GroupBox groupBox16;
-        private System.Windows.Forms.TextBox txtAnimation;
-        private System.Windows.Forms.Label label31;
-        private System.Windows.Forms.Button btLoadAnimation;
-        private System.Windows.Forms.Button btSaveAnimation;
-        private System.Windows.Forms.Button btNewAnimation;
-        private System.Windows.Forms.DataGridView dgvAnimation;
-        private System.Windows.Forms.DataGridViewTextBoxColumn NameCol;
-        private System.Windows.Forms.DataGridViewComboBoxColumn DirectionCol;
-        private System.Windows.Forms.DataGridViewButtonColumn OpCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn id;
-        private System.Windows.Forms.GroupBox groupBox15;
-        private tyoEngineTileMapEditWindow.MapEditPanel panelAnimation;
-        private System.Windows.Forms.ListBox listBoxAnimation;
         private System.Windows.Forms.TabControl tabSystemMenuControl;
         private System.Windows.Forms.TabPage TileMapEditor;
         private System.Windows.Forms.TabControl tabControl1;
@@ -702,6 +677,24 @@
         private System.Windows.Forms.Button btMAP_RenewMap;
         private System.Windows.Forms.Button btMAP_Edit;
         private System.Windows.Forms.Button btShowMap;
+        private System.Windows.Forms.PropertyGrid aniPropertyGrid_Infos;
+        private System.Windows.Forms.Button btAni_LoadAnimation;
+        private System.Windows.Forms.Button btAni_ClearAnimation;
+        private System.Windows.Forms.Button btAni_SaveAnimation;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Button btAni_AddAniTexture;
+        private System.Windows.Forms.PictureBox aniPictureBox_frameTexture;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.PictureBox aniPictureBox_AniShow;
+        private System.Windows.Forms.Button btAni_DelAniTexture;
+        private System.Windows.Forms.ListBox aniListBox_FrameList;
+        private System.Windows.Forms.Button btAni_PlayAnimation;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox aniTextBox_Name;
+        private System.Windows.Forms.Timer aniTimer_AnimationPlayDt;
+        private System.Windows.Forms.TextBox aniTextBox_FPS;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button btAni_SortAnimationFrameList;
     }
 }
 

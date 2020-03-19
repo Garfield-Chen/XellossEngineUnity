@@ -12,6 +12,8 @@ public class BattleScene : tyoScene.tyoSceneNode
 
     tyoSprite controlPadUI = null;
 
+    tyoSprite mapMask = null;
+
     const float inputControlGridSize = 170.0f;
 
 	UnityEngine.Rect leftControl_rect = new Rect(50.0f /* + 100.0f * 0*/,Screen.height - inputControlGridSize * 2 - 50.0f, inputControlGridSize, inputControlGridSize);
@@ -163,6 +165,18 @@ public class BattleScene : tyoScene.tyoSceneNode
                                  -100.0f);
 			}
 		}
+
+        Sprite _sprMask = tyoCore.resources.GetSpriteByName("mask1");
+
+        if ( _sprMask != null )
+		{
+			mapMask = new tyoSprite(_sprMask);
+			mapMask.name = "map mask";
+			mapMask.AddSceneRender(this);
+			//mapMask.ScaleToFullScreen();
+			//bgSprite.ScaleToFullWidth();
+			mapMask.SetPosition(Screen.width / 2, Screen.height / 2,-90.0f);
+        }
 
 		base.EnterScene();
 	}

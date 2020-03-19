@@ -751,14 +751,14 @@ public class tyoMap
                 continue;
             }
             
-            for (int x = mapPosX; x < mapPosX + _wcount + 1; ++x)
+            for (int x = mapPosX; x < mapPosX + _wcount; ++x)
             {
                 if (x >= mapJsonFile.MapSizeWidth)
                 {
                     break;
                 }
 
-                for (int y = mapPosY; y < mapPosY + _hcount + 1; ++y)
+                for (int y = mapPosY; y < mapPosY + _hcount; ++y)
                 {
                     if (y >= mapJsonFile.MapSizeHeight)
                     {

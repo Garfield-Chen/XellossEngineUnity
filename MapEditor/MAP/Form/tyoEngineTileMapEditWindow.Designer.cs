@@ -39,6 +39,7 @@
             this.mapVScrollBar = new System.Windows.Forms.VScrollBar();
             this.mapHScrollBar = new System.Windows.Forms.HScrollBar();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btTileAttribute = new System.Windows.Forms.Button();
             this.btEditLayer = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -66,8 +67,6 @@
             this.btOutputMapDataFile = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.SaveEditorDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.timerAnimation = new System.Windows.Forms.Timer(this.components);
-            this.btTileAttribute = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -162,6 +161,17 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "功能区";
             // 
+            // btTileAttribute
+            // 
+            this.btTileAttribute.Location = new System.Drawing.Point(271, 95);
+            this.btTileAttribute.Margin = new System.Windows.Forms.Padding(2);
+            this.btTileAttribute.Name = "btTileAttribute";
+            this.btTileAttribute.Size = new System.Drawing.Size(83, 23);
+            this.btTileAttribute.TabIndex = 14;
+            this.btTileAttribute.Text = " 图块属性";
+            this.btTileAttribute.UseVisualStyleBackColor = true;
+            this.btTileAttribute.Click += new System.EventHandler(this.btTileAttribute_Click);
+            // 
             // btEditLayer
             // 
             this.btEditLayer.Location = new System.Drawing.Point(184, 95);
@@ -209,7 +219,6 @@
             this.btAnimation.TabIndex = 12;
             this.btAnimation.Text = "加载动态图";
             this.btAnimation.UseVisualStyleBackColor = true;
-            this.btAnimation.Click += new System.EventHandler(this.btTest_Click);
             // 
             // hSystemFPSBar
             // 
@@ -391,10 +400,10 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripDropDownButton1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 592);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 591);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.statusStrip1.Size = new System.Drawing.Size(785, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(785, 23);
             this.statusStrip1.TabIndex = 8;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -409,50 +418,34 @@
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
-            this.toolStripDropDownButton1.Size = new System.Drawing.Size(72, 20);
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(69, 21);
             this.toolStripDropDownButton1.Text = "地图数据";
             // 
             // btOutputPNGFile
             // 
             this.btOutputPNGFile.Name = "btOutputPNGFile";
-            this.btOutputPNGFile.Size = new System.Drawing.Size(163, 22);
+            this.btOutputPNGFile.Size = new System.Drawing.Size(162, 22);
             this.btOutputPNGFile.Text = "导出PNG预览图";
             this.btOutputPNGFile.Click += new System.EventHandler(this.btOutputPNGFile_Click);
             // 
             // btOutputMapDataFile
             // 
             this.btOutputMapDataFile.Name = "btOutputMapDataFile";
-            this.btOutputMapDataFile.Size = new System.Drawing.Size(163, 22);
+            this.btOutputMapDataFile.Size = new System.Drawing.Size(162, 22);
             this.btOutputMapDataFile.Text = "导出地图数据";
             this.btOutputMapDataFile.Click += new System.EventHandler(this.btOutputMapDataFile_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(160, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(159, 6);
             // 
             // SaveEditorDataToolStripMenuItem
             // 
             this.SaveEditorDataToolStripMenuItem.Name = "SaveEditorDataToolStripMenuItem";
-            this.SaveEditorDataToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.SaveEditorDataToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.SaveEditorDataToolStripMenuItem.Text = "保存编辑数据";
             this.SaveEditorDataToolStripMenuItem.Click += new System.EventHandler(this.SaveEditorDataToolStripMenuItem_Click);
-            // 
-            // timerAnimation
-            // 
-            this.timerAnimation.Enabled = true;
-            this.timerAnimation.Tick += new System.EventHandler(this.timerAnimation_Tick);
-            // 
-            // btTileAttribute
-            // 
-            this.btTileAttribute.Location = new System.Drawing.Point(271, 95);
-            this.btTileAttribute.Margin = new System.Windows.Forms.Padding(2);
-            this.btTileAttribute.Name = "btTileAttribute";
-            this.btTileAttribute.Size = new System.Drawing.Size(83, 23);
-            this.btTileAttribute.TabIndex = 14;
-            this.btTileAttribute.Text = " 图块属性";
-            this.btTileAttribute.UseVisualStyleBackColor = true;
-            this.btTileAttribute.Click += new System.EventHandler(this.btTileAttribute_Click);
             // 
             // tyoEngineTileMapEditWindow
             // 
@@ -518,7 +511,6 @@
         private System.Windows.Forms.Button buttonPreview;
         private System.Windows.Forms.Button loadMonsterBtn;
         private System.Windows.Forms.Button btAnimation;
-        private System.Windows.Forms.Timer timerAnimation;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label7;
