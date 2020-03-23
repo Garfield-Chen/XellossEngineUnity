@@ -166,6 +166,7 @@ namespace tyoEngineEditor
 
         tyoEngineTileMapEditTilePieceWin _PieceDlg = null;
         tyoEngineTileMapPreview _PreviewDlg = null;
+        tyoEngineTileAnimationEditor _AnimationTileDlg = null;
         int _SetMapTileFlagLayerIndex = -1;
 
         private void tyoEngineTileMapEditWindow_Shown(object sender, EventArgs e)
@@ -317,7 +318,7 @@ namespace tyoEngineEditor
             //        0 : _mapInfos._mapAnimationUseInfo[i].count + 1;
             //}
 
-            //panelMap.Refresh();
+            panelMap.Refresh();
 
             int x = _mapMouse.X / _mapInfos.Map_Tile_Width + mapHScrollBar.Value;
             int y = _mapMouse.Y / _mapInfos.Map_Tile_Height + mapVScrollBar.Value;
@@ -2106,62 +2107,6 @@ namespace tyoEngineEditor
         private void loadMonsterBtn_Click(object sender, EventArgs e)
         {
 
-            /*
-            //加一个图层放怪物和NPC
-            bool b = _mapInfos._mapLayerInfosByIndex[_mapInfos._mapLayerInfosByIndex.Count - 1]._name
-                .Equals(Parameters.SYSYTEMUSE);
-            if (!b && !(_mapInfos._mapLayerInfosByIndex.Count).Equals(comboBoxMapLayer.Items.Count + 1))
-            {
-                MapLayerInfos layer = new MapLayerInfos();
-                layer._name = Parameters.SYSYTEMUSE;
-                layer._depth = _mapInfos._mapLayerInfosByIndex.Count;
-
-                _mapInfos._mapLayerInfosByIndex[_mapInfos._mapLayerInfosByIndex.Count] = layer;
-
-                //在_LayerShowFlag加一层，并可以显示
-                bool[] tempBool = new bool[_mapInfos._LayerShowFlag.Length + 1];
-                _mapInfos._LayerShowFlag.CopyTo(tempBool, 0);
-                _mapInfos._LayerShowFlag = tempBool;
-                _mapInfos._LayerShowFlag[_mapInfos._LayerShowFlag.Length - 1] = true;
-
-                //在_mapLayerDepth加一层，并赋值到最高层
-                MapLayerDrawInfos tmpLayerDepth = new MapLayerDrawInfos();
-                tmpLayerDepth._depth = layer._depth;
-                tmpLayerDepth._index = _mapLayerDepth[_mapLayerDepth.Count - 1]._index + 1;
-                _mapLayerDepth.Add(tmpLayerDepth);
-
-                //在_mapTitle加一层
-                int[, ,] tempMapTitle = new int[_mapInfos._mapTitle.GetLength(0) + 1,
-                    _mapInfos._mapTitle.GetLength(1), _mapInfos._mapTitle.GetLength(2)];
-                Array.Copy(_mapInfos._mapTitle, tempMapTitle, _mapInfos._mapTitle.Length);
-                _mapInfos._mapTitle = tempMapTitle;
-
-                for (int x = 0; x < _mapInfos._mapTitle.GetLength(1); ++x)
-                {
-                    for (int y = 0; y < _mapInfos._mapTitle.GetLength(2); ++y)
-                    {
-                        _mapInfos._mapTitle[_mapInfos._mapTitle.GetLength(0) - 1, x, y] = -1;
-                    }
-                }
-
-                //在_mapAnimationTitle加一层
-                tempMapTitle = new int[_mapInfos._mapAnimationTitle.GetLength(0) + 1,
-                    _mapInfos._mapAnimationTitle.GetLength(1), _mapInfos._mapAnimationTitle.GetLength(2)];
-                Array.Copy(_mapInfos._mapAnimationTitle, tempMapTitle, _mapInfos._mapAnimationTitle.Length);
-                _mapInfos._mapAnimationTitle = tempMapTitle;
-
-                for (int x = 0; x < _mapInfos._mapAnimationTitle.GetLength(1); ++x)
-                {
-                    for (int y = 0; y < _mapInfos._mapAnimationTitle.GetLength(2); ++y)
-                    {
-                        _mapInfos._mapAnimationTitle[_mapInfos._mapTitle.GetLength(0) - 1, x, y] = -1;
-                    }
-                }
-            }
-
-            tyoEngineTitleMapMonster monsterForm = new tyoEngineTitleMapMonster(this, _mapInfos);
-            monsterForm.Show();
-             * */
         }
 
         
@@ -2179,103 +2124,6 @@ namespace tyoEngineEditor
             if (tele.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 ListBox listBox = tele.getListBox();
-                #region 草稿
-                //MapLayerInfos tmpMapLayerInfos;
-                //for (int i = 1; i < listBox.Items.Count; i++)
-                //{
-                //    tmpMapLayerInfos = (MapLayerInfos)listBox.Items[i];
-                //    for (int j = i - 1; j >= 0; j--)
-                //    {
-                //        if (((MapLayerInfos)listBox.Items[j]).Depth > tmpMapLayerInfos.Depth)
-                //        {
-                //            listBox.Items[j + 1] = listBox.Items[j];
-                //            if (j == 0)
-                //            {
-                //                listBox.Items[0] = tmpMapLayerInfos;
-                //                break;
-                //            }
-                //        }
-                //        else
-                //        {
-                //            listBox.Items[j + 1] = tmpMapLayerInfos;
-                //            break;
-                //        }
-                //    }
-                //}
-
-                //for (int i = 0; i < listBox.Items.Count; i++) 
-                //{
-                //    MapLayerInfos m = (MapLayerInfos)listBox.Items[i];
-                //    List<MapLayerInfos> tmpList = new List<MapLayerInfos>();
-                //    if (m.opType.Equals("ADD")) 
-                //    {
-                //        MapLayerInfos layer = new MapLayerInfos();
-                //        layer._name = m.Name;
-                //        layer._depth = m.Depth;
-
-                //        _mapInfos._mapLayerInfosByIndex.Clear();
-                //        for (int n = 0; n < listBox.Items.Count; n++)
-                //        {
-                //            _mapInfos._mapLayerInfosByIndex.Add(((MapLayerInfos)listBox.Items[n]).Depth, (MapLayerInfos)listBox.Items[n]);
-                //        }
-
-                //        #region 直接加了一层
-                //        //在_LayerShowFlag加一层，并可以显示
-                //        bool[] tempBool = new bool[_mapInfos._LayerShowFlag.Length + 1];
-                //        _mapInfos._LayerShowFlag.CopyTo(tempBool, 0);
-                //        _mapInfos._LayerShowFlag = tempBool;
-                //        _mapInfos._LayerShowFlag[_mapInfos._LayerShowFlag.Length - 1] = true;
-
-                //        //在_mapTitle加一层
-                //        int[, ,] tempMapTitle = new int[_mapInfos._mapTitle.GetLength(0) + 1,
-                //            _mapInfos._mapTitle.GetLength(1), _mapInfos._mapTitle.GetLength(2)];
-                //        Array.Copy(_mapInfos._mapTitle, tempMapTitle, _mapInfos._mapTitle.Length);
-                //        _mapInfos._mapTitle = tempMapTitle;
-
-                //        for (int x = 0; x < _mapInfos._mapTitle.GetLength(1); ++x)
-                //        {
-                //            for (int y = 0; y < _mapInfos._mapTitle.GetLength(2); ++y)
-                //            {
-                //                _mapInfos._mapTitle[_mapInfos._mapTitle.GetLength(0) - 1, x, y] = -1;
-                //            }
-                //        }
-
-                //        //在_mapAnimationTitle加一层
-                //        tempMapTitle = new int[_mapInfos._mapAnimationTitle.GetLength(0) + 1,
-                //            _mapInfos._mapAnimationTitle.GetLength(1), _mapInfos._mapAnimationTitle.GetLength(2)];
-                //        Array.Copy(_mapInfos._mapAnimationTitle, tempMapTitle, _mapInfos._mapAnimationTitle.Length);
-                //        _mapInfos._mapAnimationTitle = tempMapTitle;
-
-                //        for (int x = 0; x < _mapInfos._mapAnimationTitle.GetLength(1); ++x)
-                //        {
-                //            for (int y = 0; y < _mapInfos._mapAnimationTitle.GetLength(2); ++y)
-                //            {
-                //                _mapInfos._mapAnimationTitle[_mapInfos._mapTitle.GetLength(0) - 1, x, y] = -1;
-                //            }
-                //        }
-                //        #endregion
-
-                //        //在_mapLayerDepth加一层，并将后面的depth加1
-                //        for (int j = i; j < _mapLayerDepth.Count; j++) 
-                //        {
-                //            _mapLayerDepth[j]._depth = _mapLayerDepth[j]._depth + 1;
-                //            _mapLayerDepth[j]._index = _mapLayerDepth[j]._index + 1;
-                //        }
-                //        MapLayerDrawInfos tmpLayerDepth = new MapLayerDrawInfos();
-                //        tmpLayerDepth._depth = layer._depth;
-                //        tmpLayerDepth._index = layer._depth;
-                //        _mapLayerDepth.Insert(layer._depth, tmpLayerDepth);
-
-                //        comboBoxMapLayer.Items.Insert(i, _mapInfos._mapLayerInfosByIndex[i].Name);
-                //        checkedListBoxMapLayerShow.Items.Insert(i, _mapInfos._mapLayerInfosByIndex[i].Name);
-
-                //        checkedListBoxMapLayerShow.SelectedIndex = i;
-
-                //        checkedListBoxMapLayerShow.SetItemChecked(i, true);
-                //    }
-                //}
-                #endregion
-
                 ChagneLayer(listBox);
             }
         }
@@ -2431,6 +2279,27 @@ namespace tyoEngineEditor
                 }
                 
             }
+        }
+
+        bool _AnimationTileDlgIsShow = false;
+        private void btAnimation_Click(object sender, EventArgs e)
+        {
+            if (_AnimationTileDlg == null)
+            {
+                _AnimationTileDlg = new tyoEngineTileAnimationEditor();
+                _AnimationTileDlg.InitData(this);
+            }
+
+            if(_AnimationTileDlgIsShow)
+            {
+                _AnimationTileDlg.Hide();
+            }
+            else
+            {
+                _AnimationTileDlg.Show();
+            }
+
+            _AnimationTileDlgIsShow = !_AnimationTileDlgIsShow;
         }
     }
 }

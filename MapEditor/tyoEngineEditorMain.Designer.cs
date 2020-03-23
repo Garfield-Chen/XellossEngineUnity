@@ -39,6 +39,11 @@
             this.dealingToolLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.dealingToolProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.btAni_SortAnimationFrameList = new System.Windows.Forms.Button();
+            this.aniTextBox_FPS = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.aniTextBox_Name = new System.Windows.Forms.TextBox();
             this.btAni_DelAniTexture = new System.Windows.Forms.Button();
             this.btAni_AddAniTexture = new System.Windows.Forms.Button();
             this.aniListBox_FrameList = new System.Windows.Forms.ListBox();
@@ -74,12 +79,7 @@
             this.propertyGridMapEditor_MapInfos = new System.Windows.Forms.PropertyGrid();
             this.btMAP_RenewMap = new System.Windows.Forms.Button();
             this.btMAP_Edit = new System.Windows.Forms.Button();
-            this.aniTextBox_Name = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.aniTimer_AnimationPlayDt = new System.Windows.Forms.Timer(this.components);
-            this.aniTextBox_FPS = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.btAni_SortAnimationFrameList = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -188,6 +188,49 @@
             this.tabPage6.TabIndex = 4;
             this.tabPage6.Text = "Animation Edit<动态素材编辑>";
             this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // btAni_SortAnimationFrameList
+            // 
+            this.btAni_SortAnimationFrameList.Location = new System.Drawing.Point(152, 418);
+            this.btAni_SortAnimationFrameList.Name = "btAni_SortAnimationFrameList";
+            this.btAni_SortAnimationFrameList.Size = new System.Drawing.Size(75, 23);
+            this.btAni_SortAnimationFrameList.TabIndex = 8;
+            this.btAni_SortAnimationFrameList.Text = "重新排序";
+            this.btAni_SortAnimationFrameList.UseVisualStyleBackColor = true;
+            this.btAni_SortAnimationFrameList.Click += new System.EventHandler(this.btAni_SortAnimationFrameList_Click);
+            // 
+            // aniTextBox_FPS
+            // 
+            this.aniTextBox_FPS.Location = new System.Drawing.Point(540, 125);
+            this.aniTextBox_FPS.Name = "aniTextBox_FPS";
+            this.aniTextBox_FPS.Size = new System.Drawing.Size(44, 21);
+            this.aniTextBox_FPS.TabIndex = 7;
+            this.aniTextBox_FPS.Text = "60";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(490, 130);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(41, 12);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "FPS ：";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(234, 23);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(71, 12);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "动画名字 ：";
+            // 
+            // aniTextBox_Name
+            // 
+            this.aniTextBox_Name.Location = new System.Drawing.Point(311, 18);
+            this.aniTextBox_Name.Name = "aniTextBox_Name";
+            this.aniTextBox_Name.Size = new System.Drawing.Size(166, 21);
+            this.aniTextBox_Name.TabIndex = 5;
             // 
             // btAni_DelAniTexture
             // 
@@ -551,52 +594,9 @@
             this.btMAP_Edit.UseVisualStyleBackColor = true;
             this.btMAP_Edit.Click += new System.EventHandler(this.btMAP_Edit_Click);
             // 
-            // aniTextBox_Name
-            // 
-            this.aniTextBox_Name.Location = new System.Drawing.Point(311, 18);
-            this.aniTextBox_Name.Name = "aniTextBox_Name";
-            this.aniTextBox_Name.Size = new System.Drawing.Size(166, 21);
-            this.aniTextBox_Name.TabIndex = 5;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(234, 23);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(71, 12);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "动画名字 ：";
-            // 
             // aniTimer_AnimationPlayDt
             // 
             this.aniTimer_AnimationPlayDt.Tick += new System.EventHandler(this.aniTimer_AnimationPlayDt_Tick);
-            // 
-            // aniTextBox_FPS
-            // 
-            this.aniTextBox_FPS.Location = new System.Drawing.Point(540, 125);
-            this.aniTextBox_FPS.Name = "aniTextBox_FPS";
-            this.aniTextBox_FPS.Size = new System.Drawing.Size(44, 21);
-            this.aniTextBox_FPS.TabIndex = 7;
-            this.aniTextBox_FPS.Text = "60";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(490, 130);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(41, 12);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "FPS ：";
-            // 
-            // btAni_SortAnimationFrameList
-            // 
-            this.btAni_SortAnimationFrameList.Location = new System.Drawing.Point(152, 418);
-            this.btAni_SortAnimationFrameList.Name = "btAni_SortAnimationFrameList";
-            this.btAni_SortAnimationFrameList.Size = new System.Drawing.Size(75, 23);
-            this.btAni_SortAnimationFrameList.TabIndex = 8;
-            this.btAni_SortAnimationFrameList.Text = "重新排序";
-            this.btAni_SortAnimationFrameList.UseVisualStyleBackColor = true;
-            this.btAni_SortAnimationFrameList.Click += new System.EventHandler(this.btAni_SortAnimationFrameList_Click);
             // 
             // tyoEngineEditorMain
             // 

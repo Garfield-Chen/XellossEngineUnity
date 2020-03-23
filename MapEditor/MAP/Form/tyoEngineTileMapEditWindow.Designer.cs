@@ -217,8 +217,9 @@
             this.btAnimation.Name = "btAnimation";
             this.btAnimation.Size = new System.Drawing.Size(83, 23);
             this.btAnimation.TabIndex = 12;
-            this.btAnimation.Text = "加载动态图";
+            this.btAnimation.Text = "动画图块";
             this.btAnimation.UseVisualStyleBackColor = true;
+            this.btAnimation.Click += new System.EventHandler(this.btAnimation_Click);
             // 
             // hSystemFPSBar
             // 

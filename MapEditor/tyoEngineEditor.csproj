@@ -71,6 +71,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MAP\Form\tyoEngineTileAnimationEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MAP\Form\tyoEngineTileAnimationEditor.Designer.cs">
+      <DependentUpon>tyoEngineTileAnimationEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="MAP\Form\tyoEngineLayerEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -117,6 +123,9 @@
     </Compile>
     <EmbeddedResource Include="MAP\Form\tyoEngineLayerEdit.resx">
       <DependentUpon>tyoEngineLayerEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MAP\Form\tyoEngineTileAnimationEditor.resx">
+      <DependentUpon>tyoEngineTileAnimationEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MAP\Form\tyoEngineTileAttributeDlg.resx">
       <DependentUpon>tyoEngineTileAttributeDlg.cs</DependentUpon>
