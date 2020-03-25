@@ -28,12 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.mapEditorAniListBox_LoadAniList = new System.Windows.Forms.ListBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btMapEditor_AddAniFile = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.mapEditorAniPictureBox_AniShow = new System.Windows.Forms.PictureBox();
             this.btMapEditor_AddAniToMap = new System.Windows.Forms.Button();
+            this.mapEditorAniTimer_PlayTimer = new System.Windows.Forms.Timer(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mapEditorAniPictureBox_AniShow)).BeginInit();
@@ -48,6 +50,7 @@
             this.mapEditorAniListBox_LoadAniList.ScrollAlwaysVisible = true;
             this.mapEditorAniListBox_LoadAniList.Size = new System.Drawing.Size(270, 436);
             this.mapEditorAniListBox_LoadAniList.TabIndex = 0;
+            this.mapEditorAniListBox_LoadAniList.SelectedIndexChanged += new System.EventHandler(this.mapEditorAniListBox_LoadAniList_SelectedIndexChanged);
             // 
             // groupBox1
             // 
@@ -68,6 +71,7 @@
             this.btMapEditor_AddAniFile.TabIndex = 1;
             this.btMapEditor_AddAniFile.Text = "添加动画";
             this.btMapEditor_AddAniFile.UseVisualStyleBackColor = true;
+            this.btMapEditor_AddAniFile.Click += new System.EventHandler(this.btMapEditor_AddAniFile_Click);
             // 
             // groupBox2
             // 
@@ -96,6 +100,11 @@
             this.btMapEditor_AddAniToMap.TabIndex = 1;
             this.btMapEditor_AddAniToMap.Text = "添加到地图";
             this.btMapEditor_AddAniToMap.UseVisualStyleBackColor = true;
+            this.btMapEditor_AddAniToMap.Click += new System.EventHandler(this.btMapEditor_AddAniToMap_Click);
+            // 
+            // mapEditorAniTimer_PlayTimer
+            // 
+            this.mapEditorAniTimer_PlayTimer.Tick += new System.EventHandler(this.mapEditorAniTimer_PlayTimer_Tick);
             // 
             // tyoEngineTileAnimationEditor
             // 
@@ -126,5 +135,6 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.PictureBox mapEditorAniPictureBox_AniShow;
         private System.Windows.Forms.Button btMapEditor_AddAniToMap;
+        private System.Windows.Forms.Timer mapEditorAniTimer_PlayTimer;
     }
 }

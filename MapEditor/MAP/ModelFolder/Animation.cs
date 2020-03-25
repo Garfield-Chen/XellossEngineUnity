@@ -59,6 +59,13 @@ namespace tyoEngineEditor
             set { _animationFile = value; }
         }
 
+        private string _animationDesName = "";
+        public string AnimationDesName
+        {
+            get { return _animationDesName; }
+            set { _animationDesName = value; }
+        }
+
         private int _animationFPS = 60;
         public int AnimationFPS
         {

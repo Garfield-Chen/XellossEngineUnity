@@ -1018,6 +1018,7 @@ namespace tyoEngineEditor
 
             aniTextBox_FPS.Text = "60";
             aniTextBox_Name.Text = "";
+            aniTextBox_Descirpt.Text = "";
 
             aniTimer_AnimationPlayDt.Stop();
 
@@ -1046,29 +1047,45 @@ namespace tyoEngineEditor
             saveDlg.ShowDialog();
 
             string _filePath = saveDlg.FileName;
+            bool _isReplaceFile = false;
 
             if (Path.GetExtension(_filePath).ToLower() == ".json")
             {
-                if (Directory.Exists(_filePath))
+                if (File.Exists(_filePath))
                 {
                     if(MessageBox.Show("有相同名字的动画文件，是否替换？（素材也会被替换）", "警告", MessageBoxButtons.YesNo) == DialogResult.No)
                     {
                         return;
                     }
 
-                    Directory.Delete(_filePath);
+                    File.Delete(_filePath);
+
+                    _isReplaceFile = true;
+
+                    aniPictureBox_AniShow.Image = null;
                 }
 
                 tyoAnimationJsonFile _jsonFile = new tyoAnimationJsonFile();
 
                 _jsonFile.AnimationName = aniTextBox_Name.Text;
+                _jsonFile.AnimationDesName = aniTextBox_Descirpt.Text;
                 _jsonFile.AnimationFPS = int.Parse(aniTextBox_FPS.Text);
 
                 string _texDict = Path.GetDirectoryName(_filePath);
+                string _tmpTexDict = Path.GetDirectoryName(_filePath);
 
-                _texDict += "\\Textures\\";
+                if (!_isReplaceFile)
+                {
+                    _texDict += "\\Textures\\";
+                }
+                else
+                {
+                    _tmpTexDict += "\\Textures\\";
+                    _texDict += "\\Textures_TMP\\";
+                }
 
-                if(!Directory.Exists(_texDict))
+
+                if (!Directory.Exists(_texDict))
                 {
                     Directory.CreateDirectory(_texDict);
                 }
@@ -1079,14 +1096,11 @@ namespace tyoEngineEditor
 
                     string _texFilePath = _texDict + _texFileName + ".png";
 
-                    if (Directory.Exists(_texFilePath))
-                    {
-                        Directory.Delete(_texFilePath);
-                    }
-
                     _info.FrameImage.Save(_texFilePath, System.Drawing.Imaging.ImageFormat.Png);
 
                     _jsonFile.AnimationNameList.Add(_texFileName);
+
+                    _info.FrameImage.Dispose();
                 }
 
                 string _jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(_jsonFile);
@@ -1100,6 +1114,41 @@ namespace tyoEngineEditor
                 _writer.Close();
                 fs.Close();
 
+                ClearAnimationEditor();
+
+                if (_isReplaceFile)
+                {
+                    try
+                    {
+                        DirectoryInfo _dir = new DirectoryInfo(_tmpTexDict);
+                        FileSystemInfo[] _fileinfo = _dir.GetFileSystemInfos();  //返回目录中所有文件和子目录
+                        foreach (FileSystemInfo i in _fileinfo)
+                        {
+                            if (i is DirectoryInfo)            //判断是否文件夹
+                            {
+                                DirectoryInfo _subdir = new DirectoryInfo(i.FullName);
+                                _subdir.Delete(true);          //删除子目录和文件
+                            }
+                            else
+                            {
+                                File.Delete(i.FullName);      //删除指定文件
+                            }
+                        }
+                    }
+                    catch (Exception _e)
+                    {
+                        MessageBox.Show(_e.ToString());
+                    }
+
+                    if (Directory.Exists(_tmpTexDict))
+                    {
+                        Directory.Delete(_tmpTexDict);
+                    }
+
+                    Directory.Move(_texDict, _tmpTexDict);
+                }
+
+                LoadAnimationFile(_filePath);
                 return;
             }
 
@@ -1120,38 +1169,44 @@ namespace tyoEngineEditor
 
             if (_filePath.Length > 0)
             {
-                FileStream fs = new FileStream(_filePath, FileMode.OpenOrCreate);
-                StreamReader fileReader = new StreamReader(fs);
+                LoadAnimationFile(_filePath);
+            }
+        }
 
-                tyoAnimationJsonFile _jsonFile = new tyoAnimationJsonFile();
+        private void LoadAnimationFile(string _filePath)
+        {
+            FileStream fs = new FileStream(_filePath, FileMode.OpenOrCreate);
+            StreamReader fileReader = new StreamReader(fs);
 
-                string _jsonString = fileReader.ReadToEnd();
+            tyoAnimationJsonFile _jsonFile = new tyoAnimationJsonFile();
 
-                _jsonFile = Newtonsoft.Json.JsonConvert.DeserializeObject<tyoAnimationJsonFile>(_jsonString);
+            string _jsonString = fileReader.ReadToEnd();
 
-                fileReader.Close();
-                fs.Close();
-                ClearAnimationEditor();
+            _jsonFile = Newtonsoft.Json.JsonConvert.DeserializeObject<tyoAnimationJsonFile>(_jsonString);
 
-                aniTextBox_FPS.Text = _jsonFile.AnimationFPS.ToString();
-                aniTextBox_Name.Text = _jsonFile.AnimationName;
+            fileReader.Close();
+            fs.Close();
+            ClearAnimationEditor();
 
-                string _texDict = Path.GetDirectoryName(_filePath);
-                _texDict += "\\Textures\\";
+            aniTextBox_FPS.Text = _jsonFile.AnimationFPS.ToString();
 
-                foreach(string _texName in _jsonFile.AnimationNameList)
-                {
-                    string _texFilePath = _texDict + _texName + ".png";
+            aniTextBox_Name.Text = _jsonFile.AnimationName;
+            aniTextBox_Descirpt.Text = _jsonFile.AnimationDesName;
 
-                    tyoAnimationFrameInfo _info = new tyoAnimationFrameInfo(_texFilePath);
-                    _info.FrameID = frameID;
+            string _texDict = Path.GetDirectoryName(_filePath);
+            _texDict += "\\Textures\\";
 
-                    frameID++;
+            foreach (string _texName in _jsonFile.AnimationNameList)
+            {
+                string _texFilePath = _texDict + _texName + ".png";
 
-                    int _listIdx = aniListBox_FrameList.Items.Add(frameID);
-                    aniFrameList.Add(_info);
-                }
+                tyoAnimationFrameInfo _info = new tyoAnimationFrameInfo(_texFilePath);
+                _info.FrameID = frameID;
 
+                frameID++;
+
+                int _listIdx = aniListBox_FrameList.Items.Add(frameID);
+                aniFrameList.Add(_info);
             }
         }
     }

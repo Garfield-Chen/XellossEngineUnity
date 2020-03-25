@@ -80,6 +80,8 @@
             this.btMAP_RenewMap = new System.Windows.Forms.Button();
             this.btMAP_Edit = new System.Windows.Forms.Button();
             this.aniTimer_AnimationPlayDt = new System.Windows.Forms.Timer(this.components);
+            this.label3 = new System.Windows.Forms.Label();
+            this.aniTextBox_Descirpt = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -107,7 +109,7 @@
             this.tileMapToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(784, 25);
+            this.menuStrip1.Size = new System.Drawing.Size(784, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -117,20 +119,20 @@
             this.newMapToolStripMenuItem,
             this.loadMapToolStripMenuItem});
             this.tileMapToolStripMenuItem.Name = "tileMapToolStripMenuItem";
-            this.tileMapToolStripMenuItem.Size = new System.Drawing.Size(71, 21);
+            this.tileMapToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
             this.tileMapToolStripMenuItem.Text = "Tile Map";
             // 
             // newMapToolStripMenuItem
             // 
             this.newMapToolStripMenuItem.Name = "newMapToolStripMenuItem";
-            this.newMapToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.newMapToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.newMapToolStripMenuItem.Text = "New Map";
             this.newMapToolStripMenuItem.Click += new System.EventHandler(this.newMapToolStripMenuItem_Click);
             // 
             // loadMapToolStripMenuItem
             // 
             this.loadMapToolStripMenuItem.Name = "loadMapToolStripMenuItem";
-            this.loadMapToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.loadMapToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.loadMapToolStripMenuItem.Text = "Load Map";
             this.loadMapToolStripMenuItem.Click += new System.EventHandler(this.loadMapToolStripMenuItem_Click);
             // 
@@ -152,7 +154,7 @@
             // dealingToolLabel
             // 
             this.dealingToolLabel.Name = "dealingToolLabel";
-            this.dealingToolLabel.Size = new System.Drawing.Size(44, 17);
+            this.dealingToolLabel.Size = new System.Drawing.Size(46, 17);
             this.dealingToolLabel.Text = "处理中";
             this.dealingToolLabel.Visible = false;
             // 
@@ -169,7 +171,9 @@
             this.tabPage6.Controls.Add(this.btAni_SortAnimationFrameList);
             this.tabPage6.Controls.Add(this.aniTextBox_FPS);
             this.tabPage6.Controls.Add(this.label2);
+            this.tabPage6.Controls.Add(this.label3);
             this.tabPage6.Controls.Add(this.label1);
+            this.tabPage6.Controls.Add(this.aniTextBox_Descirpt);
             this.tabPage6.Controls.Add(this.aniTextBox_Name);
             this.tabPage6.Controls.Add(this.btAni_DelAniTexture);
             this.tabPage6.Controls.Add(this.btAni_AddAniTexture);
@@ -265,9 +269,9 @@
             // 
             // aniPropertyGrid_Infos
             // 
-            this.aniPropertyGrid_Infos.Location = new System.Drawing.Point(236, 47);
+            this.aniPropertyGrid_Infos.Location = new System.Drawing.Point(236, 79);
             this.aniPropertyGrid_Infos.Name = "aniPropertyGrid_Infos";
-            this.aniPropertyGrid_Infos.Size = new System.Drawing.Size(241, 388);
+            this.aniPropertyGrid_Infos.Size = new System.Drawing.Size(241, 356);
             this.aniPropertyGrid_Infos.TabIndex = 3;
             this.aniPropertyGrid_Infos.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.aniPropertyGrid_Infos_PropertyValueChanged);
             // 
@@ -598,6 +602,22 @@
             // 
             this.aniTimer_AnimationPlayDt.Tick += new System.EventHandler(this.aniTimer_AnimationPlayDt_Tick);
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(234, 52);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(71, 12);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "动画描述 ：";
+            // 
+            // aniTextBox_Descirpt
+            // 
+            this.aniTextBox_Descirpt.Location = new System.Drawing.Point(311, 47);
+            this.aniTextBox_Descirpt.Name = "aniTextBox_Descirpt";
+            this.aniTextBox_Descirpt.Size = new System.Drawing.Size(166, 21);
+            this.aniTextBox_Descirpt.TabIndex = 5;
+            // 
             // tyoEngineEditorMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -695,6 +715,8 @@
         private System.Windows.Forms.TextBox aniTextBox_FPS;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btAni_SortAnimationFrameList;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox aniTextBox_Descirpt;
     }
 }
 
