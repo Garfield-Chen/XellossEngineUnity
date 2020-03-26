@@ -557,7 +557,6 @@ namespace tyoEngineEditor
             _nowMapInfos._mapTile = new int[_nowMapInfos._mapLayerInfosByIndex.Count, _nowMapInfos.Map_Size_Width, _nowMapInfos.Map_Size_Height];
             _nowMapInfos._mapExternFlag1 = new int[_nowMapInfos.Map_Size_Width, _nowMapInfos.Map_Size_Height];
             _nowMapInfos._mapBlockFlag = new bool[_nowMapInfos.Map_Size_Width, _nowMapInfos.Map_Size_Height];
-            _nowMapInfos._mapAnimationTile = new int[_nowMapInfos._mapLayerInfosByIndex.Count, _nowMapInfos.Map_Size_Width, _nowMapInfos.Map_Size_Height];
 
             for (int i = 0; i < _nowMapInfos._mapLayerInfosByIndex.Count; ++i)
             {
@@ -572,8 +571,7 @@ namespace tyoEngineEditor
                             _nowMapInfos._mapExternFlag1[x, y] = _jsonFile.MapTile[i, x, y];
                             _nowMapInfos._mapBlockFlag[x, y] = _jsonFile.MapBlockFlag[x, y];
                         }
-
-                        _nowMapInfos._mapAnimationTile[i, x, y] = _jsonFile.MapAnimationTile[i, x, y];
+                        
                     }
                 }
             }

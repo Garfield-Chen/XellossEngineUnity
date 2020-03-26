@@ -97,7 +97,7 @@ namespace tyoEngineEditor
 
         private void btMapEditor_AddAniToMap_Click(object sender, EventArgs e)
         {
-
+            _MapEditWin.SetAnimationSelectPiece(_CurrentSelectAnimation);
         }
 
         string _CurrentSelectAnimation = "";

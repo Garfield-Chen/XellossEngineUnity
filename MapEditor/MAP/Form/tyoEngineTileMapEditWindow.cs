@@ -410,11 +410,25 @@ namespace tyoEngineEditor
         {
             _nowSelectPiece = _img;
             pictureBoxNowSelect.Image = _nowSelectPiece;
+            _isSelectAnimationPiece = false;
         }
 
         public Bitmap GetNowSelectPiece()
         {
             return _nowSelectPiece;
+        }
+
+        bool _isSelectAnimationPiece = false;
+        string _currentAnimationPieceName = "";
+
+        public void SetAnimationSelectPiece(string _animationName)
+        {
+            pictureBoxNowSelect.Image = null;
+            _nowSelectPieceIndexByMap.Clear();
+            _nowSelectPiece = null;
+
+            _isSelectAnimationPiece = true;
+            _currentAnimationPieceName = _animationName;
         }
 
         Pen _penMesh = new Pen(Brushes.DarkGray);
@@ -561,17 +575,20 @@ namespace tyoEngineEditor
             {
                 if (pictureBoxNowSelect.Image != null)
                 {
-                    e.Graphics.DrawImage(pictureBoxNowSelect.Image, _mapMouse.X, _mapMouse.Y);
-                    if (_mapInfos._IsLoadMonstor)
-                    {
-                        e.Graphics.FillRectangle(_blockBrush1, _mapMouse.X, _mapMouse.Y,
-                        2 * GetMapTitleWidthInScale(), 2 * GetMapTitleHeightInScale());
-                    }
-
-                    if (_mapInfos._IsClickAnimation)
+                    if(_isSelectAnimationPiece)
                     {
                         e.Graphics.FillRectangle(_blockBrush_Green, _mapMouse.X, _mapMouse.Y,
                                         _mapInfos.Map_Tile_Width, _mapInfos.Map_Tile_Height);
+                    }
+                    else
+                    {
+                        e.Graphics.DrawImage(pictureBoxNowSelect.Image, _mapMouse.X, _mapMouse.Y);
+
+                        if (_mapInfos._IsLoadMonstor)
+                        {
+                            e.Graphics.FillRectangle(_blockBrush1, _mapMouse.X, _mapMouse.Y,
+                            2 * GetMapTitleWidthInScale(), 2 * GetMapTitleHeightInScale());
+                        }
                     }
 
                     e.Graphics.DrawRectangle(_whilePen, _mapMouse.X, _mapMouse.Y, _nowSelectPiece.Width, _nowSelectPiece.Height);
@@ -667,18 +684,7 @@ namespace tyoEngineEditor
 
         private void panelMap_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            int i = _mapInfos._mapAnimationTile[comboBoxMapLayer.SelectedIndex,
-                (_mapMouse.X / _mapInfos.Map_Tile_Width) + mapHScrollBar.Value,
-                    (_mapMouse.Y / _mapInfos.Map_Tile_Height) + mapVScrollBar.Value];
-
-            //Console.WriteLine("double X:" + (_mapMouse.X / _mapInfos.Map_Title_Width) + mapHScrollBar.Value
-            //    + " Y:" + (_mapMouse.Y / _mapInfos.Map_Title_Height) + mapVScrollBar.Value
-            //    + " layer:" + comboBoxMapLayer.SelectedIndex);
-
-            if (i != -1) 
-            {
-               
-            }
+            
         }
 
         bool _IsMapPanelLBtDown = false;
@@ -1046,6 +1052,9 @@ namespace tyoEngineEditor
                 pictureBoxNowSelect.Image = null;
                 _nowSelectPieceIndexByMap.Clear();
                 _nowSelectPiece = null;
+
+                _isSelectAnimationPiece = false;
+                _currentAnimationPieceName = "";
             }
         }
 
@@ -1367,25 +1376,6 @@ namespace tyoEngineEditor
                             _file.MapTileExternFlag[x, y] = _mapInfos._mapExternFlag1[x, y];
                             _file.MapBlockFlag[x, y] = _mapInfos._mapBlockFlag[x, y];
                         }
-
-                        //if (_mapInfos._mapAnimationTitle == null)
-//                         {
-//                             //_mapInfos._mapAnimationTitle = new int[_mapInfos._mapLayerInfosByIndex.Count, _mapInfos.Map_Size_Width, _mapInfos.Map_Size_Height];
-//                             for (int m = 0; m < _mapInfos._mapLayerInfosByIndex.Count; ++m)
-//                             {
-//                                 for (int n = 0; n < _mapInfos.Map_Size_Width; ++n)
-//                                 {
-//                                     for (int p = 0; p < _mapInfos.Map_Size_Height; ++p)
-//                                     {
-//                                         //_mapInfos._mapAnimationTitle[m, n, p] = -1;
-//                                         _file.MapAnimationTitle[m, n, p] = -1;
-//                                     }
-//                                 }
-//                             }
-//                         }
-
-                        //_file.Write(_mapInfos._mapAnimationTitle[i, x, y]);
-                        _file.MapAnimationTile[i, x, y] = _mapInfos._mapAnimationTile[i, x, y];
                     }
                 }
             }
@@ -1533,7 +1523,7 @@ namespace tyoEngineEditor
 
                 Image _tmp = Image.FromFile(_mapInfos._mapTileInfosByIndex[index]._filepath);
 
-                String _imgPath = Path.GetDirectoryName(_path);
+                string _imgPath = Path.GetDirectoryName(_path);
                 string dir = _imgPath + "\\" + _mapInfos._mapTileInfosByIndex[index].dirname;
 
                 tempDir = dir.Substring(dir.LastIndexOf("\\") + 1, dir.Length - dir.LastIndexOf("\\") - 1);
@@ -1658,8 +1648,6 @@ namespace tyoEngineEditor
                 _PieceDlg.InitData(this);
             }
 
-            _mapInfos._IsClickAnimation = false;
-
             if (_TitleDlgIsShow)
             {
                 _PieceDlg.Hide();
@@ -1690,9 +1678,9 @@ namespace tyoEngineEditor
             e.Cancel = true;
         }
 
-        private void SaveMapDataToGame(String _path)
+        private void SaveMapDataToGame(string _path)
         {
-            String _pDir = Path.GetDirectoryName(_path);
+            string _pDir = Path.GetDirectoryName(_path);
 
             _pDir += "\\" + _mapInfos.Name + (string.Format("_{0}-{1}-{2}_{3}-{4}-{5}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Second, DateTime.Now.Minute));
             _pDir += "\\";
@@ -1705,7 +1693,7 @@ namespace tyoEngineEditor
 
             Directory.CreateDirectory(_pDir);
 
-            String _pPath = _pDir + Path.GetFileName(_path);
+            string _pPath = _pDir + Path.GetFileName(_path);
 
             //FileStream fs = new FileStream(_pPath, FileMode.OpenOrCreate);
 
@@ -1855,7 +1843,7 @@ namespace tyoEngineEditor
                 }
 
                 //每一层已绘制 特效 的数量
-                allDataMapTitle = GetAllDataList(item, _mapInfos._mapAnimationTile);
+                //allDataMapTitle = GetAllDataList(item, _mapInfos._mapAnimationTile);
 
                 _file.Write(allDataMapTitle.Count);
                 foreach (AllDataModel alldataModel in allDataMapTitle)
@@ -1905,7 +1893,7 @@ namespace tyoEngineEditor
                 {
                     for (int y = 0; y < _mapInfos.Map_Size_Height; ++y)
                     {
-                        if (_mapInfos._mapTile[i, x, y] != -1 || _mapInfos._mapAnimationTile[i, x, y] != -1)
+                        if (_mapInfos._mapTile[i, x, y] != -1 )
                         {
                             layerHaveValue.Add(i);
                             break;
@@ -2086,7 +2074,7 @@ namespace tyoEngineEditor
                 _PreviewDlg.SetMapInfos(_mapInfos);
 
             }
-            _mapInfos._IsClickAnimation = false;
+            
             if (isPreviewShow)
             {
                 _PreviewDlg.Show();
@@ -2120,7 +2108,7 @@ namespace tyoEngineEditor
         private void btEditLayer_Click(object sender, EventArgs e)
         {
             tyoEngineLayerEdit tele = new tyoEngineLayerEdit(_mapInfos);
-            _mapInfos._IsClickAnimation = false;
+            
             if (tele.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 ListBox listBox = tele.getListBox();
@@ -2165,14 +2153,7 @@ namespace tyoEngineEditor
         {
             int layer = -1;
             int[, ,] tmpTitle = new int[listBox.Items.Count, _mapInfos._mapTile.GetLength(1), _mapInfos._mapTile.GetLength(2)];
-            int[, ,] tmpAnimationTitle = null;
-            if (_mapInfos._mapAnimationTile != null)
-            {
-                tmpAnimationTitle =
-                    new int[listBox.Items.Count, _mapInfos._mapAnimationTile.GetLength(1), _mapInfos._mapAnimationTile.GetLength(2)];
-            }
-
-
+            
             for (int i = 0; i < listBox.Items.Count; i++)
             {
                 layer = -1;
@@ -2192,11 +2173,6 @@ namespace tyoEngineEditor
                         for (int y = 0; y < _mapInfos.Map_Size_Height; y++)
                         {
                             tmpTitle[i, x, y] = -1;
-                            if (_mapInfos._mapAnimationTile != null)
-                            {
-                                tmpAnimationTitle[i, x, y] = -1;
-                            }
-
                         }
                     }
                 }
@@ -2207,21 +2183,12 @@ namespace tyoEngineEditor
                         for (int y = 0; y < _mapInfos.Map_Size_Height; y++)
                         {
                             tmpTitle[i, x, y] = _mapInfos._mapTile[layer, x, y];
-                            if (_mapInfos._mapAnimationTile != null)
-                            {
-                                tmpAnimationTitle[i, x, y] = _mapInfos._mapAnimationTile[layer, x, y];
-                            }
-
                         }
                     }
                 }
             }
-            _mapInfos._mapTile = tmpTitle;
-            if (_mapInfos._mapAnimationTile != null)
-            {
-                _mapInfos._mapAnimationTile = tmpAnimationTitle;
-            }
 
+            _mapInfos._mapTile = tmpTitle;
         }
 
         private void ChangeLayerInfosByIndex(ListBox listBox)
@@ -2232,6 +2199,7 @@ namespace tyoEngineEditor
             {
                 tmpDic.Add(i, (MapLayerInfos)listBox.Items[i]);
             }
+
             _mapInfos._mapLayerInfosByIndex = tmpDic;
         }
 
@@ -2300,6 +2268,11 @@ namespace tyoEngineEditor
             }
 
             _AnimationTileDlgIsShow = !_AnimationTileDlgIsShow;
+        }
+
+        private void animationUpdater_Timer_Tick(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -149,7 +149,7 @@ namespace tyoEngineEditor
 
         }
 
-        public void AddAction(int _data, bool _blockData, int _layer, int _x, int _y)
+        public void AddAction(int _data, bool _blockData,int _layer, int _x, int _y)
         {
             ActionInfoNode _node = new ActionInfoNode(_data, _blockData, _layer, _x, _y);
             _ActionNodeList.Add(_node);
@@ -488,8 +488,6 @@ namespace tyoEngineEditor
 
         public bool _IsLoadMonstor = false;
 
-        public bool _IsClickAnimation = false;
-
         public Dictionary<int, MapTileInfos> _mapTileInfosByIndex = new Dictionary<int, MapTileInfos>();
 
         public List<MapUseTileInfo> _mapTileUseInfo = new List<MapUseTileInfo>();
@@ -499,8 +497,6 @@ namespace tyoEngineEditor
         public List<string> animationXML = new List<string>();
 
         public int[,,] _mapTile = null;
-
-        public int[, ,] _mapAnimationTile = null;
 
         public int[,] _mapExternFlag1 = null;
 
@@ -593,29 +589,17 @@ namespace tyoEngineEditor
                         continue;
                     }
 
-//                     if (_ActionList[_actionIndex]._ActionNodeList[i]._Data == -1 && _ActionList[_actionIndex]._IsDelPiece == false)
-//                     {
-//                         continue;
-//                     }
+                    //                     if (_ActionList[_actionIndex]._ActionNodeList[i]._Data == -1 && _ActionList[_actionIndex]._IsDelPiece == false)
+                    //                     {
+                    //                         continue;
+                    //                     }
 
-                    if (_IsClickAnimation) 
-                    {
-                        _mapAnimationTile[
-                            _ActionList[_actionIndex]._ActionNodeList[i]._Layer,
-                            _ActionList[_actionIndex]._ActionNodeList[i]._X,
-                            _ActionList[_actionIndex]._ActionNodeList[i]._Y
-                            ]
-                            = _ActionList[_actionIndex]._ActionNodeList[i]._Data;
-                    }
-                    else 
-                    {
-                        _mapTile[
+                    _mapTile[
                         _ActionList[_actionIndex]._ActionNodeList[i]._Layer,
                         _ActionList[_actionIndex]._ActionNodeList[i]._X,
                         _ActionList[_actionIndex]._ActionNodeList[i]._Y
                         ]
                         = _ActionList[_actionIndex]._ActionNodeList[i]._Data;
-                    }
                 }
             }
         }
@@ -657,7 +641,6 @@ namespace tyoEngineEditor
             _mapTileUseInfo.Clear();
 
             _mapTile = new int[_mapLayerInfosByIndex.Count,_map_Width, _map_Height];
-            _mapAnimationTile = new int[_mapLayerInfosByIndex.Count, _map_Width, _map_Height];
             _mapExternFlag1 = new int[_map_Width, _map_Height];
             _mapBlockFlag = new bool[_map_Width, _map_Height];
 
@@ -668,7 +651,6 @@ namespace tyoEngineEditor
                     for (int y = 0; y < _map_Height; ++y)
                     {
                         _mapTile[i, x, y] = -1;
-                        _mapAnimationTile[i, x, y] = -1;
 
                         if(i == 0)
                         {
@@ -759,38 +741,6 @@ namespace tyoEngineEditor
             _ActionList[_ActionIndex - 1].AddAction(_mapTile[layer, x, y], false, layer, x, y);
 
             _mapTile[layer, x, y] = index;
-        }
-
-        public void SetMapAnimationTile(int layer, int x, int y, int index)
-        {
-            if (x >= Map_Size_Width || y >= Map_Size_Height)
-            {
-                return;
-            }
-
-            if (layer < 0 || layer >= _mapLayerInfosByIndex.Count)
-            {
-                return;
-            }
-
-            if (_mapAnimationTile == null) 
-            {
-                _mapAnimationTile = new int[_mapLayerInfosByIndex.Count, _map_Width, _map_Height];
-                for (int i = 0; i < _mapLayerInfosByIndex.Count; ++i)
-                {
-                    for (int m = 0; m < _map_Width; ++m)
-                    {
-                        for (int n = 0; n < _map_Height; ++n)
-                        {
-                            _mapAnimationTile[i, m, n] = -1;
-                        }
-                    }
-                }
-            }
-
-            _ActionList[_ActionIndex - 1].AddAction(_mapAnimationTile[layer, x, y], false, layer, x, y);
-
-            _mapAnimationTile[layer, x, y] = index;
         }
 
         public int GetMapTilePieceIndex(int layer, int x, int y)
