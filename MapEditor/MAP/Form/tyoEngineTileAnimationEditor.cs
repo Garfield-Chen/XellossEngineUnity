@@ -28,6 +28,22 @@ namespace tyoEngineEditor
         Dictionary<string, List<tyoAnimationFrameInfo>> _AniListFrameDict = new Dictionary<string, List<tyoAnimationFrameInfo>>();
         Dictionary<string, tyoAnimationJsonFile> _AniListJsonDict = new Dictionary<string, tyoAnimationJsonFile>();
 
+        public Dictionary<string, List<tyoAnimationFrameInfo>> AniListFrameDict
+        {
+            get
+            {
+                return _AniListFrameDict;
+            }
+        }
+
+        public Dictionary<string, tyoAnimationJsonFile> AniListJsonDict
+        {
+            get
+            {
+                return _AniListJsonDict;
+            }
+        }
+
         private void btMapEditor_AddAniFile_Click(object sender, EventArgs e)
         {
             OpenFileDialog _dlg = new OpenFileDialog();

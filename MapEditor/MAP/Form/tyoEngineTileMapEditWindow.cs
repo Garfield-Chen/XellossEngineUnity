@@ -267,6 +267,7 @@ namespace tyoEngineEditor
 
 
             this.updateTimer.Start();
+            this.animationUpdater_Timer.Start();
         }
 
         List<MapLayerDrawInfos> _mapLayerDepth = new List<MapLayerDrawInfos>();
@@ -419,16 +420,51 @@ namespace tyoEngineEditor
         }
 
         bool _isSelectAnimationPiece = false;
+
         string _currentAnimationPieceName = "";
+        int _currentAnimationPieceDt = 1000 / 60;
+        int _currentAnimationPieceDtNow = 0;
+        int _currentAnimationPieceIdx = -1;
+        Image _currentAnimationPieceImage = null;
+
+        //current select animation fps
+        //current select animation idx
+        //current select animation image
 
         public void SetAnimationSelectPiece(string _animationName)
         {
-            pictureBoxNowSelect.Image = null;
+            if(_animationName.Length <= 0)
+            {
+                return;
+            }
+
             _nowSelectPieceIndexByMap.Clear();
             _nowSelectPiece = null;
 
             _isSelectAnimationPiece = true;
             _currentAnimationPieceName = _animationName;
+
+            if (_AnimationTileDlg.AniListJsonDict.ContainsKey(_currentAnimationPieceName))
+            {
+                _currentAnimationPieceDt = 1000 / _AnimationTileDlg.AniListJsonDict[_currentAnimationPieceName].AnimationFPS;
+            }
+
+            _currentAnimationPieceIdx = 0;
+
+            if (_AnimationTileDlg.AniListFrameDict.ContainsKey(_currentAnimationPieceName))
+            {
+                _currentAnimationPieceImage = _AnimationTileDlg.AniListFrameDict[_currentAnimationPieceName][_currentAnimationPieceIdx].FrameImage;
+            }
+
+            _currentAnimationPieceDtNow = 0;
+
+            if(pictureBoxNowSelect.Image != null)
+            {
+                pictureBoxNowSelect.Image = _currentAnimationPieceImage;
+                _nowSelectPiece = new Bitmap(pictureBoxNowSelect.Image);
+            }
+
+            
         }
 
         Pen _penMesh = new Pen(Brushes.DarkGray);
@@ -577,8 +613,10 @@ namespace tyoEngineEditor
                 {
                     if(_isSelectAnimationPiece)
                     {
-                        e.Graphics.FillRectangle(_blockBrush_Green, _mapMouse.X, _mapMouse.Y,
-                                        _mapInfos.Map_Tile_Width, _mapInfos.Map_Tile_Height);
+                        //                         e.Graphics.FillRectangle(_blockBrush_Green, _mapMouse.X, _mapMouse.Y,
+                        //                                         _mapInfos.Map_Tile_Width, _mapInfos.Map_Tile_Height);
+
+                        e.Graphics.DrawImage(pictureBoxNowSelect.Image, _mapMouse.X, _mapMouse.Y);
                     }
                     else
                     {
@@ -1055,6 +1093,10 @@ namespace tyoEngineEditor
 
                 _isSelectAnimationPiece = false;
                 _currentAnimationPieceName = "";
+                _currentAnimationPieceDt = 0;
+                _currentAnimationPieceDtNow = 0;
+                _currentAnimationPieceImage = null;
+                _currentAnimationPieceIdx = -1;
             }
         }
 
@@ -2272,7 +2314,31 @@ namespace tyoEngineEditor
 
         private void animationUpdater_Timer_Tick(object sender, EventArgs e)
         {
+            if ( _currentAnimationPieceName.Length > 0)
+            {
+                _currentAnimationPieceDtNow += animationUpdater_Timer.Interval;
 
+                if (_currentAnimationPieceDtNow > _currentAnimationPieceDt)
+                {
+                    _currentAnimationPieceDtNow = 0;
+
+                    _currentAnimationPieceIdx++;
+
+                    if (_AnimationTileDlg.AniListFrameDict.ContainsKey(_currentAnimationPieceName))
+                    {
+                        if (_currentAnimationPieceIdx >= _AnimationTileDlg.AniListFrameDict[_currentAnimationPieceName].Count)
+                        {
+                            _currentAnimationPieceIdx = 0;
+                        }
+
+                        _currentAnimationPieceImage = _AnimationTileDlg.AniListFrameDict[_currentAnimationPieceName][_currentAnimationPieceIdx].FrameImage;
+
+                        pictureBoxNowSelect.Image = _currentAnimationPieceImage;
+                        _nowSelectPiece = new Bitmap(pictureBoxNowSelect.Image);
+                        //Refresh();
+                    }
+                }
+            }
         }
     }
 }
