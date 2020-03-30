@@ -756,11 +756,17 @@ namespace tyoEngineEditor
                                 continue;
                             }
 
-                            _mapInfos.SetMapTile(comboBoxMapLayer.SelectedIndex,
+                            if ( _isSelectAnimationPiece )
+                            {
+
+                            }
+                            else
+                            {
+                                _mapInfos.SetMapTile(comboBoxMapLayer.SelectedIndex,
                                 (_mapMouse.X / _mapInfos.Map_Tile_Width) + x + mapHScrollBar.Value,
                                 (_mapMouse.Y / _mapInfos.Map_Tile_Height) + y + mapVScrollBar.Value,
                                 _nowSelectPieceIndexByMap[_count]._type);
-
+                            }
                             //     _mapInfos.SetMapAnimationTilte(comboBoxMapLayer.SelectedIndex,
                             //(_mapMouse.X / _mapInfos.Map_Title_Width) + mapHScrollBar.Value,
                             //(_mapMouse.Y / _mapInfos.Map_Title_Height) + mapVScrollBar.Value,
