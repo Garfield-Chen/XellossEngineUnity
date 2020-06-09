@@ -1039,12 +1039,25 @@ namespace tyoEngineEditor
                 return;
             }
 
+            if (aniTextBox_Name.Text.Split('_').Length > 1)
+            {
+                MessageBox.Show("动画名字中不能包含 _ (下划线)");
+                return;
+            }
 
-            SaveFileDialog saveDlg = new SaveFileDialog();
+
+                SaveFileDialog saveDlg = new SaveFileDialog();
             saveDlg.Filter = "tyo Engine Animation Data|*.json";
             saveDlg.ShowDialog();
 
             string _filePath = saveDlg.FileName;
+
+            if (_filePath.Split('_').Length > 1)
+            {
+                MessageBox.Show("文件中不能包含 _ (下划线)");
+                return;
+            }
+
             bool _isReplaceFile = false;
 
             if (Path.GetExtension(_filePath).ToLower() == ".json")

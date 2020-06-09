@@ -422,14 +422,30 @@ namespace tyoEngineEditor
         bool _isSelectAnimationPiece = false;
 
         string _currentAnimationPieceName = "";
-        int _currentAnimationPieceDt = 1000 / 60;
-        int _currentAnimationPieceDtNow = 0;
-        int _currentAnimationPieceIdx = -1;
-        Image _currentAnimationPieceImage = null;
+        AnimationInMapInfos _currentAnimationPieceInfos = null;
+
+        int _nowAnimationID = 1000;
 
         //current select animation fps
         //current select animation idx
         //current select animation image
+
+        Dictionary<string, int> _animationIDInMap = new Dictionary<string, int>();
+        Dictionary<int, AnimationInMapInfos> _animationInMapRender = new Dictionary<int, AnimationInMapInfos>();
+
+        public class AnimationInMapInfos
+        {
+            public AnimationInMapInfos()
+            {
+
+            }
+
+            public string _animationName = "";
+            public int _animationPieceDt = 1000 / 60;
+            public int _animationPieceDtNow = 0;
+            public int _animationPieceIdx = -1;
+            public Image _animationPieceImage = null;
+        }
 
         public void SetAnimationSelectPiece(string _animationName)
         {
@@ -444,23 +460,30 @@ namespace tyoEngineEditor
             _isSelectAnimationPiece = true;
             _currentAnimationPieceName = _animationName;
 
-            if (_AnimationTileDlg.AniListJsonDict.ContainsKey(_currentAnimationPieceName))
+            if (_currentAnimationPieceInfos == null)
             {
-                _currentAnimationPieceDt = 1000 / _AnimationTileDlg.AniListJsonDict[_currentAnimationPieceName].AnimationFPS;
+                _currentAnimationPieceInfos = new AnimationInMapInfos();
             }
 
-            _currentAnimationPieceIdx = 0;
+            if (_AnimationTileDlg.AniListJsonDict.ContainsKey(_currentAnimationPieceName))
+            {
+                _currentAnimationPieceInfos._animationPieceDt = 1000 / _AnimationTileDlg.AniListJsonDict[_currentAnimationPieceName].AnimationFPS;
+            }
+
+            _currentAnimationPieceInfos._animationPieceIdx = 0;
 
             if (_AnimationTileDlg.AniListFrameDict.ContainsKey(_currentAnimationPieceName))
             {
-                _currentAnimationPieceImage = _AnimationTileDlg.AniListFrameDict[_currentAnimationPieceName][_currentAnimationPieceIdx].FrameImage;
+                _currentAnimationPieceInfos._animationPieceImage = _AnimationTileDlg.AniListFrameDict[_currentAnimationPieceName][_currentAnimationPieceInfos._animationPieceIdx].FrameImage;
             }
 
-            _currentAnimationPieceDtNow = 0;
+            _currentAnimationPieceInfos._animationPieceDtNow = 0;
 
-            if(pictureBoxNowSelect.Image != null)
+            _currentAnimationPieceInfos._animationName = _animationName;
+
+            if (pictureBoxNowSelect.Image != null)
             {
-                pictureBoxNowSelect.Image = _currentAnimationPieceImage;
+                pictureBoxNowSelect.Image = _currentAnimationPieceInfos._animationPieceImage;
                 _nowSelectPiece = new Bitmap(pictureBoxNowSelect.Image);
             }
 
@@ -528,28 +551,42 @@ namespace tyoEngineEditor
                         //    MapUseTitleInfo m = _mapInfos._mapTitleUseInfo[index];
                         //}
 
-                        if (index != -1 && index < _mapInfos._mapTileUseInfo.Count)
+                        if(index <= -1000) // animation ->
                         {
-                            //e.Graphics.DrawImage(_mapInfos._mapTitleUseInfo[index]._image, (x - mapHScrollBar.Value) * _mapInfos.Map_Title_Width, (y - mapVScrollBar.Value) * _mapInfos.Map_Title_Height);
-
-                            if (_mapInfos._mapTileUseInfo[index]._image._tile != null)
+                            if(_animationInMapRender.ContainsKey(index))
                             {
-                                
                                 e.Graphics.DrawImage(
-                                _mapInfos._mapTileUseInfo[index]._image._tile,
-                                (x - mapHScrollBar.Value) * _mapInfos.Map_Tile_Width,
-                                (y - mapVScrollBar.Value) * _mapInfos.Map_Tile_Height,
-                                _mapInfos._mapTileUseInfo[index]._image._w,
-                                _mapInfos._mapTileUseInfo[index]._image._h);
+                                        _animationInMapRender[index]._animationPieceImage,
+                                        (x - mapHScrollBar.Value) * _mapInfos.Map_Tile_Width,
+                                        (y - mapVScrollBar.Value) * _mapInfos.Map_Tile_Height);
+                            }
+                            
+                        }
+                        else
+                        {
+                            if (index != -1 && index < _mapInfos._mapTileUseInfo.Count)
+                            {
+                                //e.Graphics.DrawImage(_mapInfos._mapTitleUseInfo[index]._image, (x - mapHScrollBar.Value) * _mapInfos.Map_Title_Width, (y - mapVScrollBar.Value) * _mapInfos.Map_Title_Height);
 
-                                if (_SetMapTileFlagLayerIndex >= 0 && _SetMapTileFlagLayerIndex == i)
+                                if (_mapInfos._mapTileUseInfo[index]._image._tile != null)
                                 {
-                                    e.Graphics.FillRectangle(
-                                    _setTileFlagLayerBrush,
+
+                                    e.Graphics.DrawImage(
+                                    _mapInfos._mapTileUseInfo[index]._image._tile,
                                     (x - mapHScrollBar.Value) * _mapInfos.Map_Tile_Width,
                                     (y - mapVScrollBar.Value) * _mapInfos.Map_Tile_Height,
                                     _mapInfos._mapTileUseInfo[index]._image._w,
                                     _mapInfos._mapTileUseInfo[index]._image._h);
+
+                                    if (_SetMapTileFlagLayerIndex >= 0 && _SetMapTileFlagLayerIndex == i)
+                                    {
+                                        e.Graphics.FillRectangle(
+                                        _setTileFlagLayerBrush,
+                                        (x - mapHScrollBar.Value) * _mapInfos.Map_Tile_Width,
+                                        (y - mapVScrollBar.Value) * _mapInfos.Map_Tile_Height,
+                                        _mapInfos._mapTileUseInfo[index]._image._w,
+                                        _mapInfos._mapTileUseInfo[index]._image._h);
+                                    }
                                 }
                             }
                         }
@@ -717,7 +754,7 @@ namespace tyoEngineEditor
                 }
             }
 
-            DrawMapTitlePiece();
+            DrawMapTitlePiece(true);
         }
 
         private void panelMap_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -731,8 +768,56 @@ namespace tyoEngineEditor
         float _MapTileScale = 1.0f;
         /*        float _MapScale = 1.0f;*/
 
-        private void DrawMapTitlePiece()
+        private void DrawMapTitlePiece(bool _isMove = false)
         {
+            if ( _isSelectAnimationPiece && _isMove == false)
+            {
+                int _animation_type = 0;
+
+                if (_animationIDInMap.ContainsKey(_currentAnimationPieceName))
+                {
+                    _animation_type = _animationIDInMap[_currentAnimationPieceName];
+                }
+                else
+                {
+                    _animationIDInMap[_currentAnimationPieceName] = (_nowAnimationID + 1) * -1;
+                    _animation_type = _animationIDInMap[_currentAnimationPieceName];
+
+                    AnimationInMapInfos _aniRenderInfos = new AnimationInMapInfos();
+
+                    if (_AnimationTileDlg.AniListJsonDict.ContainsKey(_currentAnimationPieceName))
+                    {
+                        _aniRenderInfos._animationPieceDt = 1000 / _AnimationTileDlg.AniListJsonDict[_currentAnimationPieceName].AnimationFPS;
+                    }
+
+                    _aniRenderInfos._animationPieceIdx = 0;
+
+                    if (_AnimationTileDlg.AniListFrameDict.ContainsKey(_currentAnimationPieceName))
+                    {
+                        _aniRenderInfos._animationPieceImage = _AnimationTileDlg.AniListFrameDict[_currentAnimationPieceName][_aniRenderInfos._animationPieceIdx].FrameImage;
+                    }
+
+                    _aniRenderInfos._animationPieceDtNow = 0;
+
+                    _aniRenderInfos._animationName = _currentAnimationPieceName;
+
+                    _animationInMapRender[_animation_type] = _aniRenderInfos;
+                }
+
+                if (_animation_type >= 0 )
+                {
+                    return;
+                }
+
+                _mapInfos.ActionBegin(false, false);
+
+                _mapInfos.SetMapTile(comboBoxMapLayer.SelectedIndex,
+                                (_mapMouse.X / _mapInfos.Map_Tile_Width) + mapHScrollBar.Value,
+                                (_mapMouse.Y / _mapInfos.Map_Tile_Height) + mapVScrollBar.Value,
+                                _animation_type);
+
+                _mapInfos.ActionEnd();
+            }
 
             if (_PieceDlg == null)
             {
@@ -756,17 +841,24 @@ namespace tyoEngineEditor
                                 continue;
                             }
 
-                            if ( _isSelectAnimationPiece )
-                            {
-
-                            }
-                            else
-                            {
-                                _mapInfos.SetMapTile(comboBoxMapLayer.SelectedIndex,
+                            // the normal tile type > 0
+                            // the animation tile type < 0
+                            _mapInfos.SetMapTile(comboBoxMapLayer.SelectedIndex,
                                 (_mapMouse.X / _mapInfos.Map_Tile_Width) + x + mapHScrollBar.Value,
                                 (_mapMouse.Y / _mapInfos.Map_Tile_Height) + y + mapVScrollBar.Value,
                                 _nowSelectPieceIndexByMap[_count]._type);
-                            }
+
+                            //if ( _isSelectAnimationPiece )
+                            //{
+
+                            //}
+                            //else
+                            //{
+                            //    _mapInfos.SetMapTile(comboBoxMapLayer.SelectedIndex,
+                            //    (_mapMouse.X / _mapInfos.Map_Tile_Width) + x + mapHScrollBar.Value,
+                            //    (_mapMouse.Y / _mapInfos.Map_Tile_Height) + y + mapVScrollBar.Value,
+                            //    _nowSelectPieceIndexByMap[_count]._type);
+                            //}
                             //     _mapInfos.SetMapAnimationTilte(comboBoxMapLayer.SelectedIndex,
                             //(_mapMouse.X / _mapInfos.Map_Title_Width) + mapHScrollBar.Value,
                             //(_mapMouse.Y / _mapInfos.Map_Title_Height) + mapVScrollBar.Value,
@@ -1099,10 +1191,7 @@ namespace tyoEngineEditor
 
                 _isSelectAnimationPiece = false;
                 _currentAnimationPieceName = "";
-                _currentAnimationPieceDt = 0;
-                _currentAnimationPieceDtNow = 0;
-                _currentAnimationPieceImage = null;
-                _currentAnimationPieceIdx = -1;
+                _currentAnimationPieceInfos = null;
             }
         }
 
@@ -2322,25 +2411,51 @@ namespace tyoEngineEditor
         {
             if ( _currentAnimationPieceName.Length > 0)
             {
-                _currentAnimationPieceDtNow += animationUpdater_Timer.Interval;
+                _currentAnimationPieceInfos._animationPieceDtNow += animationUpdater_Timer.Interval;
 
-                if (_currentAnimationPieceDtNow > _currentAnimationPieceDt)
+                if (_currentAnimationPieceInfos._animationPieceDtNow > _currentAnimationPieceInfos._animationPieceDt)
                 {
-                    _currentAnimationPieceDtNow = 0;
+                    _currentAnimationPieceInfos._animationPieceDtNow = 0;
 
-                    _currentAnimationPieceIdx++;
+                    _currentAnimationPieceInfos._animationPieceIdx++;
 
-                    if (_AnimationTileDlg.AniListFrameDict.ContainsKey(_currentAnimationPieceName))
+                    if (_AnimationTileDlg.AniListFrameDict.ContainsKey(_currentAnimationPieceInfos._animationName))
                     {
-                        if (_currentAnimationPieceIdx >= _AnimationTileDlg.AniListFrameDict[_currentAnimationPieceName].Count)
+                        if (_currentAnimationPieceInfos._animationPieceIdx >= _AnimationTileDlg.AniListFrameDict[_currentAnimationPieceInfos._animationName].Count)
                         {
-                            _currentAnimationPieceIdx = 0;
+                            _currentAnimationPieceInfos._animationPieceIdx = 0;
                         }
 
-                        _currentAnimationPieceImage = _AnimationTileDlg.AniListFrameDict[_currentAnimationPieceName][_currentAnimationPieceIdx].FrameImage;
+                        _currentAnimationPieceInfos._animationPieceImage = _AnimationTileDlg.AniListFrameDict[_currentAnimationPieceInfos._animationName][_currentAnimationPieceInfos._animationPieceIdx].FrameImage;
 
-                        pictureBoxNowSelect.Image = _currentAnimationPieceImage;
+                        pictureBoxNowSelect.Image = _currentAnimationPieceInfos._animationPieceImage;
                         _nowSelectPiece = new Bitmap(pictureBoxNowSelect.Image);
+                        //Refresh();
+                    }
+                }
+            }
+
+            foreach ( KeyValuePair<int,AnimationInMapInfos> _node in _animationInMapRender)
+            {
+                _node.Value._animationPieceDtNow += animationUpdater_Timer.Interval;
+
+                if (_node.Value._animationPieceDtNow > _node.Value._animationPieceDt)
+                {
+                    _node.Value._animationPieceDtNow = 0;
+
+                    _node.Value._animationPieceIdx++;
+
+                    if (_AnimationTileDlg.AniListFrameDict.ContainsKey(_node.Value._animationName))
+                    {
+                        if (_node.Value._animationPieceIdx >= _AnimationTileDlg.AniListFrameDict[_node.Value._animationName].Count)
+                        {
+                            _node.Value._animationPieceIdx = 0;
+                        }
+
+                        _node.Value._animationPieceImage = _AnimationTileDlg.AniListFrameDict[_node.Value._animationName][_node.Value._animationPieceIdx].FrameImage;
+
+//                         pictureBoxNowSelect.Image = _currentAnimationPieceInfos._animationPieceImage;
+//                         _nowSelectPiece = new Bitmap(pictureBoxNowSelect.Image);
                         //Refresh();
                     }
                 }
